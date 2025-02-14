@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Ground
+  m_EditorClassIdentifier: 
+  m_GroupName: Ground
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 605ab267f567dcc4a98dd4e3f6dc0305
+  m_SerializeEntries:
+  - m_GUID: 330779149aaa74b44826227d5bdc1304
+    m_Address: Prefabs/Grid
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c6c64e9be5484d44d9cb8d1cf153c3ec
+    m_Address: Prefabs/Objects
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 939f221094b33b14fb8754558061194b
+    m_Address: Assets/Resources_moved/Prefabs/Mushroom.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 0baabe0a684d52344aa50d5a34a6bf01, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9372b37f3fb041b4ba8ab73d14d63a9c, type: 2}
+    - {fileID: 11400000, guid: a13ee4d313ab5f3449d18b677f41d2f8, type: 2}
