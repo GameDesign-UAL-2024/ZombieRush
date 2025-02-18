@@ -4,7 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - ObjectGenerator
+  - ObjectSpawner
   layers:
   - Default
   - TransparentFX

@@ -29,11 +29,6 @@ public static class ItemFactory
             if (!itemTypes.ContainsKey(id))
             {
                 itemTypes.Add(id, type);
-                Debug.Log($"Registered item: {type.Name} with ID {id}");
-            }
-            else
-            {
-                Debug.LogWarning($"Duplicate item ID {id} detected for {type.Name}");
             }
         }
     }

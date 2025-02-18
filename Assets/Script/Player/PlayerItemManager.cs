@@ -59,7 +59,6 @@ public class PlayerItemManager : MonoBehaviour
                         Destroy(component);
                     }
                 }
-                Debug.Log($"Replaced {existingShootItem.GetType().Name} with {newItemID.GetType().Name}");
             }
         }
 

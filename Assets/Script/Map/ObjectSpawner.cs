@@ -5,18 +5,24 @@ using UnityEngine.UIElements;
 
 public class ObjectSpawner : MonoBehaviour
 {
+    
     public GameObject[] treePrefabs;
     public GameObject[] bushPrefabs;
     public GameObject[] rockPrefabs;
-    
-    private Dictionary<Vector3, string> objectRecords = new Dictionary<Vector3, string>();
-    private Dictionary<Vector3, GameObject> spawnedObjects = new Dictionary<Vector3, GameObject>();
-    private int worldSize = 100;
-    private int spawnRange = 20;
+    [SerializeField]
+    int dictionary_range;
+    void Awake()
+    {
+        Debug.Log($"ObjectSpawner 被挂载在："+ gameObject.GetInstanceID());
+    }
 
+    Dictionary<Vector3, string> objectRecords;
+    Dictionary<Vector3, GameObject> spawnedObjects;
+    private int spawnRange = 20;
     public void InitializeObjectData(Dictionary<Vector3Int, RuleTile> tileDictionary)
     {
-        objectRecords.Clear();
+        spawnedObjects = new Dictionary<Vector3, GameObject>();
+        objectRecords = new Dictionary<Vector3, string>();
         foreach (var tile in tileDictionary)
         {
             if (tile.Value.name == "Grass")
@@ -143,6 +149,7 @@ public class ObjectSpawner : MonoBehaviour
             Destroy(spawnedObjects[pos]);
             spawnedObjects.Remove(pos);
         }
+        dictionary_range = spawnedObjects.Count;
     }
     private void SpawnObject(Vector3 pos, string prefabName)
     {
@@ -186,5 +193,10 @@ public class ObjectSpawner : MonoBehaviour
             spawnedObjects[pos] = obj;
         }
     }
-    
+
+    public void RemoveObject(GameObject obj)
+    {
+        print(spawnedObjects);
+    }
+
 }

@@ -25,8 +25,11 @@ public class Globals : MonoBehaviour
 
     public class Events 
     {
+        public enum GameState{ playing , pausing}
+        public GameState current_state;
         public void GameStart()
         {
+            current_state = GameState.playing;
             Addressables.LoadAssetAsync<GameObject>(Globals.Datas.gridPrefabAddress).Completed += OnGridPrefabLoaded;
         }
         private void OnGridPrefabLoaded(AsyncOperationHandle<GameObject> handle)
@@ -61,6 +64,7 @@ public class Globals : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             Data = new Datas();
             Event = new Events();
+            Event.current_state = Events.GameState.pausing; 
         }
         else
         {

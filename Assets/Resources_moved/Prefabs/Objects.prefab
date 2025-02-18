@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3737627695492841196}
   m_Layer: 0
   m_Name: Objects
-  m_TagString: ObjectGeneratir
+  m_TagString: ObjectSpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1853962393146434299}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.10845, y: 5.8497276, z: -6.004873}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -54,3 +54,4 @@ MonoBehaviour:
   - {fileID: 8551892397795477515, guid: 282249a9d5bce0648b4323bd4fa385f7, type: 3}
   rockPrefabs:
   - {fileID: 8525294928490744332, guid: 2952636c46a8e7d43bd3bfaf146cd985, type: 3}
+  dictionary_range: 0
