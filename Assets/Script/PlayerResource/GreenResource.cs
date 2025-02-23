@@ -1,18 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GreenResource : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Rigidbody2D RB;
     void Start()
     {
-        
+        RB = transform.GetComponent<Rigidbody2D>();
     }
-
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.tag == "Player")
+        {
+            Globals.Instance.Data.AddResourceAmount(Globals.Datas.ResourcesType.Green , 5);
+            Destroy(gameObject);
+        }    
+    }
+    void FixedUpdate()
+    {
+        if (RB != null)
+        {
+            if (RB.velocity.magnitude > 0)
+            {
+                RB.velocity *= 0.6f;
+            }
+        }
     }
 }

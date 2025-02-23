@@ -15,6 +15,11 @@ public class InteractableGrids : MonoBehaviour
     Animator animator;
     GameObject bar_object;
     static string bar_prefab = "Prefabs/Bar";
+    static string green_path = "Prefabs/GreenBlock";
+    static string black_path = "Prefabs/BlackBlock";
+    public int release_number;
+    [SerializeField]
+    int released = 0;
 
     bool is_interacting;
     bool on_sprite;
@@ -51,9 +56,21 @@ public class InteractableGrids : MonoBehaviour
             if (progress >= 1)
             {
                 Destroy(bar_object);
-                GameObject object_spawn = GameObject.FindGameObjectWithTag("ObjectSpawner");
-                Debug.Log($"找到:"+ object_spawn.GetInstanceID());
-                if (object_spawn != null)
+                if (this_type == GridType.Trees)
+                {
+                    for (int i = 0; i < release_number; i++)
+                    {
+                        Addressables.LoadAssetAsync<GameObject>(green_path).Completed += OnResourcesLoaded;
+                    }
+                }
+            }
+        }
+        if (released != 0)
+        {
+            GameObject object_spawn = GameObject.FindGameObjectWithTag("ObjectSpawner");
+            if (object_spawn != null)
+            {
+                if (released >= release_number)
                 {
                     object_spawn.GetComponent<ObjectSpawner>().RemoveObject(gameObject);
                 }
@@ -61,10 +78,20 @@ public class InteractableGrids : MonoBehaviour
         }
     }
 
+    private void OnResourcesLoaded(AsyncOperationHandle<GameObject> handle)
+    {
+        GameObject green = Instantiate(handle.Result , transform.position , Quaternion.identity);
+        Rigidbody2D G_RB = green.GetComponent<Rigidbody2D>();
+        if (G_RB != null)
+        {
+            G_RB.AddForce(UnityEngine.Random.insideUnitCircle.normalized * 10f, ForceMode2D.Impulse);
+            released += 1;
+        }
+    }
     private void OnBarLoaded(AsyncOperationHandle<GameObject> handle)
     {
         GameObject bar = handle.Result;
-        bar_object = Instantiate(handle.Result, transform);
+        bar_object = Instantiate(bar, transform);
     }
 
     void OnPlayerClick()

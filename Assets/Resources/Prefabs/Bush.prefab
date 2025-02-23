@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 1007000765271958200}
   - component: {fileID: 3926927134213580413}
   - component: {fileID: 4996557088096876129}
+  - component: {fileID: 4652033840216404892}
   m_Layer: 0
   m_Name: Bush
   m_TagString: Untagged
@@ -159,3 +160,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4652033840216404892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8551892397795477515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2457d4d385cde6346bc064086eb1b5a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interacting_time: 0.8
+  this_type: 0
+  release_number: 3
+  released: 0

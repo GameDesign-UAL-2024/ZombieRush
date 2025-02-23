@@ -11,13 +11,8 @@ public class ObjectSpawner : MonoBehaviour
     public GameObject[] rockPrefabs;
     [SerializeField]
     int dictionary_range;
-    void Awake()
-    {
-        Debug.Log($"ObjectSpawner 被挂载在："+ gameObject.GetInstanceID());
-    }
-
-    Dictionary<Vector3, string> objectRecords;
-    Dictionary<Vector3, GameObject> spawnedObjects;
+    static Dictionary<Vector3, string> objectRecords;
+    static Dictionary<Vector3, GameObject> spawnedObjects;
     private int spawnRange = 20;
     public void InitializeObjectData(Dictionary<Vector3Int, RuleTile> tileDictionary)
     {
@@ -150,6 +145,7 @@ public class ObjectSpawner : MonoBehaviour
             spawnedObjects.Remove(pos);
         }
         dictionary_range = spawnedObjects.Count;
+        UpdateZOrders();
     }
     private void SpawnObject(Vector3 pos, string prefabName)
     {
@@ -196,7 +192,55 @@ public class ObjectSpawner : MonoBehaviour
 
     public void RemoveObject(GameObject obj)
     {
-        print(spawnedObjects);
+        // 遍历 spawnedObjects 找到对应的键
+        Vector3 keyToRemove = default(Vector3);
+        bool found = false;
+        foreach (var kvp in spawnedObjects)
+        {
+            if (kvp.Value == obj)
+            {
+                keyToRemove = kvp.Key;
+                found = true;
+                break;
+            }
+        }
+
+        // 如果找到了，删除两个字典中的记录
+        if (found)
+        {
+            spawnedObjects.Remove(keyToRemove);
+            objectRecords.Remove(keyToRemove);
+        }
+        Destroy(obj);
     }
 
+    void UpdateZOrders()
+    {
+        if (spawnedObjects == null || spawnedObjects.Count == 0)
+            return;
+
+        // 1. 找到最小和最大Y值
+        float minY = float.MaxValue;
+        float maxY = float.MinValue;
+        foreach (var obj in spawnedObjects.Values)
+        {
+            if (obj == null) continue;
+            float currentY = obj.transform.position.y;
+            minY = Mathf.Min(minY, currentY);
+            maxY = Mathf.Max(maxY, currentY);
+        }
+
+        // 2. 计算动态缩放因子（避免除以零）
+        float yRange = maxY - minY;
+        float zScale = (yRange == 0) ? 0 : 1.0f / yRange;
+
+        // 3. 设置Z值
+        foreach (var obj in spawnedObjects.Values)
+        {
+            if (obj == null) continue;
+            Vector3 pos = obj.transform.position;
+            pos.z = (pos.y - maxY) * zScale; // Y越大，Z越接近0
+            obj.transform.position = pos;
+        }
+    }
 }

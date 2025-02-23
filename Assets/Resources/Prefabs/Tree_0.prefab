@@ -266,6 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interacting_time: 1
   this_type: 0
+  release_number: 5
 --- !u!95 &1903459642886081209
 Animator:
   serializedVersion: 5

@@ -6,20 +6,39 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class Globals : MonoBehaviour
 {
     public static Globals Instance { get; private set; }
-    
     public class Datas 
     {
         public static string gridPrefabAddress = "Prefabs/Grid";
         public static string gridObjectAddress = "Prefabs/Objects";
         public int seed;
+        public enum ResourcesType{ Green , Pink , Black }
+        Dictionary<ResourcesType , int> player_current_resources;
         public Datas()
         {
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             string timestampStr = timestamp.ToString();
             string lastFourDigits = timestampStr.Length >= 4 ? timestampStr.Substring(timestampStr.Length - 4) : timestampStr;
-
+            player_current_resources = new Dictionary<ResourcesType, int>
+            {
+                { ResourcesType.Green, 0},
+                { ResourcesType.Black, 0},
+                { ResourcesType.Pink , 0}
+            };
             // 转换为整数
             seed = int.Parse(lastFourDigits);
+        }
+        public int GetResourceAmount(ResourcesType target_type)
+        {
+            return player_current_resources[target_type];
+        }
+        public void AddResourceAmount(ResourcesType target_type , int amount)
+        {
+            player_current_resources[target_type] += amount;
+            PlayerUI player_ui = PlayerUI.Instance;
+            if (player_ui != null)
+            {
+                player_ui.UpdateValues(target_type,player_current_resources[target_type]);
+            }
         }
     }
 

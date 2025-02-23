@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 1330542488152123327}
   - component: {fileID: 1970998787225076273}
   - component: {fileID: 8968762643647733561}
+  - component: {fileID: -5603974754803373734}
   - component: {fileID: 8642996066045054324}
   m_Layer: 0
   m_Name: Tree_1
@@ -217,6 +218,22 @@ MonoBehaviour:
     m_Extent: {x: 1.217529, y: 1.219997, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 1
+--- !u!114 &-5603974754803373734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8709437259440495324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2457d4d385cde6346bc064086eb1b5a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interacting_time: 1
+  this_type: 0
+  release_number: 5
+  released: 0
 --- !u!95 &8642996066045054324
 Animator:
   serializedVersion: 5
