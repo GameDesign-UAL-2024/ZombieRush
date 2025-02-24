@@ -24,7 +24,7 @@ public class GreenResource : MonoBehaviour
         {
             if (RB.velocity.magnitude > 0)
             {
-                RB.velocity *= 0.6f;
+                RB.velocity *= 0.7f;
             }
         }
     }
