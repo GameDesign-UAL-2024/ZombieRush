@@ -4,9 +4,21 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-
+using UnityEngine.SceneManagement;
 public class ChunkGenerator : MonoBehaviour
 {
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    public static ChunkGenerator Instance;
     public Tilemap tilemap;
     public RuleTile grassTile;
     public RuleTile sandTile;
@@ -24,6 +36,7 @@ public class ChunkGenerator : MonoBehaviour
         GenerateMap();
         ApplyPostProcessing(); // 进行后处理，确保地形不会出现 1 格宽的过渡
         Addressables.LoadAssetAsync<GameObject>(Globals.Datas.gridObjectAddress).Completed += OnObjectPrefabLoaded;
+
     }
     private void OnObjectPrefabLoaded(AsyncOperationHandle<GameObject> handle)
     {
@@ -120,5 +133,5 @@ public class ChunkGenerator : MonoBehaviour
     public Dictionary<Vector3Int, RuleTile> GetTileDictionary()
     {
         return tileDictionary;
-    }
+    }    
 }

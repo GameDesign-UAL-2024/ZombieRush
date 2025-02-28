@@ -5,11 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - ObjectSpawner
+  - ChunkGenerator
+  - PlayerObjects
+  - PlayerBuddies
+  - Enemy
+  - Resources
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - NavBlocks
   - Water
   - UI
   - 

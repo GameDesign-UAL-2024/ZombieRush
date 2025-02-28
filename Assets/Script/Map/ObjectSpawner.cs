@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    
+
     public GameObject[] treePrefabs;
     public GameObject[] bushPrefabs;
     public GameObject[] rockPrefabs;
@@ -216,31 +216,53 @@ public class ObjectSpawner : MonoBehaviour
 
     void UpdateZOrders()
     {
-        if (spawnedObjects == null || spawnedObjects.Count == 0)
-            return;
-
-        // 1. 找到最小和最大Y值
-        float minY = float.MaxValue;
-        float maxY = float.MinValue;
-        foreach (var obj in spawnedObjects.Values)
+        // 1. 获取带有特定标签的物体
+        GameObject[] taggedObjects = new GameObject[]
         {
-            if (obj == null) continue;
-            float currentY = obj.transform.position.y;
-            minY = Mathf.Min(minY, currentY);
-            maxY = Mathf.Max(maxY, currentY);
+            GameObject.FindGameObjectWithTag("Player"),
+            GameObject.FindGameObjectWithTag("Resources"),
+            GameObject.FindGameObjectWithTag("PlayerObjects"),
+            GameObject.FindGameObjectWithTag("Enemy"),
+            GameObject.FindGameObjectWithTag("PlayerBuddies")
+        };
+
+        // 2. 合并 spawnedObjects 和 taggedObjects
+        List<GameObject> allObjects = new List<GameObject>(spawnedObjects.Values);
+        foreach (var taggedObject in taggedObjects)
+        {
+            if (taggedObject != null) 
+            {
+                allObjects.Add(taggedObject);
+            }
         }
 
-        // 2. 计算动态缩放因子（避免除以零）
+        // 3. 找到最小和最大Y值
+        float minY = float.MaxValue;
+        float maxY = float.MinValue;
+        foreach (var obj in allObjects)
+        {
+            if (obj != null)
+            {
+                float currentY = obj.transform.position.y;
+                minY = Mathf.Min(minY, currentY);
+                maxY = Mathf.Max(maxY, currentY);
+            }
+        }
+
+        // 4. 计算动态缩放因子（避免除以零）
         float yRange = maxY - minY;
         float zScale = (yRange == 0) ? 0 : 1.0f / yRange;
 
-        // 3. 设置Z值
-        foreach (var obj in spawnedObjects.Values)
+        // 5. 设置所有物体的Z值
+        foreach (var obj in allObjects)
         {
-            if (obj == null) continue;
-            Vector3 pos = obj.transform.position;
-            pos.z = (pos.y - maxY) * zScale; // Y越大，Z越接近0
-            obj.transform.position = pos;
+            if (obj != null)
+            {
+                Vector3 pos = obj.transform.position;
+                pos.z = (pos.y - maxY) * zScale; // Y越大，Z越接近0
+                obj.transform.position = pos;                
+            }
         }
     }
+
 }
