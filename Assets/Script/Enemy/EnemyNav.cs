@@ -7,7 +7,7 @@ using System;
 public class EnemyNav : MonoBehaviour
 {
     [SerializeField] float repathInterval = 0.5f; // 路径更新间隔
-    [SerializeField] float arrivalThreshold = 0.1f; // 到达判定阈值
+    [SerializeField] float arrivalThreshold = 0.1f; // 到达判定阈�?
 
     private List<Vector2> currentPath = new List<Vector2>();
     private Coroutine moveCoroutine;
@@ -15,8 +15,8 @@ public class EnemyNav : MonoBehaviour
     private int currentPathIndex;
     private float lastRepathTime;
 
-    [SerializeField] LayerMask obstacleLayer; // 在Inspector中设置障碍物所在图层
-    [SerializeField] float obstacleCheckRadius = 1f; // 障碍物检测半径
+    [SerializeField] LayerMask obstacleLayer; // 在Inspector中设置障碍物所在图�?
+    [SerializeField] float obstacleCheckRadius = 1f; // 障碍物检测半�?
     public GameObject target;
     List<Vector2> all_points = new List<Vector2>();
     [SerializeField] List<Vector2> map_points = new List<Vector2>();
@@ -90,7 +90,7 @@ public class EnemyNav : MonoBehaviour
 
         if (target != null && is_activing)
         {
-            if (Time.time - lastRepathTime >= repathInterval)
+            if (Time.time - lastRepathTime >= repathInterval)//当前时间 - 上一次开始协程的时间 >= 更新间隔
             {
                 lastRepathTime = Time.time;
                 Vector2 startPos = transform.position;
@@ -108,7 +108,7 @@ public class EnemyNav : MonoBehaviour
                     moveCoroutine = null;
                 }
 
-                // 异步计算路径，计算完成后回调
+                // 开始协程，现在它！=null
                 pathCoroutine = StartCoroutine(FindPathCoroutine(startPos, targetPos, (path) =>
                 {
                     currentPath = path;
@@ -144,7 +144,7 @@ public class EnemyNav : MonoBehaviour
                     self_controller.speed * Time.deltaTime
                 );
 
-                // 保持Z轴位置
+                // 保持Z轴位�?
                 transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
 
                 yield return null;
@@ -197,18 +197,21 @@ public class EnemyNav : MonoBehaviour
         Vector2 startSnapped = SnapToGrid(start);
         Vector2 targetSnapped = SnapToGrid(originalTarget);
         Vector2? actualTarget = GetNearestValidTarget(targetSnapped);
+        /* '!= '是不等于 ， 那么单 ! 是？ ！ 是 'not'   not true = false , not false = true
+        if 语句的逻辑是 if(bool) 也就是括号里最后需要是一个bool就行，true就执行，false就不执行
+        这个的意思就是当 actualTarget.Hasvalue为false的时候就执行*/
         if (!actualTarget.HasValue)
         {
             callback(null);
-            yield break;
+            yield break;//终止这次协程，因为找不到有效的路径（这个目标点不可能到达）
         }
 
-        Dictionary<Vector2, Vector2> parentDict = new Dictionary<Vector2, Vector2>();
-        Dictionary<Vector2, float> gCostDict = new Dictionary<Vector2, float>();
+        Dictionary<Vector2, Vector2> parentDict = new Dictionary<Vector2, Vector2>();  // 上一个，下一个 相当于我告诉你的原始人用的链表
+        Dictionary<Vector2, float> gCostDict = new Dictionary<Vector2, float>(); // 储存路径的字典（从近到远）
         Dictionary<Vector2, float> hCostDict = new Dictionary<Vector2, float>();
 
         BinaryHeapPriorityQueue<Vector2> openList = new BinaryHeapPriorityQueue<Vector2>();
-        HashSet<Vector2> closedSet = new HashSet<Vector2>();
+        HashSet<Vector2> closedSet = new HashSet<Vector2>(); //可以用hashcode直接访问其中特定值的列表，不需要从头遍历到尾，特别节省时间
 
         gCostDict[startSnapped] = 0;
         hCostDict[startSnapped] = Vector2.Distance(startSnapped, actualTarget.Value);
@@ -232,7 +235,7 @@ public class EnemyNav : MonoBehaviour
             {
                 Vector2 neighborSnapped = SnapToGrid(neighbor);
 
-                // 检查邻居节点是否在导航网格中
+                // 检查邻居节点是否在导航网格�?
                 if (!map_points.Contains(neighborSnapped))
                     continue;
 
@@ -240,7 +243,7 @@ public class EnemyNav : MonoBehaviour
                 if (closedSet.Contains(neighborSnapped))
                     continue;
 
-                // 检查邻居节点是否有障碍物
+                // 检查邻居节点是否有障碍�?
                 if (HasObstacle(neighborSnapped))
                 {
                     closedSet.Add(neighborSnapped);
@@ -263,7 +266,7 @@ public class EnemyNav : MonoBehaviour
             }
 
             iterations++;
-            // 每 100 次迭代后 yield 一帧，避免长时间占用主线程
+            // �? 100 次迭代后 yield 一帧，避免长时间占用主线程
             if (iterations % 100 == 0)
                 yield return null;
         }
@@ -278,7 +281,7 @@ public class EnemyNav : MonoBehaviour
 
     private bool HasObstacle(Vector2 position)
     {
-        // 使用 Physics2D.OverlapCircle 检测指定位置是否有碰撞体
+        // 使用 Physics2D.OverlapCircle 检测指定位置是否有碰撞�?
         Collider2D hit = Physics2D.OverlapCircle(position, obstacleCheckRadius, obstacleLayer);
 
         // 如果检测到的碰撞体存在，且不是自身或其子对象的碰撞体，则视为障碍物
@@ -336,7 +339,7 @@ public class EnemyNav : MonoBehaviour
         return path;
     }
 
-    // 支持斜向路径的邻居节点（8 方向）
+    // 支持斜向路径的邻居节点（8 方向�?
     List<Vector2> GetNeighbors(Vector2 pos)
     {
         return new List<Vector2>
@@ -351,6 +354,23 @@ public class EnemyNav : MonoBehaviour
             pos + new Vector2(-1, -1)
         };
     }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;  // 设置绘制颜色
+
+        // 如果点数不足两个，则不绘制
+        if (currentPath == null || currentPath.Count < 2)
+            return;
+
+        // 遍历列表，绘制连续的线段
+        for (int i = 0; i < currentPath.Count - 1; i++)
+        {
+            Vector3 start = new Vector3(currentPath[i].x, currentPath[i].y, 0);
+            Vector3 end = new Vector3(currentPath[i + 1].x, currentPath[i + 1].y, 0);
+            Gizmos.DrawLine(start, end);
+        }
+    }
 }
 
 public static class NavigationExtensions
@@ -361,7 +381,7 @@ public static class NavigationExtensions
     }
 }
 
-// 使用二叉堆实现的优先队列（适用于较大数据量的 A*）
+// 使用二叉堆实现的优先队列（适用于较大数据量�? A*�?
 public class BinaryHeapPriorityQueue<T>
 {
     private List<KeyValuePair<T, float>> heap = new List<KeyValuePair<T, float>>();
@@ -449,4 +469,5 @@ public class BinaryHeapPriorityQueue<T>
             else break;
         }
     }
+
 }

@@ -11,12 +11,30 @@ public class Enemy_01 : Enemy
     bool could_hurt;
     public override GameObject target { get; set;}
     public override EnemyState current_state { get; set;}
-
+    EnemyNav self_nav;
+    GameObject player;
+    Dictionary<Vector2 , GameObject> player_objects;
     void Start()
     {
         current_health = max_health;
+        self_nav = transform.GetComponent<EnemyNav>();
+        foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (p.GetComponent<PlayerController>() != null)
+            {
+                player = p;
+            }
+        }
+        
         current_state = EnemyState.Wait;
         could_hurt = false;
+    }
+
+    void Update()
+    {
+        if (current_state == EnemyState.Wait)
+        {
+        }
     }
 
     public override void SetTarget(GameObject tar)
