@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
         else if (moveInput.x < -0.1f) {sprite.flipX = true;}
 
         if (Input.GetMouseButtonDown(0)){anim.SetTrigger("Attack");}
-        // 计算新位置
+        // 计算新位�?
         Vector3 newPosition = transform.position + (Vector3)moveInput * moveSpeed * Time.deltaTime;
         newPosition.x = Mathf.Clamp(newPosition.x, 0, 199);
         newPosition.y = Mathf.Clamp(newPosition.y, 0, 199);

@@ -63,6 +63,13 @@ public class InteractableGrids : MonoBehaviour
                         Addressables.LoadAssetAsync<GameObject>(green_path).Completed += OnResourcesLoaded;
                     }
                 }
+                else if (this_type == GridType.Rocks)
+                {
+                    for (int i = 0; i < release_number; i++)
+                    {
+                        Addressables.LoadAssetAsync<GameObject>(black_path).Completed += OnResourcesLoaded;
+                    }
+                }
             }
         }
         if (released != 0)
@@ -100,6 +107,10 @@ public class InteractableGrids : MonoBehaviour
         {
             is_interacting = true;
             start_time = GlobalTimer.Instance.GetCurrentTime();
+            if (release_number > 0)
+            {
+                release_number = (int)UnityEngine.Random.Range(1 , release_number);
+            }
             Addressables.LoadAssetAsync<GameObject>(bar_prefab).Completed += OnBarLoaded;
         }
     }
@@ -120,7 +131,7 @@ public class InteractableGrids : MonoBehaviour
     {
         if (player != null)
         {
-            if (Vector2.Distance(player.transform.position,transform.position) > 5)
+            if (Vector2.Distance(player.transform.position,transform.position) > 3f)
             {
                 in_area = false;
                 is_interacting = false;
