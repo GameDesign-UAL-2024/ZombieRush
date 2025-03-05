@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 8806794380450534863}
   - component: {fileID: 4915643190995197792}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: Level1_Grid
   m_TagString: ChunkGenerator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

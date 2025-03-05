@@ -18,12 +18,12 @@ MonoBehaviour:
   m_GUID: 605ab267f567dcc4a98dd4e3f6dc0305
   m_SerializeEntries:
   - m_GUID: 330779149aaa74b44826227d5bdc1304
-    m_Address: Prefabs/Grid
+    m_Address: Prefabs/Level1_Grid
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c6c64e9be5484d44d9cb8d1cf153c3ec
-    m_Address: Prefabs/Objects
+    m_Address: Prefabs/Level1_Objects
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

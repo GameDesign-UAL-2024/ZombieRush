@@ -50,7 +50,6 @@ public class BulletBehaviour_0 : Bullet
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        
         if (collision.gameObject.tag == "Enemy")
         {
             Enemy enemy = collision.GetComponent<Enemy>();
@@ -58,6 +57,7 @@ public class BulletBehaviour_0 : Bullet
             {
                 enemy.TakeDamage(source , damage , false);
             }
+            Destroy(this.gameObject);
         }
     }
 }

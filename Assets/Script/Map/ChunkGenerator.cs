@@ -35,8 +35,11 @@ public class ChunkGenerator : MonoBehaviour
     {
         GenerateMap();
         ApplyPostProcessing(); // 进行后处理，确保地形不会出现 1 格宽的过渡
-        Addressables.LoadAssetAsync<GameObject>(Globals.Datas.gridObjectAddress).Completed += OnObjectPrefabLoaded;
-
+        if (Globals.Instance.Data.current_level == Globals.Datas.Levels.Level1)
+        {
+            Addressables.LoadAssetAsync<GameObject>(Globals.Datas.L1_Objects).Completed += OnObjectPrefabLoaded;
+        }
+        
     }
     private void OnObjectPrefabLoaded(AsyncOperationHandle<GameObject> handle)
     {

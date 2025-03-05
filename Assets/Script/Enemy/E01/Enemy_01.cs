@@ -92,13 +92,17 @@ public class Enemy_01 : Enemy
                 }
             }
         }
+        else
+        {
+            navigation.SetNavActive(false);
+        }
 
         if (current_health <= 0)
         {
+            SetState(EnemyState.Wait);
             dying = true;
             could_hurt = false;
             animator.SetBool("Dead",true);
-            SetState(EnemyState.Wait);
         }
 
     }
@@ -147,7 +151,7 @@ public class Enemy_01 : Enemy
         switch (newState)
         {
             case EnemyState.Wait:
-                // 等待状态，无需额外操作
+                navigation.SetNavActive(false);
                 break;
             case EnemyState.Moving:
                 // 设置为移动状态，设置目标，并激活导航
