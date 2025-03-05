@@ -20,10 +20,21 @@ public class Enemy_01 : Enemy
     float behaviour_time;
     float behaviour_gap = 2f;
     bool dying;
-
+    EnemyNav self_nav;
+    GameObject player;
+    Dictionary<Vector2 , GameObject> player_objects;
     void Start()
     {
         current_health = max_health;
+        self_nav = transform.GetComponent<EnemyNav>();
+        foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (p.GetComponent<PlayerController>() != null)
+            {
+                player = p;
+            }
+        }
+        
         current_state = EnemyState.Wait;
         could_hurt = true;
         g_timer = GlobalTimer.Instance;
