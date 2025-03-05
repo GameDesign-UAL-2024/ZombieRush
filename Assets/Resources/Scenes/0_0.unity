@@ -254,7 +254,6 @@ MonoBehaviour:
   obstacleCheckRadius: 0.4
   target: {fileID: 1475799065}
   map_points: []
-  is_activing: 1
 --- !u!114 &3781778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,7 +302,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1.4666667, y: 2.7}
+    oldSize: {x: 1.7666667, y: 2.6}
     newSize: {x: 1.84, y: 1.37}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

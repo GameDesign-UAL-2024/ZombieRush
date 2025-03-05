@@ -21,7 +21,6 @@ public class Enemy_01 : Enemy
     float behaviour_gap = 2f;
     bool dying;
     EnemyNav self_nav;
-    GameObject player;
     Dictionary<Vector2 , GameObject> player_objects;
     void Start()
     {
