@@ -13,7 +13,12 @@ public class DefaultShoot : Items
     Vector2 mouse_position;
     public int fire_rate = 3;  // 每秒最多发射 3 颗子弹
     private float nextFireTime = 0f; // 记录下次可以射击的时间
+    PlayerController player;
 
+    void Start()
+    {
+        player = transform.GetComponent<PlayerController>();
+    }
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && Time.time >= nextFireTime)
@@ -36,7 +41,17 @@ public class DefaultShoot : Items
         ItemFactory.CreateItemByID(1,new_bullet);
         Bullet items_component = new_bullet.GetComponent<Bullet>();
         bullets.Add(items_component);
-        items_component.Initialize(mouse_position,new_bullet.GetComponent<Rigidbody2D>());
+        if (player != null)
+        {
+            if (player.player_properties != null)
+            {
+                items_component.Initialize(transform.position,mouse_position,new_bullet.GetComponent<Rigidbody2D>() 
+                , player.player_properties.bullet_speed 
+                , player.player_properties.damage 
+                , player.player_properties.bullet_exist_time);
+            }
+        }
+        
     }
     public void RemoveBulletFromList(Bullet bullet)
     {
@@ -47,4 +62,5 @@ public class DefaultShoot : Items
     }
     public override void OnShoot(){}
     public override void ActiveBulletEffects(){}
+
 }

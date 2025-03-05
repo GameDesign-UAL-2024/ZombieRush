@@ -28,7 +28,7 @@ public class EnemyNav : MonoBehaviour
     Enemy self_controller;
     Dictionary<Vector2Int, List<Vector2>> spatialGrid = new Dictionary<Vector2Int, List<Vector2>>();
 
-    public bool is_activing;
+    public bool is_activing {get; private set;}
     bool initialized;
     public void SetNavActive(bool value) => is_activing = value;
     public void SetTarget(GameObject t) => target = t;

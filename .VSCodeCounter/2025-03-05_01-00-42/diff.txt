@@ -1,0 +1,53 @@
+Date : 2025-03-05 01:00:42
+Directory : c:\Users\2020m\Desktop\ZombieRush\Assets\Script
+Total : 17 files,  840 codes, 29 comments, 82 blanks, all 951 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |         17 |        840 |         29 |         82 |        951 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                     | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                        |         17 |        840 |         29 |         82 |        951 |
+| . (Files)                                                                                |          2 |         59 |          0 |          1 |         60 |
+| Enemy                                                                                    |          3 |        514 |         25 |         69 |        608 |
+| Enemy (Files)                                                                            |          2 |        397 |         16 |         59 |        472 |
+| Enemy\E01                                                                                |          1 |        117 |          9 |         10 |        136 |
+| InteractableGrids                                                                        |          1 |        108 |          0 |          5 |        113 |
+| Items                                                                                    |          3 |          1 |          0 |          1 |          2 |
+| Items (Files)                                                                            |          1 |         -5 |          0 |          0 |         -5 |
+| Items\BulletShoot                                                                        |          2 |          6 |          0 |          1 |          7 |
+| Items\BulletShoot\0                                                                      |          2 |          6 |          0 |          1 |          7 |
+| Map                                                                                      |          2 |         78 |          7 |          6 |         91 |
+| Player                                                                                   |          3 |         45 |          1 |          6 |         52 |
+| PlayerResource                                                                           |          3 |         35 |         -4 |         -6 |         25 |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                 | language | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Enemy\E01\Enemy_01.cs                    | C#       |        117 |          9 |         10 |        136 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Enemy\Enemy.cs                           | C#       |         14 |          0 |          5 |         19 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Enemy\EnemyNav.cs                        | C#       |        383 |         16 |         54 |        453 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\GlobalTimer.cs                           | C#       |         34 |          0 |          3 |         37 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Globals.cs                               | C#       |         25 |          0 |         -2 |         23 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\InteractableGrids\InteractableGrids.cs   | C#       |        108 |          0 |          5 |        113 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\BulletShoot\0\BulletBehaviour_0.cs | C#       |          1 |          0 |          1 |          2 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\BulletShoot\0\DefaultShoot.cs      | C#       |          5 |          0 |          0 |          5 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\ItemFactory.cs                     | C#       |         -5 |          0 |          0 |         -5 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Map\ChunkGenerator.cs                    | C#       |         13 |          0 |          0 |         13 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Map\ObjectSpawner.cs                     | C#       |         65 |          7 |          6 |         78 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\PlayerResource\BlackResource.cs          | C#       |         29 |          0 |          2 |         31 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\PlayerResource\GrayResource.cs           | C#       |        -12 |         -2 |         -5 |        -19 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\PlayerResource\GreenResource.cs          | C#       |         18 |         -2 |         -3 |         13 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\PlayerController.cs               | C#       |          6 |          0 |          0 |          6 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\PlayerItemManager.cs              | C#       |         -1 |          0 |          0 |         -1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\PlayerUI.cs                       | C#       |         40 |          1 |          6 |         47 |
+| Total                                                                                    |          |        840 |         29 |         82 |        951 |
++------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

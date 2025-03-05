@@ -1,0 +1,36 @@
+# Details
+
+Date : 2025-03-05 01:00:42
+
+Directory c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script
+
+Total : 21 files,  1549 codes, 64 comments, 185 blanks, all 1798 lines
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
+
+## Files
+| filename | language | code | comment | blank | total |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| [Assets/Script/Enemy/E01/Enemy\_01.cs](/Assets/Script/Enemy/E01/Enemy_01.cs) | C# | 117 | 9 | 10 | 136 |
+| [Assets/Script/Enemy/Enemy.cs](/Assets/Script/Enemy/Enemy.cs) | C# | 14 | 0 | 5 | 19 |
+| [Assets/Script/Enemy/EnemyNav.cs](/Assets/Script/Enemy/EnemyNav.cs) | C# | 383 | 16 | 54 | 453 |
+| [Assets/Script/GlobalTimer.cs](/Assets/Script/GlobalTimer.cs) | C# | 34 | 0 | 3 | 37 |
+| [Assets/Script/Globals.cs](/Assets/Script/Globals.cs) | C# | 89 | 2 | 3 | 94 |
+| [Assets/Script/InteractableGrids/Bar.cs](/Assets/Script/InteractableGrids/Bar.cs) | C# | 26 | 2 | 4 | 32 |
+| [Assets/Script/InteractableGrids/InteractableGrids.cs](/Assets/Script/InteractableGrids/InteractableGrids.cs) | C# | 138 | 0 | 8 | 146 |
+| [Assets/Script/Items/BulletBehaviour/Bullet.cs](/Assets/Script/Items/BulletBehaviour/Bullet.cs) | C# | 10 | 0 | 3 | 13 |
+| [Assets/Script/Items/BulletShoot/0/BulletBehaviour\_0.cs](/Assets/Script/Items/BulletShoot/0/BulletBehaviour_0.cs) | C# | 44 | 0 | 3 | 47 |
+| [Assets/Script/Items/BulletShoot/0/DefaultShoot.cs](/Assets/Script/Items/BulletShoot/0/DefaultShoot.cs) | C# | 49 | 3 | 4 | 56 |
+| [Assets/Script/Items/ItemFactory.cs](/Assets/Script/Items/ItemFactory.cs) | C# | 52 | 6 | 11 | 69 |
+| [Assets/Script/Items/Items.cs](/Assets/Script/Items/Items.cs) | C# | 11 | 0 | 3 | 14 |
+| [Assets/Script/Map/ChunkGenerator.cs](/Assets/Script/Map/ChunkGenerator.cs) | C# | 120 | 2 | 16 | 138 |
+| [Assets/Script/Map/ObjectSpawner.cs](/Assets/Script/Map/ObjectSpawner.cs) | C# | 235 | 9 | 25 | 269 |
+| [Assets/Script/PlayerResource/BlackResource.cs](/Assets/Script/PlayerResource/BlackResource.cs) | C# | 29 | 0 | 2 | 31 |
+| [Assets/Script/PlayerResource/GreenResource.cs](/Assets/Script/PlayerResource/GreenResource.cs) | C# | 30 | 0 | 2 | 32 |
+| [Assets/Script/PlayerResource/PinkResource.cs](/Assets/Script/PlayerResource/PinkResource.cs) | C# | 12 | 2 | 5 | 19 |
+| [Assets/Script/Player/PlayerController.cs](/Assets/Script/Player/PlayerController.cs) | C# | 52 | 2 | 3 | 57 |
+| [Assets/Script/Player/PlayerItemManager.cs](/Assets/Script/Player/PlayerItemManager.cs) | C# | 52 | 8 | 10 | 70 |
+| [Assets/Script/Player/PlayerObjectManager.cs](/Assets/Script/Player/PlayerObjectManager.cs) | C# | 12 | 2 | 5 | 19 |
+| [Assets/Script/Player/PlayerUI.cs](/Assets/Script/Player/PlayerUI.cs) | C# | 40 | 1 | 6 | 47 |
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
