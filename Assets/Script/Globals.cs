@@ -3,9 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Runtime.InteropServices;
-using Unity.Mathematics;
-public class Globals : MonoBehaviour
+using System.Collections;public class Globals : MonoBehaviour
 {
     public static Globals Instance { get; private set; }
     public class Datas 
@@ -26,7 +24,7 @@ public class Globals : MonoBehaviour
         {
             enemy_wave_number = 0;
             last_enemy_wave_time = 0;
-            waiting_time = 30;
+            waiting_time = 10;
             current_level = Levels.Level1;
             EnemyPool = new List<Enemy>() ;
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -109,72 +107,118 @@ public class Globals : MonoBehaviour
     }
     void Start()
     {
-
+            
         Screen.SetResolution(1920, 1080, false);
         this.Data.timer = GlobalTimer.Instance;
+        StartCoroutine(EnemyWavesCoroutine());
     }
     void Update()
     {
-        EnemyWaves();
-    }
-
-    void EnemyWaves()
-    {
-        if (this.Event.current_state == Events.GameState.playing && this.Data.timer != null && Datas.EnemyPool.Count == 0)
+        // 检测窗口是否聚焦
+        if (Application.isFocused)
         {
-            if (this.Data.timer.GetCurrentTime() - this.Data.last_enemy_wave_time >= Data.waiting_time)
+            // 获取鼠标位置（屏幕坐标）
+            Vector2 mousePosition = Input.mousePosition;
+            
+            // 获取当前窗口的安全区域
+            Rect screenRect = new Rect(0, 0, Screen.width, Screen.height);
+
+            // 如果鼠标在窗口内部，则隐藏鼠标
+            if (screenRect.Contains(mousePosition))
             {
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-                if (player == null) return; // 避免空引用异常
+                Cursor.lockState = CursorLockMode.Confined; // 限制鼠标在窗口内
+                Cursor.visible = false; // 隐藏鼠标
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None; // 允许鼠标自由移动
+                Cursor.visible = true; // 显示鼠标
+            }
+        }
+        else
+        {
+            // 窗口不在聚焦状态时，解锁鼠标并显示
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+    private static Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
 
-                if (this.Data.enemy_wave_number <= 2)
+    private IEnumerator EnemyWavesCoroutine()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null) yield break;
+
+        while (true)
+        {
+            if (Event.current_state == Events.GameState.playing && Data.timer != null && Datas.EnemyPool.Count == 0)
+            {
+                if (Data.timer.GetCurrentTime() - Data.last_enemy_wave_time >= Data.waiting_time)
                 {
-                    for (int i = 0; i < 30; i++)
-                    {
-                        float x_offset = UnityEngine.Random.Range(-15, 15);
-                        float y_offset = UnityEngine.Random.Range(-15, 15);
-
-                        // 让 x 和 y 独立变化，避免都变成 -10 或 10
-                        bool adjustXFirst = UnityEngine.Random.value > 0.5f;
-
-                        if (adjustXFirst)
-                        {
-                            x_offset = (x_offset <= 0) ? UnityEngine.Random.Range(-15, -10) : UnityEngine.Random.Range(10, 15);
-                            y_offset = (y_offset <= 0) ? UnityEngine.Random.Range(-15, -11) : UnityEngine.Random.Range(11, 15);
-                        }
-                        else
-                        {
-                            y_offset = (y_offset <= 0) ? UnityEngine.Random.Range(-15, -10) : UnityEngine.Random.Range(10, 15);
-                            x_offset = (x_offset <= 0) ? UnityEngine.Random.Range(-15, -11) : UnityEngine.Random.Range(11, 15);
-                        }
-
-                        Vector2 spawnPosition = (Vector2)player.transform.position + new Vector2(x_offset, y_offset);
-                        spawnPosition.x = Math.Clamp(spawnPosition.x, 0, 199);
-                        spawnPosition.y = Math.Clamp(spawnPosition.y, 0, 199);
-                        // 通过 Lambda 捕获参数，保证异步回调时仍然能获取正确的偏移量
-                        Addressables.LoadAssetAsync<GameObject>("Prefabs/Enemy0").Completed += (handle) =>
-                        {
-                            OnEnemyLoaded(handle, spawnPosition);
-                        };
-                    }
+                    StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 30, player.transform.position));
                     Data.enemy_wave_number += 1;
                     Data.last_enemy_wave_time = Data.timer.GetCurrentTime();
                     Data.waiting_time += 10;
                 }
             }
+            yield return null; // 等待下一帧
         }
     }
 
-    void OnEnemyLoaded(AsyncOperationHandle<GameObject> handle, Vector2 spawnPosition)
+    private IEnumerator LoadAndSpawnEnemyWave(string enemyKey, int count, Vector3 playerPosition)
     {
-        if (handle.Status == AsyncOperationStatus.Succeeded && handle.Result != null)
+        GameObject enemyPrefab = null;
+
+        // 动态加载敌人预制体
+        var handle = Addressables.LoadAssetAsync<GameObject>(enemyKey);
+        yield return handle;
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            GameObject enemy = Instantiate(handle.Result, spawnPosition, Quaternion.identity);
-            Datas.EnemyPool.Add(enemy.GetComponent<Enemy>());
+            enemyPrefab = handle.Result;
         }
         else
         {
-            Debug.LogError("Failed to load enemy prefab.");
+            Debug.LogError($"Failed to load enemy prefab: {enemyKey}");
+            yield break;
+        }
+
+        yield return StartCoroutine(SpawnEnemyWaveCoroutine(enemyPrefab, count, playerPosition));
+    }
+
+    private IEnumerator SpawnEnemyWaveCoroutine(GameObject enemyPrefab, int count, Vector3 playerPosition)
+    {
+        // 限制每秒最多生成的敌人数量
+        int enemiesPerSecond = 2;
+        float interval = 1f / enemiesPerSecond;
+
+        for (int i = 0; i < count; i++)
+        {
+            float x_offset = UnityEngine.Random.Range(-15, 15);
+            float y_offset = UnityEngine.Random.Range(-15, 15);
+
+            bool adjustXFirst = UnityEngine.Random.value > 0.5f;
+
+            if (adjustXFirst)
+            {
+                x_offset = (x_offset <= 0) ? UnityEngine.Random.Range(-15, -10) : UnityEngine.Random.Range(10, 15);
+                y_offset = (y_offset <= 0) ? UnityEngine.Random.Range(-15, -11) : UnityEngine.Random.Range(11, 15);
+            }
+            else
+            {
+                y_offset = (y_offset <= 0) ? UnityEngine.Random.Range(-15, -10) : UnityEngine.Random.Range(10, 15);
+                x_offset = (x_offset <= 0) ? UnityEngine.Random.Range(-15, -11) : UnityEngine.Random.Range(11, 15);
+            }
+
+            Vector2 spawnPosition = (Vector2)playerPosition + new Vector2(x_offset, y_offset);
+            spawnPosition.x = Mathf.Clamp(spawnPosition.x, 0, 199);
+            spawnPosition.y = Mathf.Clamp(spawnPosition.y, 0, 199);
+
+            GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            Datas.EnemyPool.Add(enemy.GetComponent<Enemy>());
+
+            // 等待下一次生成
+            yield return new WaitForSeconds(interval);
         }
     }
 }

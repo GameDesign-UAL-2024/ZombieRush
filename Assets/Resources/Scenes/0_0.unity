@@ -439,6 +439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 519495963}
   - component: {fileID: 519495962}
+  - component: {fileID: 519495964}
   - component: {fileID: 519495961}
   m_Layer: 0
   m_Name: Mouse
@@ -506,8 +507,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -926768329
+  m_SortingLayer: 2
   m_SortingOrder: 10
   m_Sprite: {fileID: 1452049933, guid: 185e56b87537ee24d9634dc257944ebe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -535,6 +536,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519495964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519495960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9f5104fae3aed49a552b0b98bbecde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &539764990
 GameObject:
   m_ObjectHideFlags: 0

@@ -86,7 +86,7 @@ public class Enemy_01 : Enemy
                 {
                     sprite_renderer.flipX = false;
                 }
-                if (navigation.is_activing == false)
+                if (navigation.is_activing == false && current_state == EnemyState.Moving)
                 {
                     navigation.SetNavActive(true);
                 }
@@ -155,13 +155,14 @@ public class Enemy_01 : Enemy
                 break;
             case EnemyState.Moving:
                 // 设置为移动状态，设置目标，并激活导航
-                animator.SetBool("Moving", true);
+                animator.SetBool("Moving", true);  // 立即设置Moving为true，确保动画立即开始
                 navigation.SetTarget(player);
                 navigation.SetNavActive(true);
                 break;
             case EnemyState.Attack:
                 // 设置为攻击状态
                 animator.SetBool("Attack", true);
+                navigation.SetNavActive(false);
                 break;
         }
     }
