@@ -71,7 +71,6 @@ public class EnemyNav : MonoBehaviour
         
         // 标记初始化完成
         initialized = true;
-        Debug.Log("Enemy navigation initialized");
     }
 
     // 分批异步加载导航点

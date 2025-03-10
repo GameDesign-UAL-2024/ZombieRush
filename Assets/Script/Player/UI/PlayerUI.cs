@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerUI : MonoBehaviour
 {
-    
+    public GameObject building_panel;
     public static PlayerUI Instance {get; private set;}
     void Awake()
     {
@@ -42,5 +42,10 @@ public class PlayerUI : MonoBehaviour
         {
 
         }
+    }
+
+    public void OnClickingBuilding()
+    {
+
     }
 }

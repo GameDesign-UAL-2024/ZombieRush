@@ -8,6 +8,7 @@ public class BulletBehaviour_0 : Bullet
 { 
     public override int ID { get; set; } = 1;
     public override ItemTypes Type { get; set; } = ItemTypes.BulletBehaviour;
+    public int pass_over_time = 0;
     Vector2 direction;
     float moveSpeed = 10;
     float damage;
@@ -55,9 +56,16 @@ public class BulletBehaviour_0 : Bullet
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(source , damage , false);
+                if(enemy.TakeDamage(source , damage , false))
+                {
+                    pass_over_time -= 1;
+                }
             }
-            Destroy(this.gameObject);
+            if (pass_over_time <= 0)
+            {
+                Destroy(this.gameObject);
+            }
+            
         }
     }
 }

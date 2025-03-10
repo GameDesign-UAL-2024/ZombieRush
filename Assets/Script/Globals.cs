@@ -3,7 +3,13 @@ using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Collections;public class Globals : MonoBehaviour
+using ExcelDataReader;
+using System.IO;       // 用于 File 类
+using System.Data;  
+using System.Text;   // 用于 DataTable 和 DataSet
+using System.Collections;
+using Unity.VisualScripting;
+public class Globals : MonoBehaviour
 {
     public static Globals Instance { get; private set; }
     public class Datas 
@@ -20,6 +26,7 @@ using System.Collections;public class Globals : MonoBehaviour
         public int enemy_wave_number;
         public float last_enemy_wave_time;
         public int waiting_time;
+        public Dictionary<int, Dictionary<string, string>> Bulding_Datas { get; private set;} = new Dictionary<int, Dictionary<string, string>>();
         public Datas()
         {
             enemy_wave_number = 0;
@@ -38,6 +45,7 @@ using System.Collections;public class Globals : MonoBehaviour
             };
             // 转换为整数
             seed = int.Parse(lastFourDigits);
+            Bulding_Datas = LoadBuldingDatas("Assets/Resources/Excels/Building_Properties.xlsx");
         }
         public int GetResourceAmount(ResourcesType target_type)
         {
@@ -51,6 +59,70 @@ using System.Collections;public class Globals : MonoBehaviour
             {
                 player_ui.UpdateValues(target_type,player_current_resources[target_type]);
             }
+        }
+
+        Dictionary<int, Dictionary<string, string>> LoadBuldingDatas(string filePath)
+        {
+            // 创建一个字典用于保存数据
+            var buildingData = new Dictionary<int, Dictionary<string, string>>();
+
+            // 设置编码为 UTF-8
+            var encoding = Encoding.GetEncoding(1252); 
+            var configuration = new ExcelReaderConfiguration()
+            {
+                FallbackEncoding = encoding,
+                LeaveOpen = false // 在使用 ExcelDataReader 库读取 Excel 文件时，ExcelReaderConfiguration 类中的 LeaveOpen 属性用于控制在读取完成后，是否保持原始数据流（Stream）的打开状态
+            };
+
+            using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            using (var reader = ExcelReaderFactory.CreateReader(stream, configuration))
+            {
+                var result = reader.AsDataSet();
+                DataTable table = result.Tables[0];
+
+                if (table.Rows.Count < 2)
+                {
+                    Debug.LogError("Excel 文件数据不足！");
+                    return null;
+                }
+
+                // 读取表头（第一行）
+                var headers = new List<string>();
+                for (int col = 0; col < table.Columns.Count; col++)
+                {
+                    headers.Add(table.Rows[0][col].ToString());
+                }
+
+                // 遍历数据行（从第二行开始）
+                for (int row = 1; row < table.Rows.Count; row++)
+                {
+                    var currentRow = table.Rows[row];
+                    if (currentRow.ItemArray.Length == 0)
+                        continue;
+
+                    // 解析 ID（第一列必须为可转换成 int 的 ID）
+                    if (!int.TryParse(currentRow[0].ToString(), out int id))
+                    {
+                        Debug.LogWarning($"ID 解析失败，行 {row + 1} 被跳过");
+                        continue;
+                    }
+
+                    // 构建行数据（包含所有列）
+                    var rowData = new Dictionary<string, string>();
+                    for (int col = 0; col < headers.Count; col++)
+                    {
+                        string value = currentRow[col]?.ToString() ?? "null"; // 显式处理空值
+                        rowData[headers[col]] = value;
+                    }
+
+                    buildingData[id] = rowData;
+                }
+
+                Debug.Log("Excel 读取完成！");
+            }
+
+            // 返回构造好的数据字典
+            return buildingData;
         }
     }
 
@@ -169,22 +241,31 @@ using System.Collections;public class Globals : MonoBehaviour
     {
         GameObject enemyPrefab = null;
 
-        // 动态加载敌人预制体
-        var handle = Addressables.LoadAssetAsync<GameObject>(enemyKey);
-        yield return handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
+        // 先检查字典中是否已经加载过这个敌人预制体
+        if (enemyPrefabs.ContainsKey(enemyKey))
         {
-            enemyPrefab = handle.Result;
+            enemyPrefab = enemyPrefabs[enemyKey];
         }
         else
         {
-            Debug.LogError($"Failed to load enemy prefab: {enemyKey}");
-            yield break;
+            // 如果没有缓存，则加载并存入字典
+            var handle = Addressables.LoadAssetAsync<GameObject>(enemyKey);
+            yield return handle;
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                enemyPrefab = handle.Result;
+                enemyPrefabs[enemyKey] = enemyPrefab;
+            }
+            else
+            {
+                Debug.LogError($"Failed to load enemy prefab: {enemyKey}");
+                yield break;
+            }
         }
 
         yield return StartCoroutine(SpawnEnemyWaveCoroutine(enemyPrefab, count, playerPosition));
     }
+
 
     private IEnumerator SpawnEnemyWaveCoroutine(GameObject enemyPrefab, int count, Vector3 playerPosition)
     {

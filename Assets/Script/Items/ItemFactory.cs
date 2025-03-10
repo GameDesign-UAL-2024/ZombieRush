@@ -16,44 +16,46 @@ public static class ItemFactory
 
     private static void RegisterAllItems()
     {
+        // 创建一个临时的 GameObject 用于添加组件
+        GameObject tempGO = new GameObject("TempItemObject");
+        
         var itemSubclasses = Assembly.GetExecutingAssembly().GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Items)));
 
         foreach (var type in itemSubclasses)
         {
-            GameObject tempObject = new GameObject("TempItemObject");
-            Items itemInstance = tempObject.AddComponent(type) as Items;
-            int id = itemInstance.ID;
-            // 销毁临时创建的 GameObject
-            GameObject.Destroy(tempObject);
-            if (!itemTypes.ContainsKey(id))
+            // 在同一个临时对象上添加组件
+            Items itemInstance = tempGO.AddComponent(type) as Items;
+            if (itemInstance != null)
             {
-                itemTypes.Add(id, type);
+                int id = itemInstance.ID;
+                if (!itemTypes.ContainsKey(id))
+                {
+                    itemTypes.Add(id, type);
+                }
+                // 立即销毁刚添加的组件，保持临时对象干净
+                UnityEngine.Object.DestroyImmediate(itemInstance);
             }
         }
+        
+        // 完成后销毁临时 GameObject
+        UnityEngine.Object.DestroyImmediate(tempGO);
     }
 
     public static Items.ItemTypes GetTypeByID(int id)
     {
         if (itemTypes.TryGetValue(id, out Type type))
         {
-            GameObject tempObject = new GameObject("TempItemObject");
-
-            // 使用 AddComponent 将反射得到的类型作为组件挂载
-            Items itemInstance = tempObject.AddComponent(type) as Items;
-
-            // 获取该实例的 Type 属性
-            Items.ItemTypes itemType = itemInstance.Type;
-
-            // 销毁临时创建的 GameObject
-            GameObject.Destroy(tempObject);
-
-            // 返回该类型
-            return itemType;      
+            GameObject tempGO = new GameObject("TempItemObject");
+            Items itemInstance = tempGO.AddComponent(type) as Items;
+            Items.ItemTypes result = itemInstance != null ? itemInstance.Type : Items.ItemTypes.None;
+            UnityEngine.Object.DestroyImmediate(tempGO);
+            return result;
         }
         Debug.LogWarning($"Item ID {id} not found!");
         return Items.ItemTypes.None;
     }
+
     public static Items CreateItemByID(int id, GameObject target)
     {
         if (itemTypes.TryGetValue(id, out Type type))
