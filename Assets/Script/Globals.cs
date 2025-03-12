@@ -8,7 +8,6 @@ using System.IO;       // 用于 File 类
 using System.Data;  
 using System.Text;   // 用于 DataTable 和 DataSet
 using System.Collections;
-using Unity.VisualScripting;
 public class Globals : MonoBehaviour
 {
     public static Globals Instance { get; private set; }
@@ -31,7 +30,7 @@ public class Globals : MonoBehaviour
         {
             enemy_wave_number = 0;
             last_enemy_wave_time = 0;
-            waiting_time = 10;
+            waiting_time = 999;
             current_level = Levels.Level1;
             EnemyPool = new List<Enemy>() ;
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -85,7 +84,6 @@ public class Globals : MonoBehaviour
                     Debug.LogError("Excel 文件数据不足！");
                     return null;
                 }
-
                 // 读取表头（第一行）
                 var headers = new List<string>();
                 for (int col = 0; col < table.Columns.Count; col++)
@@ -114,7 +112,7 @@ public class Globals : MonoBehaviour
                         string value = currentRow[col]?.ToString() ?? "null"; // 显式处理空值
                         rowData[headers[col]] = value;
                     }
-
+                    
                     buildingData[id] = rowData;
                 }
 
@@ -127,7 +125,7 @@ public class Globals : MonoBehaviour
     }
 
     public class Events 
-    {
+    { 
         public enum GameState{ playing , pausing}
         public GameState current_state;
         public void GameStart()
