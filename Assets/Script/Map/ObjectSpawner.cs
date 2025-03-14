@@ -11,7 +11,7 @@ public class ObjectSpawner : MonoBehaviour
     public GameObject[] rockPrefabs;
     [SerializeField]
     int dictionary_range;
-    static Dictionary<Vector3, string> objectRecords;
+    public static Dictionary<Vector3, string> objectRecords {get; private set;}
     static Dictionary<Vector3, GameObject> spawnedObjects;
     private int spawnRange = 20;
     public void InitializeObjectData(Dictionary<Vector3Int, RuleTile> tileDictionary)

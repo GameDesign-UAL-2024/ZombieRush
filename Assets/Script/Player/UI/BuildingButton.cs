@@ -8,6 +8,7 @@ public class BuildingButton : MonoBehaviour
 {
 
     private bool initialized;
+    int this_id;
     Dictionary<string , string> this_properties;
     UnityEngine.UI.Button button_comp;
     public Image image;
@@ -28,13 +29,14 @@ public class BuildingButton : MonoBehaviour
         
     }
 
-    public void Initialize(string img_path, Dictionary<string , string> properties , int Green_Need , int  Black_Need , int Pink_Need , UnityAction Listener)
+    public void Initialize(string img_path,int id, Dictionary<string , string> properties , int Green_Need , int  Black_Need , int Pink_Need , UnityAction<int> Listener)
     {
         green_value = Green_Need;
         black_value = Black_Need;
         pink_value = Pink_Need;
+        this_id = id;
         this_properties = properties;
-        button_comp.onClick.AddListener(Listener);
+        button_comp.onClick.AddListener(() => Listener(this_id));
         SetImageSprite(img_path);
     }
 

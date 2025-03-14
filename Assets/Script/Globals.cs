@@ -30,7 +30,7 @@ public class Globals : MonoBehaviour
         {
             enemy_wave_number = 0;
             last_enemy_wave_time = 0;
-            waiting_time = 999;
+            waiting_time = 10;
             current_level = Levels.Level1;
             EnemyPool = new List<Enemy>() ;
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -223,9 +223,9 @@ public class Globals : MonoBehaviour
         {
             if (Event.current_state == Events.GameState.playing && Data.timer != null && Datas.EnemyPool.Count == 0)
             {
-                if (Data.timer.GetCurrentTime() - Data.last_enemy_wave_time >= Data.waiting_time)
+                if (Data.timer.GetCurrentTime() - Data.last_enemy_wave_time >= Data.waiting_time && Data.enemy_wave_number <= 2)
                 {
-                    StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 30, player.transform.position));
+                    StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 5, player.transform.position));
                     Data.enemy_wave_number += 1;
                     Data.last_enemy_wave_time = Data.timer.GetCurrentTime();
                     Data.waiting_time += 10;

@@ -166,5 +166,14 @@ public class Enemy_01 : Enemy
                 break;
         }
     }
+
+    public void DestroyEnemy()
+    {
+        if (Globals.Datas.EnemyPool.Contains(this))
+        {
+            Globals.Datas.EnemyPool.Remove(this);
+            Destroy(this.gameObject);
+        }
+    }
 }
 

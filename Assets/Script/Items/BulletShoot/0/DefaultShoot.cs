@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 public class DefaultShoot : Items
@@ -21,7 +22,7 @@ public class DefaultShoot : Items
     }
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && Time.time >= nextFireTime)
+        if (Input.GetMouseButtonDown(0) && !IsPointerOverUI() && Time.time >= nextFireTime)
         {
             // 计算下次射击时间
             nextFireTime = Time.time + (1f / fire_rate);
@@ -34,6 +35,17 @@ public class DefaultShoot : Items
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
             mouse_position = new Vector2(worldPos.x, worldPos.y);
         }
+    }
+    private bool IsPointerOverUI()
+    {
+        // 创建一个指针事件数据，使用当前鼠标位置
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        // 射线检测所有UI元素
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        // 如果检测到的UI元素数量大于0，则返回true
+        return results.Count > 0;
     }
     private void OnBulletLoaded(AsyncOperationHandle<GameObject> handle)
     {
