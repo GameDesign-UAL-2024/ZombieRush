@@ -9,6 +9,7 @@ public class DefaultShoot : Items
 {
     public override int ID { get; set; } = 0;
     public override ItemTypes Type { get; set; } = ItemTypes.ShootBehaviour;
+    public override List<int> compatible_item_id { get; set; } = new List<int>(){};
     static string bullet_prefab = "Prefabs/DefultBullet";
     public List<Bullet> bullets = new List<Bullet>();
     Vector2 mouse_position;
