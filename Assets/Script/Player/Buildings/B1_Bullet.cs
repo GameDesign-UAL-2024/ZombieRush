@@ -22,7 +22,7 @@ public class B1_Bullet : MonoBehaviour
     bool isTracking = false;
     // 一旦达到最大追踪角度，则停止追踪（保持最后旋转角度）
     bool trackingEnded = false;
-
+    
     // 控制显示与碰撞的组件引用
     SpriteRenderer spriteRenderer;
     BoxCollider2D boxCollider;
@@ -31,7 +31,7 @@ public class B1_Bullet : MonoBehaviour
     float launchTime;
 
     // 用于通知发射者（子弹池）当前子弹飞行结束
-    UnityEvent<B1_Bullet> onFlightEnd;
+    UnityEvent<B1_Bullet> onFlightEnd = new UnityEvent<B1_Bullet>();
 
     /// <summary>
     /// 初始化方法：设置目标，追踪量，和飞行结束时调用的事件（用于回收子弹）
@@ -86,44 +86,52 @@ public class B1_Bullet : MonoBehaviour
             return;
         }
 
-        // 判断是否满足追踪条件：当子弹距离当前target位置小于等于2f时开始追踪
-        float distanceToTarget = Vector2.Distance(transform.position, target.position);
-        if (!isTracking && distanceToTarget <= 2f)
+        // 如果 target 不为 null，则进行追踪逻辑
+        if (target != null)
         {
-            isTracking = true;
-        }
-
-        // 如果处于追踪阶段且尚未达到最大追踪角度，则进行角度调整
-        if (isTracking && !trackingEnded)
-        {
-            // 计算从当前位置指向target的期望方向
-            Vector2 desiredDirection = ((Vector2)target.position - (Vector2)transform.position).normalized;
-            // 计算当前方向与期望方向的夹角（正负表示旋转方向）
-            float angleDiff = Vector2.SignedAngle(currentDirection, desiredDirection);
-            // 计算本帧允许旋转的最大角度
-            float maxRotation = trackingTurnSpeed * Time.deltaTime;
-            // 限制旋转量在允许范围内
-            float rotation = Mathf.Clamp(angleDiff, -maxRotation, maxRotation);
-
-            // 判断累计旋转角度是否会超出最大追踪角度
-            if (Mathf.Abs(accumulatedTrackingAngle + rotation) > maxTrackingAngle)
+            // 判断是否满足追踪条件：当子弹距离当前 target 位置小于等于2f时开始追踪
+            float distanceToTarget = Vector2.Distance(transform.position, target.position);
+            if (!isTracking && distanceToTarget <= 2f)
             {
-                // 若超出，则仅允许旋转到达最大追踪角度，并停止追踪
-                float allowedRotation = maxTrackingAngle - Mathf.Abs(accumulatedTrackingAngle);
-                rotation = Mathf.Sign(rotation) * allowedRotation;
-                trackingEnded = true;
-            }
-            else
-            {
-                accumulatedTrackingAngle += rotation;
+                isTracking = true;
             }
 
-            // 将当前运动方向旋转相应角度
-            currentDirection = Quaternion.Euler(0, 0, rotation) * currentDirection;
+            // 如果处于追踪阶段且尚未达到最大追踪角度，则进行角度调整
+            if (isTracking && !trackingEnded)
+            {
+                // 计算从当前位置指向 target 的期望方向
+                Vector2 desiredDirection = ((Vector2)target.position - (Vector2)transform.position).normalized;
+                // 计算当前方向与期望方向的夹角（正负表示旋转方向）
+                float angleDiff = Vector2.SignedAngle(currentDirection, desiredDirection);
+                // 计算本帧允许旋转的最大角度
+                float maxRotation = trackingTurnSpeed * Time.deltaTime;
+                // 限制旋转量在允许范围内
+                float rotation = Mathf.Clamp(angleDiff, -maxRotation, maxRotation);
+
+                // 判断累计旋转角度是否会超出最大追踪角度
+                if (Mathf.Abs(accumulatedTrackingAngle + rotation) > maxTrackingAngle)
+                {
+                    // 若超出，则仅允许旋转到达最大追踪角度，并停止追踪
+                    float allowedRotation = maxTrackingAngle - Mathf.Abs(accumulatedTrackingAngle);
+                    rotation = Mathf.Sign(rotation) * allowedRotation;
+                    trackingEnded = true;
+                }
+                else
+                {
+                    accumulatedTrackingAngle += rotation;
+                }
+
+                // 将当前运动方向旋转相应角度
+                currentDirection = Quaternion.Euler(0, 0, rotation) * currentDirection;
+            }
         }
+        // 若 target 为 null，则不进行追踪，但依然会沿 currentDirection 前进
 
         // 子弹沿当前方向运动
         transform.position += (Vector3)(currentDirection * fly_speed * Time.deltaTime);
+        // 始终更新旋转，使子弹正朝向其运动方向（注意默认朝上，所以需要偏移-90度）
+        float angle = Mathf.Atan2(currentDirection.y, currentDirection.x) * Mathf.Rad2Deg - 90f;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     // 飞行结束时调用的方法：通知发射者回收该子弹，并关闭自身

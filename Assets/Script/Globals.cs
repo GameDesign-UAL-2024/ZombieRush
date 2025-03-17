@@ -126,14 +126,14 @@ public class Globals : MonoBehaviour
 
     public class Events 
     { 
-        public enum GameState{ playing , pausing}
+        public enum GameState{ playing , pausing , timer_off}
         public GameState current_state;
+        public bool in_battle;
         public void GameStart()
         {
             current_state = GameState.playing;
             GameObject GridObject = GameObject.FindGameObjectWithTag("ChunkGenerator");
             if (GridObject != null){Destroy(GridObject);}
-
             Addressables.LoadAssetAsync<GameObject>(Globals.Datas.L1_Grid).Completed += OnGridPrefabLoaded;
         }
         private void OnGridPrefabLoaded(AsyncOperationHandle<GameObject> handle)
@@ -169,6 +169,7 @@ public class Globals : MonoBehaviour
             Data = new Datas();
             Event = new Events();
             Event.current_state = Events.GameState.pausing; 
+            Event.in_battle = false;
         }
         else
         {
@@ -221,15 +222,20 @@ public class Globals : MonoBehaviour
 
         while (true)
         {
-            if (Event.current_state == Events.GameState.playing && Data.timer != null && Datas.EnemyPool.Count == 0)
+            if (Event.current_state == Events.GameState.playing && Data.timer != null && Datas.EnemyPool.Count == 0 && Event.in_battle == false)
             {
                 if (Data.timer.GetCurrentTime() - Data.last_enemy_wave_time >= Data.waiting_time && Data.enemy_wave_number <= 2)
                 {
+                    Event.in_battle = true;
                     StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 5, player.transform.position));
                     Data.enemy_wave_number += 1;
-                    Data.last_enemy_wave_time = Data.timer.GetCurrentTime();
                     Data.waiting_time += 10;
                 }
+            }
+            else if (Datas.EnemyPool.Count == 0 && Event.in_battle == true)
+            {
+                Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                Event.in_battle = false;
             }
             yield return null; // 等待下一帧
         }
