@@ -24,13 +24,13 @@ public class Globals : MonoBehaviour
         public static List<Enemy> EnemyPool;
         public int enemy_wave_number;
         public float last_enemy_wave_time;
-        public int waiting_time;
+        public float waiting_time;
         public Dictionary<int, Dictionary<string, string>> Bulding_Datas { get; private set;} = new Dictionary<int, Dictionary<string, string>>();
         public Datas()
         {
             enemy_wave_number = 0;
             last_enemy_wave_time = 0;
-            waiting_time = 10;
+            waiting_time = 10f;
             current_level = Levels.Level1;
             EnemyPool = new List<Enemy>() ;
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -126,6 +126,8 @@ public class Globals : MonoBehaviour
 
     public class Events 
     { 
+        // 在 Globals.Datas 内或 Globals 类中新增标志变量：
+        public bool waveActive = false;
         public enum GameState{ playing , pausing , timer_off}
         public GameState current_state;
         public bool in_battle;
@@ -214,7 +216,6 @@ public class Globals : MonoBehaviour
         }
     }
     private static Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
-
     private IEnumerator EnemyWavesCoroutine()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -222,22 +223,25 @@ public class Globals : MonoBehaviour
 
         while (true)
         {
+            // 当敌人全部清除时，重置波次状态
+            if (Datas.EnemyPool.Count == 0 && Event.in_battle)
+            {
+                Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                Event.in_battle = false;
+            }
+
+            // 当游戏处于 playing 状态，并且当前没有敌人且不在战斗中时
             if (Event.current_state == Events.GameState.playing && Data.timer != null && Datas.EnemyPool.Count == 0 && Event.in_battle == false)
             {
-                if (Data.timer.GetCurrentTime() - Data.last_enemy_wave_time >= Data.waiting_time && Data.enemy_wave_number <= 2)
+                // 检查等待时间条件
+                if (((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) >= Data.waiting_time) && Data.enemy_wave_number <= 2)
                 {
-                    Event.in_battle = true;
                     StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 5, player.transform.position));
                     Data.enemy_wave_number += 1;
                     Data.waiting_time += 10;
                 }
             }
-            else if (Datas.EnemyPool.Count == 0 && Event.in_battle == true)
-            {
-                Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
-                Event.in_battle = false;
-            }
-            yield return null; // 等待下一帧
+            yield return null;
         }
     }
 
@@ -301,7 +305,7 @@ public class Globals : MonoBehaviour
 
             GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
             Datas.EnemyPool.Add(enemy.GetComponent<Enemy>());
-
+            Event.in_battle = true;
             // 等待下一次生成
             yield return new WaitForSeconds(interval);
         }

@@ -27,11 +27,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 939f221094b33b14fb8754558061194b
-    m_Address: Assets/Resources_moved/Prefabs/Mushroom.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 082eb1e34bb6574438fc17e4f0ec7679
     m_Address: Prefabs/Bar
     m_ReadOnly: 0

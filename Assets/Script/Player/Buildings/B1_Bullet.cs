@@ -8,7 +8,7 @@ public class B1_Bullet : MonoBehaviour
     bool initialized;
     float fly_speed = 3f;
     Transform target;
-
+    float attack_point;
     // 新增变量：
     // 追踪时角度变化的速度（单位：度/秒）
     float trackingTurnSpeed;
@@ -39,10 +39,11 @@ public class B1_Bullet : MonoBehaviour
     /// <param name="target">追踪目标</param>
     /// <param name="trackingTurnSpeed">追踪角度变化速度（度/秒）</param>
     /// <param name="flightEndEvent">飞行结束通知事件</param>
-    public void Initialize(Transform target, float trackingTurnSpeed, UnityAction<B1_Bullet> flightEndEvent)
+    public void Initialize(Transform target, float trackingTurnSpeed, UnityAction<B1_Bullet> flightEndEvent , float atk)
     {
         this.target = target;
         this.trackingTurnSpeed = trackingTurnSpeed;
+        this.attack_point = atk;
         onFlightEnd.AddListener(flightEndEvent);
         // 标记已初始化
         initialized = true;
@@ -143,5 +144,17 @@ public class B1_Bullet : MonoBehaviour
         }
         // 使用对象池时通常采用SetActive(false)进行回收
         gameObject.SetActive(false);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            Enemy enemy = collision.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(transform.position,attack_point,false);
+            }
+        }            
     }
 }

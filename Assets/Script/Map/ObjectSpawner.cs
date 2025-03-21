@@ -216,25 +216,31 @@ public class ObjectSpawner : MonoBehaviour
 
     void UpdateZOrders()
     {
-        // 1. 获取带有特定标签的物体
-        GameObject[] taggedObjects = new GameObject[]
+        List<GameObject> rootSpawnedObjects = new List<GameObject>();
+        foreach(var obj in spawnedObjects.Values)
         {
-            GameObject.FindGameObjectWithTag("Player"),
-            GameObject.FindGameObjectWithTag("Resources"),
-            GameObject.FindGameObjectWithTag("PlayerObjects"),
-            GameObject.FindGameObjectWithTag("Enemy"),
-            GameObject.FindGameObjectWithTag("PlayerBuddies")
-        };
-
-        // 2. 合并 spawnedObjects 和 taggedObjects
-        List<GameObject> allObjects = new List<GameObject>(spawnedObjects.Values);
-        foreach (var taggedObject in taggedObjects)
-        {
-            if (taggedObject != null) 
+            if(obj != null && obj.transform.parent == null)
             {
-                allObjects.Add(taggedObject);
+                rootSpawnedObjects.Add(obj);
             }
         }
+
+        // 获取所有带有特定标签的根节点物体
+        List<GameObject> taggedObjects = new List<GameObject>();
+        foreach(string tag in new string[]{"Player", "Resources", "PlayerObjects", "Enemy", "PlayerBuddies"})
+        {
+            foreach(var obj in GameObject.FindGameObjectsWithTag(tag))
+            {
+                if(obj != null && obj.transform.parent == null)
+                {
+                    taggedObjects.Add(obj);
+                }
+            }
+        }
+
+        // 合并
+        List<GameObject> allObjects = new List<GameObject>(rootSpawnedObjects);
+        allObjects.AddRange(taggedObjects);
 
         // 3. 找到最小和最大Y值
         float minY = float.MaxValue;

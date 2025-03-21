@@ -49,7 +49,6 @@ MonoBehaviour:
   - {fileID: 3644468253578222520, guid: 12da409c19d2ab9439dc022f1a6df683, type: 3}
   - {fileID: 8709437259440495324, guid: 9aec9211f6b23bc4587d50f7155b3d3e, type: 3}
   - {fileID: 8232522952874095071, guid: c280f60b9f0338d4c8a98c1179e7eacf, type: 3}
-  - {fileID: 8366014839076859659, guid: 939f221094b33b14fb8754558061194b, type: 3}
   bushPrefabs:
   - {fileID: 8551892397795477515, guid: 282249a9d5bce0648b4323bd4fa385f7, type: 3}
   rockPrefabs:
