@@ -2367,7 +2367,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1160526536}
   m_HandleRect: {fileID: 1160526535}
   m_Direction: 3
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2422,6 +2422,7 @@ GameObject:
   - component: {fileID: 1908847154}
   - component: {fileID: 1908847153}
   - component: {fileID: 1908847155}
+  - component: {fileID: 1908847156}
   m_Layer: 0
   m_Name: B1_0
   m_TagString: PlayerObjects
@@ -2510,6 +2511,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shot_point: {fileID: 131396168}
+--- !u!95 &1908847156
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908847152}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 39319cf538ee78a4ea25e93a0597847f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2142492014
 GameObject:
   m_ObjectHideFlags: 0

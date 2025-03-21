@@ -8,6 +8,7 @@ public abstract class Items : MonoBehaviour
     public enum ItemTypes{ Properties , BulletEffect , ShootBehaviour , BulletBehaviour , None}
     public abstract ItemTypes Type { get; set; }
 
+    public abstract  List<int> compatible_item_id{get; set;}
     public abstract void OnShoot();
     public abstract void ActiveBulletEffects();
 }
