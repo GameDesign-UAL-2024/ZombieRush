@@ -23,6 +23,7 @@ public class PlayerUI : MonoBehaviour
 
     public TextMeshProUGUI green_value;
     public TextMeshProUGUI black_value;
+    public TextMeshProUGUI pink_value;
     // public TextMeshProUGUI pink_value; // 可根据需要补充
 
     Coroutine get_data;

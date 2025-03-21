@@ -32,6 +32,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a8e810cfa30acaa40bbde43d55ce906b
+    m_Address: Prefabs/Pink
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0baabe0a684d52344aa50d5a34a6bf01, type: 2}
   m_SchemaSet:
