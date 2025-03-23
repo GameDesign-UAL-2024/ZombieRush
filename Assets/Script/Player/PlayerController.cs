@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviour
 {
-    private Vector2Int currentChunkPos;
     public float moveSpeed = 5f; // 移动速度
     private Vector2 moveInput;
     ObjectSpawner objectSpawner;
@@ -20,6 +19,7 @@ public class PlayerController : MonoBehaviour
         public float damage;
         public int max_health;
         public float bullet_exist_time;
+        public int luck;
         
         public Properties()
         {
@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
             damage = 1f;
             max_health = 6;
             bullet_exist_time = 3f;
+            luck = 1;
         }
     } 
 

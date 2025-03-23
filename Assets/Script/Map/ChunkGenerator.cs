@@ -132,7 +132,6 @@ public class ChunkGenerator : MonoBehaviour
             }
         }
     }
-
     public Dictionary<Vector3Int, RuleTile> GetTileDictionary()
     {
         return tileDictionary;

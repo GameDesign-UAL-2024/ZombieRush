@@ -5,10 +5,9 @@ using UnityEngine;
 public abstract class Items : MonoBehaviour
 {
     public abstract int ID { get; set; }
-    public enum ItemTypes{ Properties , BulletEffect , ShootBehaviour , BulletBehaviour , None}
+    public enum ItemTypes{ Properties , BulletEffect , ShootBehaviour_Bullet , ShootBehaviour_Lazer , BulletBehaviour , Additional_Attack , Proactive , None}
     public abstract ItemTypes Type { get; set; }
 
-    public abstract  List<int> compatible_item_id{get; set;}
     public abstract void OnShoot();
     public abstract void ActiveBulletEffects();
 }

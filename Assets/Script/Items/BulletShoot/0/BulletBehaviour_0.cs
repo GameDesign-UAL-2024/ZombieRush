@@ -8,7 +8,6 @@ public class BulletBehaviour_0 : Bullet
 { 
     public override int ID { get; set; } = 1;
     public override ItemTypes Type { get; set; } = ItemTypes.BulletBehaviour;
-    public override List<int> compatible_item_id { get; set; } = new List<int>();
     public int pass_over_time = 0;
     Vector2 direction;
     float moveSpeed = 10;

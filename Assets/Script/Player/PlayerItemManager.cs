@@ -24,7 +24,6 @@ public class PlayerItemManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     void Update()
@@ -35,26 +34,26 @@ public class PlayerItemManager : MonoBehaviour
         }
         if (! player.TryGetComponent<Items>(out Items component))
         {
-            int itemToAdd = current_items.Find(item => ItemFactory.GetTypeByID(item) == Items.ItemTypes.ShootBehaviour); 
+            int itemToAdd = current_items.Find(item => ItemFactory.GetTypeByID(item) == Items.ItemTypes.ShootBehaviour_Bullet || ItemFactory.GetTypeByID(item) == Items.ItemTypes.ShootBehaviour_Lazer); 
             ItemFactory.CreateItemByID(itemToAdd , player);
         }
     }
     // 添加 Item，确保只有一个 ShootBehaviour 类型的 Item
     public void AddItem(int newItemID)
     {
-        if (ItemFactory.GetTypeByID(newItemID) == Items.ItemTypes.ShootBehaviour)
+        if ((ItemFactory.GetTypeByID(newItemID) == Items.ItemTypes.ShootBehaviour_Bullet) || (ItemFactory.GetTypeByID(newItemID) == Items.ItemTypes.ShootBehaviour_Lazer))
         {
             int existingShootItem = -100;
             // 查找现有的 ShootBehaviour 道具
-            existingShootItem = current_items.FirstOrDefault(item => ItemFactory.GetTypeByID(item) == Items.ItemTypes.ShootBehaviour);
+            existingShootItem = current_items.FirstOrDefault(item => ItemFactory.GetTypeByID(item) == Items.ItemTypes.ShootBehaviour_Bullet || ItemFactory.GetTypeByID(item) == Items.ItemTypes.ShootBehaviour_Lazer);
 
             if (existingShootItem >= 0)
             {
                 // 替换已有的 ShootBehaviour 道具
                 current_items.Remove(existingShootItem);
-                if ( player.TryGetComponent<Items>(out Items component))
+                if ( player.TryGetComponent(out Items component))
                 {
-                    if ( component.Type == Items.ItemTypes.ShootBehaviour)
+                    if ( component.Type == Items.ItemTypes.ShootBehaviour_Bullet || component.Type == Items.ItemTypes.ShootBehaviour_Lazer)
                     {
                         Destroy(component);
                     }
