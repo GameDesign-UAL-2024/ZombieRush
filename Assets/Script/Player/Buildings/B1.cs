@@ -20,7 +20,7 @@ public class B1 : Buildings
     // 缓存加载的子弹预制件，避免重复加载
     GameObject bulletPrefabCache;
     Globals global;
-    UnityEvent<Buildings> destroy_event;
+    UnityEvent<Buildings> destroy_event = new UnityEvent<Buildings>();
     GlobalTimer timer;
 
     void Awake()
@@ -112,9 +112,10 @@ public class B1 : Buildings
 
     public void BuildingDestroy()
     {
-        destroy_event.Invoke(this);
+        if (initialized)
+            destroy_event.Invoke(this);
     }
-    public void Initialize(UnityAction<Buildings> on_building_destroy)
+    public override void Initialize(UnityAction<Buildings> on_building_destroy)
     {
         
         destroy_event.AddListener(on_building_destroy);

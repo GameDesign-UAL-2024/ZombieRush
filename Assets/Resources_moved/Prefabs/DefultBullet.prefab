@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4660273503842365384}
   - component: {fileID: 8771729105461718659}
   - component: {fileID: 3600776105066586386}
+  - component: {fileID: 9120578156372257745}
   m_Layer: 0
   m_Name: DefultBullet
   m_TagString: Untagged
@@ -158,3 +159,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.2}
   m_EdgeRadius: 0
+--- !u!114 &9120578156372257745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2566560984444931431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a80837b66043b2c4292f0169ae216dab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pass_over_time: 0

@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UIandNoticement_EN
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: EN
+  m_SharedData: {fileID: 11400000, guid: b80f683fe88128448ba5fb999d49c763, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 4801410637372850273
+  m_TableData:
+  - m_Id: 136873067974656
+    m_Localized: Buildings! (Meow)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 136732147748864
+    m_Localized: '{remain_time:cond:<=0?They''re coming!|Adventurers are regrouping
+      their forces: {remain_time} seconds}
+
+'
+    m_Metadata:
+      m_Items:
+      - rid: 4801410637372850273
+  - m_Id: 138527360192512
+    m_Localized: Hold "W A S D" to Move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 138747607289856
+    m_Localized: Collect slime essence by get close and right click on the trees
+      and stones.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1235602554523648
+    m_Localized: They are coming
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4801410637372850273
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 0090186f5b7c0000

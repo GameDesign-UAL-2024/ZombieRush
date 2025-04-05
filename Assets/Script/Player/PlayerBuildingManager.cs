@@ -80,6 +80,7 @@ public class PlayerBuildingManager : MonoBehaviour
         if (newBuildingComponent != null)
         {
             int key = gridPosition.x * 1000 + gridPosition.y;
+            newBuildingComponent.Initialize(OnBuildingDestroyed);
             current_buildings.Add(key, newBuildingComponent);
         }
     }
@@ -112,7 +113,7 @@ public class PlayerBuildingManager : MonoBehaviour
     }
 
     // 建筑被销毁时，清理相关记录
-    void OnBuildingDestroyed(Buildings building)
+    public void OnBuildingDestroyed(Buildings building)
     {
         Vector2Int position = Vector2Int.FloorToInt(building.transform.position);
         int key = position.x * 1000 + position.y;

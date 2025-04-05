@@ -25,7 +25,7 @@ public class PlayerUI : MonoBehaviour
     public TextMeshProUGUI black_value;
     public TextMeshProUGUI pink_value;
     // public TextMeshProUGUI pink_value; // 可根据需要补充
-
+    [SerializeField]private Descriptions description;
     Coroutine get_data;
     Globals globals;
 
@@ -152,15 +152,15 @@ public class PlayerUI : MonoBehaviour
         {
             black_value.text = number.ToString();
         }
-        // 根据需要添加对粉色的处理
-
-        // 资源值变化时触发建筑按钮更新
+        else
+        {
+            pink_value.text = number.ToString();
+        }
         TriggerValidBuildingsUpdate();
     }
 
     public void OnClickingBuilding(int id)
     {
-        Debug.Log($"BuildingButton pressed: B {id}");
         StartCoroutine(PlaceBuildingCoroutine(id));
     }
 
@@ -193,15 +193,20 @@ public class PlayerUI : MonoBehaviour
             mousePos.z = 0f; // 保证在2D平面上
             Vector2Int gridPos = Vector2Int.FloorToInt(mousePos);
             buildingPreview.transform.position = new Vector3(gridPos.x, gridPos.y, 0f);
-
             // 检查这个位置是否合法
             bool isValid = PlayerBuildingManager.Instance.IsPositionValid(gridPos);
             sr.color = isValid ? Color.white : Color.red;
             
             // 检测左键：输出信息并销毁对象
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && isValid)
             {
-                Debug.Log($"building id : {id} placed");
+                PlayerBuildingManager.Instance.SpawnBuilding(All_Buildings_Data[id]["Prefab_Path"] , gridPos);
+                int.TryParse(All_Buildings_Data[id][Green_Need_Key], out int g_need);
+                int.TryParse(All_Buildings_Data[id][Black_Need_Key], out int b_need);
+                int.TryParse(All_Buildings_Data[id][Pink_Need_Key], out int p_need);
+                globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Green,-g_need);
+                globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Black,-b_need);
+                globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Pink,-p_need);
                 Destroy(buildingPreview);
                 yield break;
             }
@@ -214,8 +219,14 @@ public class PlayerUI : MonoBehaviour
             yield return null;
         }
     }
-
-
+    public void ShowDescription(int id , int type)
+    {
+        description.UpdateDescription(id,type);
+    }
+    public void ClearDescription()
+    {
+        description.ClearLocalizationReferences();
+    }
     public void OnClickingBuildingPanelButton(GameObject panel)
     {
         CanvasGroup cg = panel.GetComponent<CanvasGroup>();

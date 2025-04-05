@@ -8,6 +8,4 @@ public abstract class Items : MonoBehaviour
     public enum ItemTypes{ Properties , BulletEffect , ShootBehaviour_Bullet , ShootBehaviour_Lazer , BulletBehaviour , Additional_Attack , Proactive , None}
     public abstract ItemTypes Type { get; set; }
 
-    public abstract void OnShoot();
-    public abstract void ActiveBulletEffects();
 }

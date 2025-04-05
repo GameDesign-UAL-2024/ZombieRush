@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-String-Tables-English (United States) (en-US)
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-String-Tables-English (United States) (en-US)
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 4de76655cb9201248b5dcbeab7a74e09
+  m_SerializeEntries:
+  - m_GUID: 9f40efb389a10aa47a777ed4b8dee12f
+    m_Address: Items_Description_EN
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-EN
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 052d25e25253be442a94ee1a93eee639
+    m_Address: Buildings_Name_EN
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-EN
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a6397b15b189584daae2ad82dcbd9ae
+    m_Address: UIandNoticement_EN
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-EN
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43c60f99804c40742a75444cffae3f7a
+    m_Address: Building_Description_EN
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-EN
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc5c8fcf16e02fd4b91015fab6274044
+    m_Address: Item_Name_EN
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-EN
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 0baabe0a684d52344aa50d5a34a6bf01, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: fe36f3d6725496d4a86589a12aad0859, type: 2}
+    - {fileID: 11400000, guid: df64c810f73e4be46a95d4b13ab14ba2, type: 2}

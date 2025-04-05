@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class Buildings : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public abstract class Buildings : MonoBehaviour
     public abstract float max_health {get; set;}
     public abstract float current_health {get; set;}
 
-    
+    public abstract void Initialize(UnityAction<Buildings> on_building_destroy);
     public abstract void TakeDamage(float amount);
     
 }

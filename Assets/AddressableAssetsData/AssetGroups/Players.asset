@@ -37,6 +37,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35c49ea4f62b6c7488c212cbaa84e55a
+    m_Address: Prefabs/CloudExploEffect
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0baabe0a684d52344aa50d5a34a6bf01, type: 2}
   m_SchemaSet:

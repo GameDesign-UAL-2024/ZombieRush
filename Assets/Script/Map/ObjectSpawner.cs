@@ -5,15 +5,57 @@ using UnityEngine.UIElements;
 
 public class ObjectSpawner : MonoBehaviour
 {
-
     public GameObject[] treePrefabs;
     public GameObject[] bushPrefabs;
     public GameObject[] rockPrefabs;
     [SerializeField]
     int dictionary_range;
-    public static Dictionary<Vector3, string> objectRecords {get; private set;}
+    public static Dictionary<Vector3, string> objectRecords { get; private set; }
     static Dictionary<Vector3, GameObject> spawnedObjects;
     private int spawnRange = 20;
+
+    // 预制体查找字典，改用延迟初始化，避免空引用问题
+    private Dictionary<string, GameObject> prefabLookup;
+
+    // 延迟初始化预制体查找字典的方法
+    private void EnsurePrefabLookupInitialized()
+    {
+        if (prefabLookup == null)
+        {
+            prefabLookup = new Dictionary<string, GameObject>();
+            if (treePrefabs != null)
+            {
+                foreach (var tree in treePrefabs)
+                {
+                    if (tree != null && !prefabLookup.ContainsKey(tree.name))
+                        prefabLookup.Add(tree.name, tree);
+                }
+            }
+            if (bushPrefabs != null)
+            {
+                foreach (var bush in bushPrefabs)
+                {
+                    if (bush != null && !prefabLookup.ContainsKey(bush.name))
+                        prefabLookup.Add(bush.name, bush);
+                }
+            }
+            if (rockPrefabs != null)
+            {
+                foreach (var rock in rockPrefabs)
+                {
+                    if (rock != null && !prefabLookup.ContainsKey(rock.name))
+                        prefabLookup.Add(rock.name, rock);
+                }
+            }
+        }
+    }
+
+    // 如果 ObjectSpawner 是挂在场景上的，Awake 会优先调用
+    void Awake()
+    {
+        EnsurePrefabLookupInitialized();
+    }
+
     public void InitializeObjectData(Dictionary<Vector3Int, RuleTile> tileDictionary)
     {
         spawnedObjects = new Dictionary<Vector3, GameObject>();
@@ -99,9 +141,9 @@ public class ObjectSpawner : MonoBehaviour
             Vector3 pos = center + new Vector3(Random.Range(-5, 6), Random.Range(-5, 6), 0);
             bool valid = true;
 
-            foreach (var occupiedPos in occupied)
+            for (int i = 0; i < occupied.Count; i++)
             {
-                if (Vector3.Distance(occupiedPos, pos) < minDistance)
+                if (Vector3.Distance(occupied[i], pos) < minDistance)
                 {
                     valid = false;
                     break;
@@ -118,17 +160,24 @@ public class ObjectSpawner : MonoBehaviour
 
     public void UpdateSpawnedObjects(Vector3 playerPosition)
     {
+        if (objectRecords == null || spawnedObjects == null)
+        {
+            Debug.LogWarning("ObjectSpawner 未初始化，请先调用 InitializeObjectData 方法哦！");
+            return;
+        }
+
         List<Vector3> toSpawn = new List<Vector3>();
         List<Vector3> toRemove = new List<Vector3>();
 
+        float sqrRange = spawnRange * spawnRange;
         foreach (var entry in objectRecords)
         {
-            float distance = Vector2.Distance(playerPosition, entry.Key);
-            if (distance <= spawnRange && !spawnedObjects.ContainsKey(entry.Key) && entry.Value != null)
+            float distSqr = (playerPosition - entry.Key).sqrMagnitude;
+            if (distSqr <= sqrRange && !spawnedObjects.ContainsKey(entry.Key) && entry.Value != null)
             {
                 toSpawn.Add(entry.Key);
             }
-            else if (distance > spawnRange && spawnedObjects.ContainsKey(entry.Key))
+            else if (distSqr > sqrRange && spawnedObjects.ContainsKey(entry.Key))
             {
                 toRemove.Add(entry.Key);
             }
@@ -147,52 +196,26 @@ public class ObjectSpawner : MonoBehaviour
         dictionary_range = spawnedObjects.Count;
         UpdateZOrders();
     }
+
     private void SpawnObject(Vector3 pos, string prefabName)
     {
+        // 确保预制体查找字典被初始化啦
+        EnsurePrefabLookupInitialized();
+        
         GameObject prefab = null;
-
-        // 在 treePrefabs、bushPrefabs 和 rockPrefabs 中查找匹配的预制体
-        foreach (var t in treePrefabs)
-        {
-            if (t.name == prefabName)
-            {
-                prefab = t;
-                break;
-            }
-        }
-        if (prefab == null)
-        {
-            foreach (var b in bushPrefabs)
-            {
-                if (b.name == prefabName)
-                {
-                    prefab = b;
-                    break;
-                }
-            }
-        }
-        if (prefab == null)
-        {
-            foreach (var r in rockPrefabs)
-            {
-                if (r.name == prefabName)
-                {
-                    prefab = r;
-                    break;
-                }
-            }
-        }
-
-        if (prefab != null)
+        if (prefabLookup.TryGetValue(prefabName, out prefab))
         {
             GameObject obj = Instantiate(prefab, pos, Quaternion.identity);
             spawnedObjects[pos] = obj;
+        }
+        else
+        {
+            Debug.LogWarning("未在预制体查找字典中找到名称为 " + prefabName + " 的预制体！");
         }
     }
 
     public void RemoveObject(GameObject obj)
     {
-        // 遍历 spawnedObjects 找到对应的键
         Vector3 keyToRemove = default(Vector3);
         bool found = false;
         foreach (var kvp in spawnedObjects)
@@ -205,7 +228,6 @@ public class ObjectSpawner : MonoBehaviour
             }
         }
 
-        // 如果找到了，删除两个字典中的记录
         if (found)
         {
             spawnedObjects.Remove(keyToRemove);
@@ -217,32 +239,29 @@ public class ObjectSpawner : MonoBehaviour
     void UpdateZOrders()
     {
         List<GameObject> rootSpawnedObjects = new List<GameObject>();
-        foreach(var obj in spawnedObjects.Values)
+        foreach (var obj in spawnedObjects.Values)
         {
-            if(obj != null && obj.transform.parent == null)
+            if (obj != null && obj.transform.parent == null)
             {
                 rootSpawnedObjects.Add(obj);
             }
         }
 
-        // 获取所有带有特定标签的根节点物体
         List<GameObject> taggedObjects = new List<GameObject>();
-        foreach(string tag in new string[]{"Player", "Resources", "PlayerObjects", "Enemy", "PlayerBuddies"})
+        foreach (string tag in new string[] { "Player", "Resources", "PlayerObjects", "Enemy", "PlayerBuddies" })
         {
-            foreach(var obj in GameObject.FindGameObjectsWithTag(tag))
+            foreach (var obj in GameObject.FindGameObjectsWithTag(tag))
             {
-                if(obj != null && obj.transform.parent == null)
+                if (obj != null && obj.transform.parent == null)
                 {
                     taggedObjects.Add(obj);
                 }
             }
         }
 
-        // 合并
         List<GameObject> allObjects = new List<GameObject>(rootSpawnedObjects);
         allObjects.AddRange(taggedObjects);
 
-        // 3. 找到最小和最大Y值
         float minY = float.MaxValue;
         float maxY = float.MinValue;
         foreach (var obj in allObjects)
@@ -255,20 +274,17 @@ public class ObjectSpawner : MonoBehaviour
             }
         }
 
-        // 4. 计算动态缩放因子（避免除以零）
         float yRange = maxY - minY;
         float zScale = (yRange == 0) ? 0 : 1.0f / yRange;
 
-        // 5. 设置所有物体的Z值
         foreach (var obj in allObjects)
         {
             if (obj != null)
             {
                 Vector3 pos = obj.transform.position;
-                pos.z = (pos.y - maxY) * zScale; // Y越大，Z越接近0
-                obj.transform.position = pos;                
+                pos.z = (pos.y - maxY) * zScale;
+                obj.transform.position = pos;
             }
         }
     }
-
 }

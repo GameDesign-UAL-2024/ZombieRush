@@ -7,6 +7,7 @@ using System.Reflection;
 public static class ItemFactory
 {
     private static Dictionary<int, Type> itemTypes = new Dictionary<int, Type>();
+    private static Dictionary<int, Items.ItemTypes> itemTypeCache = new Dictionary<int, Items.ItemTypes>();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeFactory()
@@ -16,43 +17,43 @@ public static class ItemFactory
 
     private static void RegisterAllItems()
     {
-        // 创建一个临时的 GameObject 用于添加组件
-        GameObject tempGO = new GameObject("TempItemObject");
-        
         var itemSubclasses = Assembly.GetExecutingAssembly().GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Items)));
 
         foreach (var type in itemSubclasses)
         {
-            // 在同一个临时对象上添加组件
-            Items itemInstance = tempGO.AddComponent(type) as Items;
-            if (itemInstance != null)
+            FieldInfo idField = type.GetField("StaticID", BindingFlags.Static | BindingFlags.Public);
+            FieldInfo typeField = type.GetField("StaticType", BindingFlags.Static | BindingFlags.Public);
+
+            if (idField != null && typeField != null)
             {
-                int id = itemInstance.ID;
-                if (!itemTypes.ContainsKey(id))
+                int id = (int)idField.GetValue(null);
+                var itemType = (Items.ItemTypes)typeField.GetValue(null);
+
+                if (itemTypes.ContainsKey(id))
                 {
-                    itemTypes.Add(id, type);
+                    Debug.LogWarning($"重复的道具 ID：{id} 在类 {type.Name} 中已存在。原始类：{itemTypes[id].Name}");
+                    continue;
                 }
-                // 立即销毁刚添加的组件，保持临时对象干净
-                UnityEngine.Object.DestroyImmediate(itemInstance);
+
+                itemTypes.Add(id, type);
+                itemTypeCache.Add(id, itemType);
+            }
+            else
+            {
+                Debug.LogWarning($"类 {type.Name} 缺少 StaticID 或 StaticType 字段，无法注册。");
             }
         }
-        
-        // 完成后销毁临时 GameObject
-        UnityEngine.Object.DestroyImmediate(tempGO);
     }
 
     public static Items.ItemTypes GetTypeByID(int id)
     {
-        if (itemTypes.TryGetValue(id, out Type type))
+        if (itemTypeCache.TryGetValue(id, out var itemType))
         {
-            GameObject tempGO = new GameObject("TempItemObject");
-            Items itemInstance = tempGO.AddComponent(type) as Items;
-            Items.ItemTypes result = itemInstance != null ? itemInstance.Type : Items.ItemTypes.None;
-            UnityEngine.Object.DestroyImmediate(tempGO);
-            return result;
+            return itemType;
         }
-        Debug.LogWarning($"Item ID {id} not found!");
+
+        Debug.LogWarning($"Item ID {id} 未找到对应类型！");
         return Items.ItemTypes.None;
     }
 
@@ -60,11 +61,10 @@ public static class ItemFactory
     {
         if (itemTypes.TryGetValue(id, out Type type))
         {
-            // 使用 AddComponent 将组件添加到 target 上，并转换为 Items 类型
             return target.AddComponent(type) as Items;
         }
-        Debug.LogWarning($"Item ID {id} not found!");
+
+        Debug.LogWarning($"Item ID {id} 未找到对应类！");
         return null;
     }
-
 }
