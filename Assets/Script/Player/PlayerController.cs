@@ -13,24 +13,34 @@ public class PlayerController : MonoBehaviour
     SpriteRenderer sprite;
     Rigidbody2D RB;
     public Properties player_properties;
+    CameraEffects camera_effect;
     public class Properties
     {
         public float bullet_speed;
         public float damage;
-        public int max_health;
+        public float max_health;
+        public float current_health;
         public float bullet_exist_time;
-        public int luck;
+        public float luck;
         
         public Properties()
         {
             bullet_speed = 5f;
             damage = 1f;
             max_health = 6;
+            current_health = max_health;
             bullet_exist_time = 3f;
             luck = 1;
         }
     } 
-
+    public bool ReduceLife(float value)
+    {
+        if (player_properties == null){return false;}
+        player_properties.current_health -= value;
+        if (player_properties.current_health < 0){ player_properties.current_health = 0; }
+        if (camera_effect != null){ camera_effect.Shake(); }
+        return true;
+    }
     void Start()
     {
         if (SceneManager.GetActiveScene().name == "0_0")
@@ -41,6 +51,7 @@ public class PlayerController : MonoBehaviour
         anim = transform.GetComponent<Animator>();
         sprite = transform.GetComponent<SpriteRenderer>();
         RB = transform.GetComponent<Rigidbody2D>();
+        camera_effect = CameraEffects.Instance;
     }
 
     void Update()

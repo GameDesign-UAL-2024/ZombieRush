@@ -30,7 +30,7 @@ public class Globals : MonoBehaviour
         {
             enemy_wave_number = 0;
             last_enemy_wave_time = 0;
-            waiting_time = 10f;
+            waiting_time = 90f;
             current_level = Levels.Level1;
             EnemyPool = new List<Enemy>() ;
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -130,10 +130,13 @@ public class Globals : MonoBehaviour
         public bool waveActive = false;
         public enum GameState{ playing , pausing , timer_off}
         public GameState current_state;
+        public GameObject world_item {get; private set;}
         public bool in_battle;
         public void GameStart()
         {
             current_state = GameState.playing;
+            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>("Prefabs/ItemInWorld");
+            handle.Completed += op => world_item = handle.Result;
             GameObject GridObject = GameObject.FindGameObjectWithTag("ChunkGenerator");
             if (GridObject != null){Destroy(GridObject);}
             Addressables.LoadAssetAsync<GameObject>(Globals.Datas.L1_Grid).Completed += OnGridPrefabLoaded;
@@ -223,22 +226,46 @@ public class Globals : MonoBehaviour
 
         while (true)
         {
-            // 当敌人全部清除时，重置波次状态
-            if (Datas.EnemyPool.Count == 0 && Event.in_battle)
-            {
-                Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
-                Event.in_battle = false;
-            }
-
-            // 当游戏处于 playing 状态，并且当前没有敌人且不在战斗中时
-            if (Event.current_state == Events.GameState.playing && Data.timer != null && Datas.EnemyPool.Count == 0 && Event.in_battle == false)
+            // 优先判断：如果游戏处于 playing 状态、计时器存在、敌人池为空且不在战斗中，则触发生成敌人波
+            if (Event.current_state == Events.GameState.playing && Data.timer != null &&
+                Datas.EnemyPool.Count == 0 && Event.in_battle == false)
             {
                 // 检查等待时间条件
                 if (((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) >= Data.waiting_time) && Data.enemy_wave_number <= 2)
                 {
+                    // 更新开始生成波的时间，同时标记为战斗中，防止重复触发
+                    Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                    Event.in_battle = true;
                     StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 5, player.transform.position));
                     Data.enemy_wave_number += 1;
-                    Data.waiting_time += 10;
+                    if (Data.enemy_wave_number == 3)
+                    {
+                        Data.waiting_time += 15f;
+                    }
+                }
+                else if (((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) >= Data.waiting_time) && Data.enemy_wave_number <= 4)
+                {
+                    Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                    Event.in_battle = true;
+                    StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 10, player.transform.position));
+                    Data.enemy_wave_number += 1;
+                }
+            }
+            // 奖励生成：只有当敌人池为空且仍处于战斗状态，并且距离上次记录的时间超过1秒后才发放奖励
+            else if (Datas.EnemyPool.Count == 0 && Event.in_battle)
+            {
+                if ((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) > 1f)
+                {
+                    // 战斗结束：生成奖励道具，并重置状态
+                    int generating_item_id = ItemFactory.PropertieItems[UnityEngine.Random.Range(1, ItemFactory.PropertieItems.Count)];
+                    GameObject world_item_instance = Instantiate(this.Event.world_item, player.transform.position + new Vector3(0, -5, 0), Quaternion.identity);
+                    Items.ItemRanks? rank = ItemFactory.GetRankByID(generating_item_id);
+                    if (rank != null)
+                    {
+                        world_item_instance.GetComponent<ItemInWorld>().Initialize(generating_item_id, (Items.ItemRanks)rank);
+                    }
+                    Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                    Event.in_battle = false;
                 }
             }
             yield return null;

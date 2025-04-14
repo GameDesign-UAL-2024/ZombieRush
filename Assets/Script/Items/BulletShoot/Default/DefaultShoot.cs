@@ -8,6 +8,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class DefaultShoot : Items
 {
     public override int ID { get; set; } = 0;
+    public override ItemRanks Rank { get; set; } = ItemRanks.N;
     public override ItemTypes Type { get; set; } = ItemTypes.ShootBehaviour_Bullet;
     static string bullet_prefab = "Prefabs/DefultBullet";
     public List<Bullet> bullets = new List<Bullet>();

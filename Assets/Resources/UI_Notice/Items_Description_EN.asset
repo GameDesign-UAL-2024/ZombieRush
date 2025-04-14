@@ -27,11 +27,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3893863745359872
-    m_Localized: Slightly increases damage and decreases bounce speed
+    m_Localized: Slightly increases damage and decreases bullet speed
     m_Metadata:
       m_Items: []
   - m_Id: 3893861438492672
     m_Localized: Increased bullet speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4046949587652608
+    m_Localized: Luck Up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4046952729186304
+    m_Localized: Range Up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4058552034955264
+    m_Localized: HP Up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4058561748963328
+    m_Localized: Bullet speed Up , Range Up
     m_Metadata:
       m_Items: []
   references:

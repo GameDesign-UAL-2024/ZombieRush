@@ -34,6 +34,22 @@ MonoBehaviour:
     m_Localized: Slime Acid
     m_Metadata:
       m_Items: []
+  - m_Id: 3919971085750272
+    m_Localized: Four-Leaf clover
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3920094847078400
+    m_Localized: Slime supercharge
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3920233481408512
+    m_Localized: Hyperplasia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3920298606366720
+    m_Localized: High-velocity bullets
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -29,7 +29,7 @@ public class EnemyNav : MonoBehaviour
     Enemy self_controller;
     Dictionary<Vector2Int, List<Vector2>> spatialGrid = new Dictionary<Vector2Int, List<Vector2>>();
 
-    public bool is_activing { get; private set; }
+    [SerializeField]public bool is_activing { get; private set; }
     bool initialized;
     public void SetNavActive(bool value) => is_activing = value;
     public void SetTarget(GameObject t) => target = t;
@@ -208,6 +208,7 @@ public class EnemyNav : MonoBehaviour
     {
         while (currentPathIndex < currentPath.Count)
         {
+
             Vector2 targetPoint = currentPath[currentPathIndex];
             while (Vector2.Distance(transform.position, targetPoint) > arrivalThreshold)
             {

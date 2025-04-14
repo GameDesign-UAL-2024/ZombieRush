@@ -1,20 +1,109 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class ItemInWorld : MonoBehaviour
 {
-    int self_item;
+    int self_item_id;
     PlayerItemManager PIM;
+    PlayerUI UI_INSTANCE;
+    Animator animator;
+    [SerializeField]SpriteRenderer self_image;
+    [SerializeField]Sprite S_img;
+    [SerializeField]Sprite A_img;
+    [SerializeField]Sprite B_img;
+    SpriteRenderer bottom_renderer; // 底座的Renderer
+    Sprite item_image;
+    bool Initialized = false;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         PIM = PlayerItemManager.Instance;
+        UI_INSTANCE = PlayerUI.Instance;
+        animator = transform.GetComponent<Animator>();
+        bottom_renderer = transform.GetComponent<SpriteRenderer>();
+        if (self_image != null)
+            self_image.enabled = false;
     }
 
-    // Update is called once per frame
+    public void Initialize(int item_id , Items.ItemRanks rank)
+    {
+        self_item_id = item_id;
+        string img_path = "Sprites/Items/" + self_item_id.ToString();
+        item_image = Resources.Load<Sprite>(img_path);
+        if (rank == Items.ItemRanks.S)
+            bottom_renderer.sprite = S_img;
+        else if (rank == Items.ItemRanks.A)
+            bottom_renderer.sprite = A_img;
+        else
+            bottom_renderer.sprite = B_img;    
+
+        if (item_image == null)
+        {
+            Debug.Log($"img not found:{self_item_id}");
+        }
+        else
+        {
+            self_image.sprite = item_image;
+        }
+        self_image.enabled = true;
+        Initialized = true;
+    }
+
     void Update()
     {
+        if ( ! Initialized)
+            return;
         
+        if (IsMouseOverSpritePixel(self_image) || IsMouseOverSpritePixel(bottom_renderer))
+        {
+            UI_INSTANCE.ShowDescription(self_item_id,0);
+            if (Input.GetMouseButtonDown(1))
+            {
+                PIM.AddItem(self_item_id);
+                UI_INSTANCE.ClearDescription();
+                Dissappear();
+            }
+        }
+    }
+    void Dissappear()
+    {
+        Destroy(this.gameObject);
+    }
+    bool IsMouseOverSpritePixel(SpriteRenderer renderer)
+    {
+        if (renderer == null || renderer.sprite == null)
+        {
+            return false;
+        }
+        
+        // 获取鼠标在世界坐标中的位置
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // 使用 renderer 的 z 坐标，确保转换准确
+        worldPos.z = renderer.transform.position.z;
+        
+        // 转换为 Sprite 的局部坐标（使用 renderer.transform 而不是当前组件的 transform）
+        Vector2 localPos = renderer.transform.InverseTransformPoint(worldPos);
+
+        Sprite sprite = renderer.sprite;
+        Rect textureRect = sprite.textureRect;
+        Vector2 pivot = sprite.pivot;
+        float pixelsPerUnit = sprite.pixelsPerUnit;
+
+        // 将局部坐标转换为以像素为单位的坐标（参照 Sprite 的 pivot）
+        Vector2 pixelPos = new Vector2(localPos.x * pixelsPerUnit + pivot.x,
+                                    localPos.y * pixelsPerUnit + pivot.y);
+
+        // 检查是否在 Sprite 纹理矩形内
+        if (pixelPos.x < 0 || pixelPos.x > textureRect.width ||
+            pixelPos.y < 0 || pixelPos.y > textureRect.height)
+        {
+            return false;
+        }
+
+        int texX = Mathf.FloorToInt(pixelPos.x + textureRect.x);
+        int texY = Mathf.FloorToInt(pixelPos.y + textureRect.y);
+
+        UnityEngine.Color pixelColor = sprite.texture.GetPixel(texX, texY);
+        return pixelColor.a > 0.01f;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyNav))]
-public class Enemy_01 : Enemy
+public class Enemy0 : Enemy
 {
     public override float max_health { get; set;} = 3f;
     public override float current_health { get; set;}

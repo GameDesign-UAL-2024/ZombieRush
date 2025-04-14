@@ -9,9 +9,16 @@ public static class ItemFactory
     private static Dictionary<int, Type> itemTypes = new Dictionary<int, Type>();
     private static Dictionary<int, Items.ItemTypes> itemTypeCache = new Dictionary<int, Items.ItemTypes>();
 
+    public static List<int> PropertieItems {get; private set;}
+    public static List<int> BulletEffectItems {get; private set;}
+    public static List<int> AdvancedItems {get; private set;}
+    public static List<int> ProactiveItems {get; private set;}
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeFactory()
     {
+        PropertieItems = new List<int>();
+        BulletEffectItems = new List<int>();
+        AdvancedItems = new List<int>();
         RegisterAllItems();
     }
 
@@ -20,30 +27,48 @@ public static class ItemFactory
         var itemSubclasses = Assembly.GetExecutingAssembly().GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Items)));
 
+        // 创建一个临时 GameObject 用于生成 MonoBehaviour 实例
+        GameObject tempContainer = new GameObject("TempItemsContainer");
+
         foreach (var type in itemSubclasses)
         {
-            FieldInfo idField = type.GetField("StaticID", BindingFlags.Static | BindingFlags.Public);
-            FieldInfo typeField = type.GetField("StaticType", BindingFlags.Static | BindingFlags.Public);
-
-            if (idField != null && typeField != null)
+            // 添加组件以创建实例（注意：MonoBehaviour 不能通过 new 操作符直接创建）
+            Items instance = tempContainer.AddComponent(type) as Items;
+            if (instance == null)
             {
-                int id = (int)idField.GetValue(null);
-                var itemType = (Items.ItemTypes)typeField.GetValue(null);
-
-                if (itemTypes.ContainsKey(id))
-                {
-                    Debug.LogWarning($"重复的道具 ID：{id} 在类 {type.Name} 中已存在。原始类：{itemTypes[id].Name}");
-                    continue;
-                }
-
-                itemTypes.Add(id, type);
-                itemTypeCache.Add(id, itemType);
+                Debug.LogWarning($"无法为类型 {type.Name} 创建实例。");
+                continue;
             }
+
+            int id = instance.ID;
+            Items.ItemTypes itemType = instance.Type;
+
+            if (itemTypes.ContainsKey(id))
+            {
+                Debug.LogWarning($"重复的道具 ID:{id} 在类 {type.Name} 中已存在。原始类：{itemTypes[id].Name}");
+                GameObject.DestroyImmediate(instance);
+                continue;
+            }
+
+            itemTypes.Add(id, type);
+            itemTypeCache.Add(id, itemType);
+
+            //将物品按类别分类储存在列表，方便生成道具区分道具池
+            if (itemType == Items.ItemTypes.Properties)
+                PropertieItems.Add(id);
+            else if (itemType == Items.ItemTypes.ShootBehaviour_Bullet || itemType == Items.ItemTypes.ShootBehaviour_Lazer)
+                AdvancedItems.Add(id);
+            else if (itemType == Items.ItemTypes.BulletEffect)
+                BulletEffectItems.Add(id);
             else
-            {
-                Debug.LogWarning($"类 {type.Name} 缺少 StaticID 或 StaticType 字段，无法注册。");
-            }
+                ProactiveItems.Add(id);
+
+            // 注册后移除组件，避免多余的实例存在
+            GameObject.DestroyImmediate(instance);
         }
+
+        // 最后销毁临时容器
+        GameObject.DestroyImmediate(tempContainer);
     }
 
     public static Items.ItemTypes GetTypeByID(int id)
@@ -57,6 +82,18 @@ public static class ItemFactory
         return Items.ItemTypes.None;
     }
 
+    public static Items.ItemRanks? GetRankByID(int id)
+    {
+        GameObject tempContainer = new GameObject("TempItemsContainer");
+        if (itemTypes.ContainsKey(id))
+        {
+            CreateItemByID(id, tempContainer);
+            Items instance = tempContainer.GetComponent<Items>();
+            return instance.Rank;
+        }
+        Debug.Log("Cannot Find item");
+        return null;
+    }
     public static Items CreateItemByID(int id, GameObject target)
     {
         if (itemTypes.TryGetValue(id, out Type type))

@@ -1,11 +1,22 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
+using UnityEngine.UI;
 
 public class Descriptions : MonoBehaviour
 {
     // 分别对应名字和描述的Localize String Event组件
     [SerializeField] private LocalizeStringEvent nameLocalizeEvent;
     [SerializeField] private LocalizeStringEvent descriptionLocalizeEvent;
+
+    void Start()
+    {
+        foreach (TextMeshProUGUI texts in transform.GetComponentsInChildren<TextMeshProUGUI>())
+        {
+            texts.text = "";
+        }
+    }
 
     /// <summary>
     /// 显示描述。type为0时表示Item，为1时表示Building，
@@ -21,7 +32,7 @@ public class Descriptions : MonoBehaviour
         // 根据type选择对应的本地化表
         // 如果type为0（Item）则使用Item_Name和Item_Description，否则为Buildings_Name和Buildings_Description
         string nameTable = (type == 0) ? "Item_Name" : "Buildings_Name";
-        string descriptionTable = (type == 0) ? "Item_Description" : "Building_Description";
+        string descriptionTable = (type == 0) ? "Items_Description" : "Building_Description";
 
         // 对Localize String Event的StringReference重新赋值
         if(nameLocalizeEvent != null && descriptionLocalizeEvent != null)
