@@ -170,7 +170,7 @@ public class Enemy1 : Enemy
 
         Vector2 currentDirection = (target.transform.position - transform.position).normalized;
         float maxDegreesPerSecond = 20f;
-
+        bool facingLeft;
         while ((GlobalTimer.Instance.GetCurrentTime() - startTime) <= 2f)
         {
             // 平滑朝向目标调整
@@ -208,7 +208,7 @@ public class Enemy1 : Enemy
             transform.rotation = Quaternion.Euler(0f, 0f, zAngle);
 
             // 更新视觉朝向（基于当前方向，而非目标位置）
-            bool facingLeft = currentDirection.x < 0;
+            facingLeft = currentDirection.x < 0;
             sprite_renderer.flipX = facingLeft;
 
             // 翻转粒子位置
@@ -224,6 +224,8 @@ public class Enemy1 : Enemy
         }
 
         // 冲刺结束后恢复Z轴旋转为正常
+        facingLeft = currentDirection.x < 0;
+        sprite_renderer.flipX = facingLeft;
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
     }
     // 然后在攻击动画事件末尾调用：

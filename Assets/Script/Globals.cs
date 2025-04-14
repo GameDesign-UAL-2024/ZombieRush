@@ -30,7 +30,7 @@ public class Globals : MonoBehaviour
         {
             enemy_wave_number = 0;
             last_enemy_wave_time = 0;
-            waiting_time = 90f;
+            waiting_time = 10f;
             current_level = Levels.Level1;
             EnemyPool = new List<Enemy>() ;
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();

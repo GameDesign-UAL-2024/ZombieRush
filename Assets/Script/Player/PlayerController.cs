@@ -38,7 +38,21 @@ public class PlayerController : MonoBehaviour
         if (player_properties == null){return false;}
         player_properties.current_health -= value;
         if (player_properties.current_health < 0){ player_properties.current_health = 0; }
-        if (camera_effect != null){ camera_effect.Shake(); }
+        if (camera_effect != null)
+        { 
+            if ((value/player_properties.max_health) < 0.1)
+            {
+                camera_effect.Shake(0.3f , 1f , 1.5f , 3); 
+            }
+            else if ((value/player_properties.max_health) > 0.3)
+            {
+                camera_effect.Shake(0.5f , 1f , 1.5f , 5.5f); 
+            }
+            else
+            {
+                camera_effect.Shake(0.4f , 1f , 1.5f , 4); 
+            }            
+        }
         return true;
     }
     void Start()
