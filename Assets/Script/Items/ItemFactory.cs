@@ -9,10 +9,11 @@ public static class ItemFactory
     private static Dictionary<int, Type> itemTypes = new Dictionary<int, Type>();
     private static Dictionary<int, Items.ItemTypes> itemTypeCache = new Dictionary<int, Items.ItemTypes>();
 
-    public static List<int> PropertieItems {get; private set;}
-    public static List<int> BulletEffectItems {get; private set;}
-    public static List<int> AdvancedItems {get; private set;}
-    public static List<int> ProactiveItems {get; private set;}
+    public static List<int> PropertieItems {get; private set;} =  new List<int>();
+    public static List<int> BulletEffectItems {get; private set;} =  new List<int>();
+    public static List<int> AdvancedItems {get; private set;} =  new List<int>();
+    public static List<int> AdditionalAttack {get; private set;} =  new List<int>();
+    public static List<int> ProactiveItems {get; private set;} =  new List<int>();
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeFactory()
     {
@@ -56,10 +57,12 @@ public static class ItemFactory
             //将物品按类别分类储存在列表，方便生成道具区分道具池
             if (itemType == Items.ItemTypes.Properties)
                 PropertieItems.Add(id);
-            else if (itemType == Items.ItemTypes.ShootBehaviour_Bullet || itemType == Items.ItemTypes.ShootBehaviour_Lazer)
+            else if ((itemType == Items.ItemTypes.ShootBehaviour_Bullet || itemType == Items.ItemTypes.ShootBehaviour_Lazer) && id != 0)
                 AdvancedItems.Add(id);
             else if (itemType == Items.ItemTypes.BulletEffect)
                 BulletEffectItems.Add(id);
+            else if (itemType == Items.ItemTypes.Additional_Attack)
+                AdditionalAttack.Add(id);
             else
                 ProactiveItems.Add(id);
 

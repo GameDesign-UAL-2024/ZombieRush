@@ -3,10 +3,11 @@ using UnityEngine;
 
 public class ItemInWorld : MonoBehaviour
 {
-    int self_item_id;
+    public int self_item_id {get; private set;}
     PlayerItemManager PIM;
     PlayerUI UI_INSTANCE;
     Animator animator;
+    Globals global;
     [SerializeField]SpriteRenderer self_image;
     [SerializeField]Sprite S_img;
     [SerializeField]Sprite A_img;
@@ -24,7 +25,10 @@ public class ItemInWorld : MonoBehaviour
         if (self_image != null)
             self_image.enabled = false;
     }
-
+    void Start()
+    {
+        global = Globals.Instance;
+    }
     public void Initialize(int item_id , Items.ItemRanks rank)
     {
         self_item_id = item_id;
@@ -63,6 +67,12 @@ public class ItemInWorld : MonoBehaviour
                 UI_INSTANCE.ClearDescription();
                 Dissappear();
             }
+        }
+
+        if (global.Event.in_battle)
+        {
+            UI_INSTANCE.ClearDescription();
+            Destroy(this.gameObject);
         }
     }
     void Dissappear()

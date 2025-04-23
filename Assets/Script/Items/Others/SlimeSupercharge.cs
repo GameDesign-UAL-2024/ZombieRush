@@ -13,8 +13,9 @@ public class SlimeSupercharge : Items
         PlayerController player = GetComponent<PlayerController>();
         if (player != null)
         {
+            player.PlayPropertieUpAnimation();
             player.player_properties.bullet_exist_time += player.player_properties.bullet_exist_time*0.1f;
-            Destroy(this);
+            Destroy(this,0.1f);
         }
     }
 }

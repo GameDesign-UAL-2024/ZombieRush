@@ -47,8 +47,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8363c46335093124a9f101bae7f40c5e
-    m_Address: Assets/Resources_moved/Prefabs/Enemy1.prefab
+  - m_GUID: aab2d74e536069e4d9f98555ea8ddfb5
+    m_Address: Prefabs/BladeBullet
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17695f0c0225e2645baba7f44439514a
+    m_Address: Prefabs/PropertiesUp
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

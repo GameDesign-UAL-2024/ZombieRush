@@ -50,6 +50,14 @@ MonoBehaviour:
     m_Localized: High-velocity bullets
     m_Metadata:
       m_Items: []
+  - m_Id: 8170703066533888
+    m_Localized: Let Them Feel The Momentum
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8874297222795264
+    m_Localized: Blade Storm
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

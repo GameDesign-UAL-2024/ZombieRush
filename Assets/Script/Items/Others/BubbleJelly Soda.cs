@@ -13,8 +13,9 @@ public class BubbleJellySoda : Items
         PlayerController player = GetComponent<PlayerController>();
         if (player != null)
         {
+            player.PlayPropertieUpAnimation();
             player.player_properties.bullet_speed += 0.5f;
-            Destroy(this);
+            Destroy(this,0.1f);
         }
     }
 }

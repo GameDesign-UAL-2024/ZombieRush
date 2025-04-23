@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
+using UnityEngine.AddressableAssets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D RB;
     public Properties player_properties;
     CameraEffects camera_effect;
+    static string properties_up_animation = "Prefabs/PropertiesUp";
+    GameObject properties_up_prefab;
+    [SerializeField] Transform properties_up_location;
     public class Properties
     {
         public float bullet_speed;
@@ -59,13 +62,14 @@ public class PlayerController : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "0_0")
         {
-            Globals.Instance.Event.GameStart();
+            //Globals.Instance.Event.GameStart();
         }
         player_properties = new Properties();
         anim = transform.GetComponent<Animator>();
         sprite = transform.GetComponent<SpriteRenderer>();
         RB = transform.GetComponent<Rigidbody2D>();
         camera_effect = CameraEffects.Instance;
+        properties_up_prefab = Addressables.LoadAssetAsync<GameObject>(properties_up_animation).WaitForCompletion();
     }
 
     void Update()
@@ -120,5 +124,12 @@ public class PlayerController : MonoBehaviour
         EventSystem.current.RaycastAll(eventData, results);
         // 如果检测到的UI元素数量大于0，则返回true
         return results.Count > 0;
+    }
+    public void PlayPropertieUpAnimation()
+    {
+        if (properties_up_location != null && properties_up_prefab != null)
+        {
+            Instantiate(properties_up_prefab,properties_up_location.position,Quaternion.identity);
+        }
     }
 }

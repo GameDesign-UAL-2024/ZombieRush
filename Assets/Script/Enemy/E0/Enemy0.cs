@@ -100,6 +100,7 @@ public class Enemy0 : Enemy
         if (current_health <= 0)
         {
             SetState(EnemyState.Wait);
+            navigation.SetNavActive(false);
             dying = true;
             could_hurt = false;
             animator.SetBool("Dead",true);

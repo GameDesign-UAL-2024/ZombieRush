@@ -50,6 +50,16 @@ MonoBehaviour:
     m_Localized: Bullet speed Up , Range Up
     m_Metadata:
       m_Items: []
+  - m_Id: 8309254211014656
+    m_Localized: Increases damage all at once, and the faster the bullet speed, the
+      more it increases.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9012154037997568
+    m_Localized: Shoots a spinning blade around, dealing two times the player damage,
+      can pierce through enemies
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

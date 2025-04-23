@@ -13,8 +13,9 @@ public class HighVelocityBullets : Items
         PlayerController player = GetComponent<PlayerController>();
         if (player != null)
         {
-            player.player_properties.bullet_speed += 0.3f;
-            Destroy(this);
+            player.PlayPropertieUpAnimation();
+            player.player_properties.bullet_speed += 1.5f;
+            Destroy(this,0.1f);
         }
     }
 }

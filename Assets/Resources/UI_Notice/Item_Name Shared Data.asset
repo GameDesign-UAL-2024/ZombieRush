@@ -47,6 +47,14 @@ MonoBehaviour:
     m_Key: 7
     m_Metadata:
       m_Items: []
+  - m_Id: 8170703066533888
+    m_Key: 8
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8874297222795264
+    m_Key: 9
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -12,7 +12,7 @@ public class PlayerItemManager : MonoBehaviour
 
     // 当前持有的射击行为道具（只能一个）
     public int current_ShootBehaviour{ get; private set; } = 0; // -1 表示没有
-    public int current_Proactive{ get; private set; } = -1;
+    public int current_Proactive{ get; private set; } = 9;
     public List<int> Additional_Attacks{ get; private set; } = new List<int>();
 
     GameObject player;
@@ -54,6 +54,14 @@ public class PlayerItemManager : MonoBehaviour
             {
                 ItemFactory.CreateItemByID(id, player);
             }
+        }
+        if (!player.GetComponents<Items>().Any(item => item.ID == current_Proactive))
+        {
+            ItemFactory.CreateItemByID(current_Proactive,player);
+        }
+        if (!player.GetComponents<Items>().Any(item => item.ID == current_ShootBehaviour))
+        {
+            ItemFactory.CreateItemByID(current_ShootBehaviour,player);
         }
     }
     void Update()
@@ -115,7 +123,23 @@ public class PlayerItemManager : MonoBehaviour
             Additional_Attacks.Add(newItemID);
             ItemFactory.CreateItemByID(newItemID, player);
         }
-    }
+        else if (newItemType == Items.ItemTypes.Proactive)
+        {
+            // 先查找并移除已有的 Proactive 行为组件
+            var allItems = player.GetComponents<Items>();
+            foreach (var itemComp in allItems)
+            {
+                if (itemComp.Type == Items.ItemTypes.Proactive)
+                {
+                    Destroy(itemComp);
+                }
+            }
+
+            // 更新当前记录并挂载新的 Proactive 组件
+            current_Proactive = newItemID;
+            ItemFactory.CreateItemByID(newItemID, player);
+        }
+            }
 
     public List<int> GetBulletEffects()
     {

@@ -15,7 +15,8 @@ public class Hyperplasia : Items
         {
             player.player_properties.max_health += 2;
             player.player_properties.current_health += 2;
-            Destroy(this);
+            player.PlayPropertieUpAnimation();
+            Destroy(this,0.1f);
         }
     }
 }

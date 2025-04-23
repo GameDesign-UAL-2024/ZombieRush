@@ -13,9 +13,10 @@ public class SlimeAcid : Items
         PlayerController player = GetComponent<PlayerController>();
         if (player != null)
         {
-            player.player_properties.damage += 0.2f;
-            player.player_properties.bullet_speed *= 0.1f;
-            Destroy(this);
+            player.player_properties.damage += 0.7f;
+            player.player_properties.bullet_speed *= 0.85f;
+            player.PlayPropertieUpAnimation();
+            Destroy(this,0.1f);
         }
     }
 }

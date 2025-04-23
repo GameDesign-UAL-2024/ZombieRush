@@ -8,6 +8,7 @@ using System.IO;       // 用于 File 类
 using System.Data;  
 using System.Text;   // 用于 DataTable 和 DataSet
 using System.Collections;
+using Unity.VisualScripting;
 public class Globals : MonoBehaviour
 {
     public static Globals Instance { get; private set; }
@@ -15,6 +16,8 @@ public class Globals : MonoBehaviour
     {
         public static string L1_Grid = "Prefabs/Level1_Grid";
         public static string L1_Objects = "Prefabs/Level1_Objects";
+        GameObject Angle;
+        GameObject Satan;
         public int seed;
         public enum Levels { Level1 , Level2 , Level3};
         public Levels current_level;
@@ -28,9 +31,11 @@ public class Globals : MonoBehaviour
         public Dictionary<int, Dictionary<string, string>> Bulding_Datas { get; private set;} = new Dictionary<int, Dictionary<string, string>>();
         public Datas()
         {
+            Angle = Addressables.LoadAssetAsync<GameObject>("Prefabs/Angle").WaitForCompletion();
+            Satan = Addressables.LoadAssetAsync<GameObject>("Prefabs/Satan").WaitForCompletion();
             enemy_wave_number = 0;
             last_enemy_wave_time = 0;
-            waiting_time = 10f;
+            waiting_time = 5f;
             current_level = Levels.Level1;
             EnemyPool = new List<Enemy>() ;
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -58,6 +63,16 @@ public class Globals : MonoBehaviour
             {
                 player_ui.UpdateValues(target_type,player_current_resources[target_type]);
             }
+        }
+
+        public GameObject GetAnglePrefab()
+        {
+            return Angle;
+        }
+
+        public GameObject GetSatanPrefab()
+        {
+            return Satan;
         }
 
         Dictionary<int, Dictionary<string, string>> LoadBuldingDatas(string filePath)
@@ -134,7 +149,6 @@ public class Globals : MonoBehaviour
         public bool in_battle;
         public void GameStart()
         {
-            current_state = GameState.playing;
             AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>("Prefabs/ItemInWorld");
             handle.Completed += op => world_item = handle.Result;
             GameObject GridObject = GameObject.FindGameObjectWithTag("ChunkGenerator");
@@ -149,6 +163,7 @@ public class Globals : MonoBehaviour
                 if (gridPrefab != null)
                 {
                     // 实例化 Prefab 到场景中
+                    
                     Instantiate(gridPrefab, new Vector3(0,0,10), Quaternion.identity);
                 }
                 else
@@ -240,14 +255,27 @@ public class Globals : MonoBehaviour
                     Data.enemy_wave_number += 1;
                     if (Data.enemy_wave_number == 3)
                     {
-                        Data.waiting_time += 15f;
+                        Data.waiting_time += 10f;
                     }
                 }
-                else if (((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) >= Data.waiting_time) && Data.enemy_wave_number <= 4)
+                else if (((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) >= Data.waiting_time) && Data.enemy_wave_number <= 10 && Data.enemy_wave_number > 2)
                 {
                     Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
                     Event.in_battle = true;
-                    StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 10, player.transform.position));
+                    if (Data.enemy_wave_number <= 3)
+                    {
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 4, player.transform.position));
+                    } 
+                    if (Data.enemy_wave_number <= 6)
+                    {
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 2, player.transform.position));
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 3, player.transform.position));
+                    } 
+                    else
+                    {
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 1, player.transform.position));
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 4, player.transform.position));                        
+                    }
                     Data.enemy_wave_number += 1;
                 }
             }
@@ -257,19 +285,79 @@ public class Globals : MonoBehaviour
                 if ((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) > 1f)
                 {
                     // 战斗结束：生成奖励道具，并重置状态
-                    int generating_item_id = ItemFactory.PropertieItems[UnityEngine.Random.Range(1, ItemFactory.PropertieItems.Count)];
-                    GameObject world_item_instance = Instantiate(this.Event.world_item, player.transform.position + new Vector3(0, -5, 0), Quaternion.identity);
-                    Items.ItemRanks? rank = ItemFactory.GetRankByID(generating_item_id);
-                    if (rank != null)
+                    if (Data.enemy_wave_number % 3 == 0)
                     {
-                        world_item_instance.GetComponent<ItemInWorld>().Initialize(generating_item_id, (Items.ItemRanks)rank);
+                        PlayerController player_controller = player.GetComponent<PlayerController>();
+                        if (player_controller.player_properties.current_health > 0.65f * player_controller.player_properties.max_health)
+                        {
+                            GameObject statue = Instantiate(Data.GetSatanPrefab() , player.transform.position + new Vector3(0,3,0) , Quaternion.identity);
+                            GameObject generated_item = GenerateRewardItem(player.transform.position, ItemFactory.PropertieItems, ItemFactory.AdvancedItems);
+                            if (generated_item != null)
+                                statue.GetComponent<Statues>().write_item(generated_item);
+                        }
+                        else
+                        {
+                            Instantiate(Data.GetAnglePrefab() , player.transform.position + new Vector3(0,3,0) , Quaternion.identity);
+                            GenerateRewardItem(player.transform.position, ItemFactory.PropertieItems, ItemFactory.AdditionalAttack);
+                        }
+
+                        Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                        Event.in_battle = false;
                     }
-                    Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
-                    Event.in_battle = false;
+                    else
+                    {
+                        int generating_item_id;
+                        if (UnityEngine.Random.value < 0.6f)
+                        {
+                            generating_item_id = ItemFactory.PropertieItems[UnityEngine.Random.Range(0, ItemFactory.PropertieItems.Count)];
+                        }
+                        else if(ItemFactory.BulletEffectItems.Count != 0)
+                        {
+                            generating_item_id = ItemFactory.BulletEffectItems[UnityEngine.Random.Range(0, ItemFactory.BulletEffectItems.Count)];
+                        }
+                        else
+                        {
+                            generating_item_id = ItemFactory.PropertieItems[UnityEngine.Random.Range(0, ItemFactory.PropertieItems.Count)];
+                        }
+                        GameObject world_item_instance = Instantiate(this.Event.world_item, player.transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+                        Items.ItemRanks? rank = ItemFactory.GetRankByID(generating_item_id);
+                        if (rank != null)
+                        {
+                            world_item_instance.GetComponent<ItemInWorld>().Initialize(generating_item_id, (Items.ItemRanks)rank);
+                        }
+                        Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                        Event.in_battle = false;
+                    }
                 }
             }
             yield return null;
         }
+    }
+    private GameObject GenerateRewardItem(Vector3 position, List<int> primaryList, List<int> fallbackList, float primaryChance = 0.6f)
+    {
+        int generating_item_id;
+
+        if (primaryList.Count == 0 && fallbackList.Count == 0)
+        {
+            Debug.LogWarning("所有物品列表为空，无法生成奖励。");
+            return null; // 或者 throw，根据你的需求
+        }
+        if (fallbackList.Count == 0 || UnityEngine.Random.value < primaryChance)
+        {
+            generating_item_id = primaryList[UnityEngine.Random.Range(0, primaryList.Count)];
+        }
+        else
+        {
+            generating_item_id = fallbackList[UnityEngine.Random.Range(0, fallbackList.Count)];
+        }
+
+        GameObject world_item_instance = Instantiate(this.Event.world_item, position + new Vector3(0, 2, 0), Quaternion.identity);
+        Items.ItemRanks? rank = ItemFactory.GetRankByID(generating_item_id);
+        if (rank != null)
+        {
+            world_item_instance.GetComponent<ItemInWorld>().Initialize(generating_item_id, (Items.ItemRanks)rank);
+        }
+        return world_item_instance;
     }
 
     private IEnumerator LoadAndSpawnEnemyWave(string enemyKey, int count, Vector3 playerPosition)
@@ -336,5 +424,20 @@ public class Globals : MonoBehaviour
             // 等待下一次生成
             yield return new WaitForSeconds(interval);
         }
+    }
+    /// <summary>
+    /// 获取距下一次战斗开始还剩多少秒（向上取整，最小为0）
+    /// </summary>
+    public int GetSecondsUntilNextWave()
+    {
+        // 计算下一波战斗的目标开始时间
+        float nextWaveTime = Data.last_enemy_wave_time + Data.waiting_time;
+        // 当前时间
+        float now = GlobalTimer.Instance.GetCurrentTime();
+        // 计算剩余时间
+        float remaining = nextWaveTime - now;
+        // 向上取整并保证非负
+        int secondsLeft = Mathf.Max(0, Mathf.CeilToInt(remaining));
+        return secondsLeft;
     }
 }

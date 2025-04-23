@@ -14,7 +14,8 @@ public class FourLeaf : Items
         if (player != null)
         {
             player.player_properties.luck += 0.1f;
-            Destroy(this);
+            player.PlayPropertieUpAnimation();
+            Destroy(this,0.1f);
         }
     }
 }

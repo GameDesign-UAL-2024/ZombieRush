@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyNav))]
 public class Enemy1 : Enemy
 {
-    public override float max_health { get; set; } = 8f;
+    public override float max_health { get; set; } = 4f;
     public override float current_health { get; set; }
     public override float speed { get; set; } = 4f;
     bool could_hurt;
@@ -131,6 +131,7 @@ public class Enemy1 : Enemy
         if (current_health <= 0)
         {
             SetState(EnemyState.Wait);
+            navigation.SetNavActive(false);
             dying = true;
             could_hurt = false;
             animator.SetBool("Dead", true);
