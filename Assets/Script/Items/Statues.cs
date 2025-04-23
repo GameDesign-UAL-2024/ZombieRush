@@ -25,11 +25,11 @@ public class Statues : MonoBehaviour
         {
             if (rank == Items.ItemRanks.S)
             {
-                player.player_properties.current_health -= player.player_properties.max_health * 0.3f;
+                player.player_properties.current_health -= player.player_properties.max_health * 0.6f;
             }
             else if ( rank == Items.ItemRanks.A )
             {
-                player.player_properties.current_health -= player.player_properties.max_health * 0.2f;
+                player.player_properties.current_health -= player.player_properties.max_health * 0.3f;
             }
             else
             {

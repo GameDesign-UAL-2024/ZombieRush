@@ -14,6 +14,7 @@ public class ItemInWorld : MonoBehaviour
     [SerializeField]Sprite B_img;
     SpriteRenderer bottom_renderer; // 底座的Renderer
     Sprite item_image;
+    Collider2D col2D;
     bool Initialized = false;
     // Start is called before the first frame update
     void Awake()
@@ -22,6 +23,7 @@ public class ItemInWorld : MonoBehaviour
         UI_INSTANCE = PlayerUI.Instance;
         animator = transform.GetComponent<Animator>();
         bottom_renderer = transform.GetComponent<SpriteRenderer>();
+        col2D = GetComponent<Collider2D>();
         if (self_image != null)
             self_image.enabled = false;
     }
@@ -55,24 +57,39 @@ public class ItemInWorld : MonoBehaviour
 
     void Update()
     {
-        if ( ! Initialized)
-            return;
-        
-        if (IsMouseOverSpritePixel(self_image) || IsMouseOverSpritePixel(bottom_renderer))
+        if (!Initialized) return;
+
+        // 如果进入战斗，自动销毁
+        if (global.Event.in_battle)
         {
-            UI_INSTANCE.ShowDescription(self_item_id,0);
+            UI_INSTANCE.ClearDescription();
+            Destroy(gameObject);
+            return;
+        }
+
+        // 把鼠标坐标转成世界坐标 + 2D
+        Vector3 worldPos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 worldPos2D = new Vector2(worldPos3D.x, worldPos3D.y);
+
+        // 发一条长度为 0 的射线，检测鼠标点下落在哪个 Collider2D 上
+        RaycastHit2D hit = Physics2D.Raycast(worldPos2D, Vector2.zero);
+        if (hit.collider == col2D)
+        {
+            // 鼠标在物体上
+            UI_INSTANCE.ShowDescription(self_item_id, 0);
+
+            // 右键点击
             if (Input.GetMouseButtonDown(1))
             {
                 PIM.AddItem(self_item_id);
                 UI_INSTANCE.ClearDescription();
-                Dissappear();
+                Destroy(gameObject);
             }
         }
-
-        if (global.Event.in_battle)
+        else
         {
+            // 鼠标不在物体上就清掉
             UI_INSTANCE.ClearDescription();
-            Destroy(this.gameObject);
         }
     }
     void Dissappear()
