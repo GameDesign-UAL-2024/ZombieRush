@@ -57,6 +57,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88f7eaf0a1e04d643859c0374ca1a2fc
+    m_Address: Prefabs/HumanArms
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0baabe0a684d52344aa50d5a34a6bf01, type: 2}
   m_SchemaSet:

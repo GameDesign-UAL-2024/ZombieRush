@@ -13,6 +13,7 @@ public abstract class Enemy : MonoBehaviour
     public abstract EnemyState current_state{get; set;}
     public abstract void SetTarget(GameObject tar);
     public abstract bool TakeDamage(Vector3 source  , float amount , bool Instant_kill);
+    public const string hitted_prefab_path = "Prefabs/Hitted";
 }
 
 

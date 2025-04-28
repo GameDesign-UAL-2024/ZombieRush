@@ -19,8 +19,8 @@ public class BladeStormBullet : MonoBehaviour
     void FixedUpdate()
     {
         if (!initialized) return;
-        transform.position += (Vector3)target_direction * 5f * Time.deltaTime;
-                transform.localRotation *= Quaternion.Euler(0f, 0f, 720 * Time.deltaTime);
+        transform.position += (Vector3)target_direction * 8f * Time.deltaTime;
+                transform.localRotation *= Quaternion.Euler(0f, 0f, 1080 * Time.deltaTime);
     }
 
     public void Initialize(Vector2 target)

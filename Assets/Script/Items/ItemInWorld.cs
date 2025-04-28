@@ -16,6 +16,7 @@ public class ItemInWorld : MonoBehaviour
     Sprite item_image;
     Collider2D col2D;
     bool Initialized = false;
+    bool wasHovering = false;  
     // Start is called before the first frame update
     void Awake()
     {
@@ -59,7 +60,6 @@ public class ItemInWorld : MonoBehaviour
     {
         if (!Initialized) return;
 
-        // 如果进入战斗，自动销毁
         if (global.Event.in_battle)
         {
             UI_INSTANCE.ClearDescription();
@@ -71,66 +71,31 @@ public class ItemInWorld : MonoBehaviour
         Vector3 worldPos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 worldPos2D = new Vector2(worldPos3D.x, worldPos3D.y);
 
-        // 发一条长度为 0 的射线，检测鼠标点下落在哪个 Collider2D 上
+        // 点检测
         RaycastHit2D hit = Physics2D.Raycast(worldPos2D, Vector2.zero);
-        if (hit.collider == col2D)
+        bool isHovering = (hit.collider == col2D);
+
+        if (isHovering)
         {
-            // 鼠标在物体上
+            // 只要悬停就持续显示
             UI_INSTANCE.ShowDescription(self_item_id, 0);
 
-            // 右键点击
             if (Input.GetMouseButtonDown(1))
             {
                 PIM.AddItem(self_item_id);
                 UI_INSTANCE.ClearDescription();
                 Destroy(gameObject);
+                return;
             }
         }
-        else
+        else if (wasHovering)
         {
-            // 鼠标不在物体上就清掉
+            // 只有从“悬停”到“未悬停”这一帧，才清一次
             UI_INSTANCE.ClearDescription();
         }
+
+        // 更新状态给下一帧用
+        wasHovering = isHovering;
     }
-    void Dissappear()
-    {
-        Destroy(this.gameObject);
-    }
-    bool IsMouseOverSpritePixel(SpriteRenderer renderer)
-    {
-        if (renderer == null || renderer.sprite == null)
-        {
-            return false;
-        }
-        
-        // 获取鼠标在世界坐标中的位置
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        // 使用 renderer 的 z 坐标，确保转换准确
-        worldPos.z = renderer.transform.position.z;
-        
-        // 转换为 Sprite 的局部坐标（使用 renderer.transform 而不是当前组件的 transform）
-        Vector2 localPos = renderer.transform.InverseTransformPoint(worldPos);
 
-        Sprite sprite = renderer.sprite;
-        Rect textureRect = sprite.textureRect;
-        Vector2 pivot = sprite.pivot;
-        float pixelsPerUnit = sprite.pixelsPerUnit;
-
-        // 将局部坐标转换为以像素为单位的坐标（参照 Sprite 的 pivot）
-        Vector2 pixelPos = new Vector2(localPos.x * pixelsPerUnit + pivot.x,
-                                    localPos.y * pixelsPerUnit + pivot.y);
-
-        // 检查是否在 Sprite 纹理矩形内
-        if (pixelPos.x < 0 || pixelPos.x > textureRect.width ||
-            pixelPos.y < 0 || pixelPos.y > textureRect.height)
-        {
-            return false;
-        }
-
-        int texX = Mathf.FloorToInt(pixelPos.x + textureRect.x);
-        int texY = Mathf.FloorToInt(pixelPos.y + textureRect.y);
-
-        UnityEngine.Color pixelColor = sprite.texture.GetPixel(texX, texY);
-        return pixelColor.a > 0.01f;
-    }
 }

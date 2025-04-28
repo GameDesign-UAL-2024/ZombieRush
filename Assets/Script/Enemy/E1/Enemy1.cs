@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AddressableAssets;
 [RequireComponent(typeof(EnemyNav))]
 public class Enemy1 : Enemy
 {
@@ -19,6 +19,7 @@ public class Enemy1 : Enemy
     EnemyNav navigation;
     GlobalTimer g_timer;
     GameObject player;
+    GameObject hitted_prefab;
     Animator animator;
     Rigidbody2D RB;
     SpriteRenderer sprite_renderer;
@@ -35,7 +36,7 @@ public class Enemy1 : Enemy
         current_health = max_health;
         self_nav = transform.GetComponent<EnemyNav>();
         particleOriginalLocalPos = attacking_effect.transform.localPosition;
-
+        hitted_prefab = Addressables.LoadAssetAsync<GameObject>(hitted_prefab_path).WaitForCompletion();
         // 查找场景中拥有 PlayerController 组件的玩家对象
         foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
         {

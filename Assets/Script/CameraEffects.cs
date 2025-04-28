@@ -62,7 +62,6 @@ public class CameraEffects : MonoBehaviour
         // 限制同时存在的 Shake 协程数量最多为 2
         if (activeShakeCount >= 2)
         {
-            Debug.Log("已有2个抖动效果在运行，忽略本次调用。");
             return;
         }
 

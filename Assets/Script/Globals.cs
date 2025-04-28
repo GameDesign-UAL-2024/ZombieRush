@@ -287,22 +287,28 @@ public class Globals : MonoBehaviour
                     // 战斗结束：生成奖励道具，并重置状态
                     if (Data.enemy_wave_number % 3 == 0)
                     {
+
+                        Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                        Event.in_battle = false;
                         PlayerController player_controller = player.GetComponent<PlayerController>();
                         if (player_controller.player_properties.current_health > 0.65f * player_controller.player_properties.max_health)
                         {
                             GameObject statue = Instantiate(Data.GetSatanPrefab() , player.transform.position + new Vector3(0,3,0) , Quaternion.identity);
-                            GameObject generated_item = GenerateRewardItem(player.transform.position, ItemFactory.PropertieItems, ItemFactory.AdvancedItems);
-                            if (generated_item != null)
-                                statue.GetComponent<Statues>().write_item(generated_item);
+                            GameObject generated_item1 = GenerateRewardItem(player.transform.position + new Vector3(-3,0,0), ItemFactory.PropertieItems, ItemFactory.AdvancedItems , 0.7f);
+                            GameObject generated_item2 = GenerateRewardItem(player.transform.position, ItemFactory.PropertieItems, ItemFactory.BulletEffectItems);
+                            GameObject generated_item3 = GenerateRewardItem(player.transform.position + new Vector3(3,0,0), ItemFactory.PropertieItems, ItemFactory.AdditionalAttack, 0.65f);
+                            if (generated_item1 != null && generated_item2 != null && generated_item3 != null)
+                                statue.GetComponent<Statues>().write_items(generated_item1,generated_item2,generated_item3);
                         }
                         else
                         {
-                            Instantiate(Data.GetAnglePrefab() , player.transform.position + new Vector3(0,3,0) , Quaternion.identity);
-                            GenerateRewardItem(player.transform.position, ItemFactory.PropertieItems, ItemFactory.AdditionalAttack);
+                            GameObject statue = Instantiate(Data.GetAnglePrefab() , player.transform.position + new Vector3(0,3,0) , Quaternion.identity);
+                            GameObject generated_item1 = GenerateRewardItem(player.transform.position + new Vector3(-3,0,0), ItemFactory.PropertieItems, ItemFactory.AdvancedItems , 0.85f);
+                            GameObject generated_item2 = GenerateRewardItem(player.transform.position, ItemFactory.PropertieItems, ItemFactory.ProactiveItems , 0.65f);
+                            GameObject generated_item3 = GenerateRewardItem(player.transform.position + new Vector3(3,0,0), ItemFactory.PropertieItems, ItemFactory.AdditionalAttack , 0.75f);
+                            if (generated_item1 != null && generated_item2 != null && generated_item3 != null)
+                                statue.GetComponent<Statues>().write_items(generated_item1,generated_item2,generated_item3);
                         }
-
-                        Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
-                        Event.in_battle = false;
                     }
                     else
                     {

@@ -5,12 +5,14 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Events;
+using System.Drawing;
 
 public class PlayerUI : MonoBehaviour
 {
     public GameObject building_panel_content;
     const string building_button = "Prefabs/BuildingButton";
-
+    [SerializeField]public UnityEngine.UI.Image ProactiveItemImage;
+    public TextMeshProUGUI CoolDownText;
     GameObject button_prefab;
     public static PlayerUI Instance { get; private set; }
 
@@ -195,7 +197,7 @@ public class PlayerUI : MonoBehaviour
             buildingPreview.transform.position = new Vector3(gridPos.x, gridPos.y, 0f);
             // 检查这个位置是否合法
             bool isValid = PlayerBuildingManager.Instance.IsPositionValid(gridPos);
-            sr.color = isValid ? Color.white : Color.red;
+            sr.color = isValid ? UnityEngine.Color.white : UnityEngine.Color.red;
             
             // 检测左键：输出信息并销毁对象
             if (Input.GetMouseButtonDown(0) && isValid)

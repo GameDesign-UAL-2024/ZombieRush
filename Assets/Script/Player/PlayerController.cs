@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     static string properties_up_animation = "Prefabs/PropertiesUp";
     GameObject properties_up_prefab;
     [SerializeField] Transform properties_up_location;
+    Globals global;
     public class Properties
     {
         public float bullet_speed;
@@ -67,13 +68,18 @@ public class PlayerController : MonoBehaviour
         player_properties = new Properties();
         anim = transform.GetComponent<Animator>();
         sprite = transform.GetComponent<SpriteRenderer>();
+        global = Globals.Instance;
         RB = transform.GetComponent<Rigidbody2D>();
         camera_effect = CameraEffects.Instance;
         properties_up_prefab = Addressables.LoadAssetAsync<GameObject>(properties_up_animation).WaitForCompletion();
     }
-
+    
     void Update()
     {
+        if (global.Event.current_state != Globals.Events.GameState.playing)
+        {
+            return;
+        }
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         moveInput = new Vector2(moveX, moveY).normalized;

@@ -14,6 +14,7 @@ public static class ItemFactory
     public static List<int> AdvancedItems {get; private set;} =  new List<int>();
     public static List<int> AdditionalAttack {get; private set;} =  new List<int>();
     public static List<int> ProactiveItems {get; private set;} =  new List<int>();
+    private static Dictionary<int, Items.ItemRanks> rankCache = new();
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeFactory()
     {
@@ -25,15 +26,16 @@ public static class ItemFactory
 
     private static void RegisterAllItems()
     {
+        // 扫描所有 Items 子类
         var itemSubclasses = Assembly.GetExecutingAssembly().GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Items)));
 
-        // 创建一个临时 GameObject 用于生成 MonoBehaviour 实例
+        // 临时容器，用于创建 MonoBehaviour 实例
         GameObject tempContainer = new GameObject("TempItemsContainer");
 
         foreach (var type in itemSubclasses)
         {
-            // 添加组件以创建实例（注意：MonoBehaviour 不能通过 new 操作符直接创建）
+            // 在临时容器上添加组件以实例化
             Items instance = tempContainer.AddComponent(type) as Items;
             if (instance == null)
             {
@@ -42,8 +44,10 @@ public static class ItemFactory
             }
 
             int id = instance.ID;
-            Items.ItemTypes itemType = instance.Type;
+            var itemType = instance.Type;
+            var itemRank = instance.Rank;
 
+            // 检查重复 ID
             if (itemTypes.ContainsKey(id))
             {
                 Debug.LogWarning($"重复的道具 ID:{id} 在类 {type.Name} 中已存在。原始类：{itemTypes[id].Name}");
@@ -51,10 +55,12 @@ public static class ItemFactory
                 continue;
             }
 
+            // 缓存类型和 Rank
             itemTypes.Add(id, type);
             itemTypeCache.Add(id, itemType);
+            rankCache.Add(id, itemRank);
 
-            //将物品按类别分类储存在列表，方便生成道具区分道具池
+            // 根据类型分类存入不同的列表
             if (itemType == Items.ItemTypes.Properties)
                 PropertieItems.Add(id);
             else if ((itemType == Items.ItemTypes.ShootBehaviour_Bullet || itemType == Items.ItemTypes.ShootBehaviour_Lazer) && id != 0)
@@ -66,11 +72,11 @@ public static class ItemFactory
             else
                 ProactiveItems.Add(id);
 
-            // 注册后移除组件，避免多余的实例存在
+            // 销毁刚才挂载的临时实例
             GameObject.DestroyImmediate(instance);
         }
 
-        // 最后销毁临时容器
+        // 销毁临时容器
         GameObject.DestroyImmediate(tempContainer);
     }
 
@@ -87,14 +93,9 @@ public static class ItemFactory
 
     public static Items.ItemRanks? GetRankByID(int id)
     {
-        GameObject tempContainer = new GameObject("TempItemsContainer");
-        if (itemTypes.ContainsKey(id))
-        {
-            CreateItemByID(id, tempContainer);
-            Items instance = tempContainer.GetComponent<Items>();
-            return instance.Rank;
-        }
-        Debug.Log("Cannot Find item");
+        if (rankCache.TryGetValue(id, out var rank))
+            return rank;
+        Debug.LogWarning($"Item ID {id} 未找到等级信息！");
         return null;
     }
     public static Items CreateItemByID(int id, GameObject target)

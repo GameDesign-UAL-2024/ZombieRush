@@ -8,7 +8,7 @@ public class BladeStorm : Items
     public override int ID { get; set; } = 9;
     public override ItemRanks Rank { get; set; } = ItemRanks.S;
     public override ItemTypes Type { get; set; } = ItemTypes.Proactive;
-
+    PlayerUI ui_instance;
     // 冷却相关字段
     [Tooltip("子弹发射的冷却时间，单位为秒")] 
     [SerializeField] private float cool_down_time = 5f;    // 总冷却时间
@@ -30,13 +30,36 @@ public class BladeStorm : Items
         if (bulletPrefab == null)
             Debug.LogError($"BladeStorm: 无法加载子弹预制件 {bulletPrefabReference}");
     }
-
+    void Start()
+    {
+        ui_instance = PlayerUI.Instance;
+        if (ui_instance.ProactiveItemImage != null)
+        {
+            string img_path = "Sprites/Items/" + ID.ToString();
+            Sprite item_image = Resources.Load<Sprite>(img_path);
+            if (item_image == null)
+                return;
+            ui_instance.ProactiveItemImage.sprite = item_image;
+        }
+    }
     private void Update()
     {
         // 累加冷却计时
         if (current_cool_time < cool_down_time)
+        {
             current_cool_time += Time.deltaTime;
-
+            if (ui_instance.CoolDownText != null)
+            {
+                ui_instance.CoolDownText.text = Mathf.CeilToInt(cool_down_time - current_cool_time).ToString();
+            }
+        }
+        else
+        {
+            if (ui_instance.CoolDownText != null)
+            {
+                ui_instance.CoolDownText.text = "";
+            }               
+        }
         // 按下空格，且冷却时间已到，才可发射
         if (Input.GetKeyDown(KeyCode.Space) && bulletPrefab != null && current_cool_time >= cool_down_time)
         {

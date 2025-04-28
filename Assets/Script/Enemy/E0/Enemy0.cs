@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 [RequireComponent(typeof(EnemyNav))]
 public class Enemy0 : Enemy
@@ -22,6 +24,8 @@ public class Enemy0 : Enemy
     bool dying;
     EnemyNav self_nav;
     Dictionary<Vector2 , GameObject> player_objects;
+    
+    static GameObject hitted_prefab;
     void Start()
     {
         current_health = max_health;
@@ -33,7 +37,7 @@ public class Enemy0 : Enemy
                 player = p;
             }
         }
-        
+        hitted_prefab = Addressables.LoadAssetAsync<GameObject>(hitted_prefab_path).WaitForCompletion();
         current_state = EnemyState.Wait;
         could_hurt = true;
         g_timer = GlobalTimer.Instance;
@@ -105,8 +109,16 @@ public class Enemy0 : Enemy
             could_hurt = false;
             animator.SetBool("Dead",true);
         }
-
     }
+
+    void LateUpdate()
+    {
+        Vector2 newPosition = transform.position;
+        newPosition.x = Mathf.Clamp(newPosition.x, 0, 199);
+        newPosition.y = Mathf.Clamp(newPosition.y, 0, 199);
+        transform.position = new Vector3(newPosition.x,newPosition.y,transform.position.z);
+    }
+
     void FixedUpdate()
     {
         RB.velocity = Vector2.Lerp(RB.velocity, Vector2.zero, 2f * Time.fixedDeltaTime);
@@ -117,16 +129,29 @@ public class Enemy0 : Enemy
     }
     public override bool TakeDamage(Vector3 source , float amount, bool Instant_kill)
     {
-        if (could_hurt)
-        {
-            current_health -= amount; 
-            animator.SetTrigger("Hit");
-            Vector2 goback_direction = - ((Vector2) source - (Vector2) transform.position).normalized;
-            RB.velocity = goback_direction * 2f;
-            navigation.SetNavActive(false);
-            return true;
-        }
-        else {return false;}
+        if (!could_hurt) 
+            return false;
+        // 1. 只取 X/Y 构建方向向量（忽略 Z）
+        Vector2 dir = new Vector2(
+            transform.position.x - source.x,
+            transform.position.y - source.y
+        ).normalized;
+
+        // 2. 计算相对于世界 X 轴的角度（度），再减去 90°
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+
+        // 3. 只在 Z 轴上旋转，X/Y 轴保持 0
+        Quaternion rot = Quaternion.Euler(0f, 0f, angle);
+
+        // 4. 在本体位置（含本体的 Z）生成特效，并赋予上面算好的旋转
+        Instantiate(hitted_prefab, transform.position, rot);
+
+        // 剩下就是普通受击逻辑
+        current_health -= amount;
+        animator.SetTrigger("Hit");
+        RB.velocity = -dir * 2f;
+        navigation.SetNavActive(false);
+        return true;
     }
 
     public void AttackDash()

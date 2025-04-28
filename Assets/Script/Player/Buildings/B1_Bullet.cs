@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class B1_Bullet : MonoBehaviour
 {
     bool initialized;
-    float fly_speed = 3f;
+    float fly_speed = 5f;
     Transform target;
     float attack_point;
     // 新增变量：
