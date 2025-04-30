@@ -13,7 +13,7 @@ public class PlayerItemManager : MonoBehaviour
     // 当前持有的射击行为道具（只能一个）
     public int current_ShootBehaviour{ get; private set; } = 0; // -1 表示没有
     public int current_Proactive{ get; private set; } = 9;
-    public List<int> Additional_Attacks{ get; private set; } = new List<int>(){10};
+    public List<int> Additional_Attacks{ get; private set; } = new List<int>(){};
 
     GameObject player;
 

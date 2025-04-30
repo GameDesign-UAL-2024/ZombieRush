@@ -7,12 +7,27 @@ using UnityEngine.AddressableAssets;
 [RequireComponent(typeof(EnemyNav))]
 public class Enemy0 : Enemy
 {
+    // —— 新增：内部状态枚举 —— 
+    public enum EnemyState
+    {
+        Wait,
+        Moving,
+        Attack
+    }
+
+    // —— 新增：存储当前状态的字段与属性 —— 
+    private EnemyState _currentState;
+    public EnemyState current_state
+    {
+        get => _currentState;
+        set => _currentState = value;
+    }
+
     public override float max_health { get; set;} = 3f;
     public override float current_health { get; set;}
     public override float speed { get; set;} = 3.5f;
     bool could_hurt;
     public override GameObject target { get; set;}
-    public override EnemyState current_state { get; set;}
     EnemyNav navigation;
     GlobalTimer g_timer;
     GameObject player;
@@ -38,7 +53,10 @@ public class Enemy0 : Enemy
             }
         }
         hitted_prefab = Addressables.LoadAssetAsync<GameObject>(hitted_prefab_path).WaitForCompletion();
+
+        // 使用内部枚举来初始化
         current_state = EnemyState.Wait;
+
         could_hurt = true;
         g_timer = GlobalTimer.Instance;
         navigation = transform.GetComponent<EnemyNav>();
@@ -58,7 +76,7 @@ public class Enemy0 : Enemy
     }
     void Update()
     {
-        if (! dying)
+        if (!dying)
         {
             // 等待状态到移动状态的转换
             if (g_timer.GetCurrentTime() - behaviour_time >= behaviour_gap && current_state == EnemyState.Wait)
@@ -90,7 +108,7 @@ public class Enemy0 : Enemy
                 {
                     sprite_renderer.flipX = false;
                 }
-                if (navigation.is_activing == false && current_state == EnemyState.Moving)
+                if (!navigation.is_activing && current_state == EnemyState.Moving)
                 {
                     navigation.SetNavActive(true);
                 }
@@ -107,7 +125,7 @@ public class Enemy0 : Enemy
             navigation.SetNavActive(false);
             dying = true;
             could_hurt = false;
-            animator.SetBool("Dead",true);
+            animator.SetBool("Dead", true);
         }
     }
 
@@ -116,7 +134,7 @@ public class Enemy0 : Enemy
         Vector2 newPosition = transform.position;
         newPosition.x = Mathf.Clamp(newPosition.x, 0, 199);
         newPosition.y = Mathf.Clamp(newPosition.y, 0, 199);
-        transform.position = new Vector3(newPosition.x,newPosition.y,transform.position.z);
+        transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
     }
 
     void FixedUpdate()
@@ -127,7 +145,7 @@ public class Enemy0 : Enemy
     {
         target = tar;
     }
-    public override bool TakeDamage(Vector3 source , float amount, bool Instant_kill)
+    public override bool TakeDamage(Vector3 source, float amount, bool Instant_kill)
     {
         if (!could_hurt) 
             return false;
@@ -181,7 +199,7 @@ public class Enemy0 : Enemy
                 break;
             case EnemyState.Moving:
                 // 设置为移动状态，设置目标，并激活导航
-                animator.SetBool("Moving", true);  // 立即设置Moving为true，确保动画立即开始
+                animator.SetBool("Moving", true);
                 navigation.SetTarget(player);
                 navigation.SetNavActive(true);
                 break;
@@ -202,4 +220,3 @@ public class Enemy0 : Enemy
         }
     }
 }
-
