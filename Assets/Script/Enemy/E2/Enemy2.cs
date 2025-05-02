@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class Enemy2 : Enemy
 {
@@ -18,7 +19,8 @@ public class Enemy2 : Enemy
     private Animator animator;
     private Rigidbody2D rb2d;
     private Transform player;
-
+    static string block_prefab_path = "Prefabs/BlockEffect";
+    GameObject block_effect;
     //—— 内部数据 —— 
     private float lastActionTime;
     private float _currentHealth;
@@ -39,7 +41,7 @@ public class Enemy2 : Enemy
         nav      = GetComponent<EnemyNav>();
         animator = GetComponent<Animator>();
         rb2d     = GetComponent<Rigidbody2D>();
-
+        block_effect = Addressables.LoadAssetAsync<GameObject>(block_prefab_path).WaitForCompletion();
         // 找到玩家对象
         target = GameObject.FindGameObjectWithTag("Player");
         if (target != null) player = target.transform;
@@ -126,7 +128,7 @@ public class Enemy2 : Enemy
         if (_state == State.Block)
         {
             blockImmunityEndTime = Time.time + 1f;
-
+            
             // 镜头抖动
             CameraEffects.Instance.Shake(
                 shakeDuration: 0.25f,
@@ -134,7 +136,7 @@ public class Enemy2 : Enemy
                 shakeFrequency: 2.5f,
                 zoomAmount: 0.7f
             );
-
+            Instantiate(block_effect,transform.position+new Vector3(0,1.5f,-0.1f),Quaternion.identity);
             var prb = target.GetComponent<Rigidbody2D>();
             if (prb != null)
             {

@@ -258,23 +258,27 @@ public class Globals : MonoBehaviour
                         Data.waiting_time += 10f;
                     }
                 }
-                else if (((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) >= Data.waiting_time) && Data.enemy_wave_number <= 10 && Data.enemy_wave_number > 2)
+                else if (((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) >= Data.waiting_time) && Data.enemy_wave_number <= 9 && Data.enemy_wave_number > 2)
                 {
                     Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
                     Event.in_battle = true;
-                    if (Data.enemy_wave_number <= 3)
+                    if (Data.enemy_wave_number == 3)
                     {
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 4, player.transform.position));
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 6 , player.transform.position));
                     } 
-                    if (Data.enemy_wave_number <= 6)
+                    else if (Data.enemy_wave_number < 6)
                     {
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 2, player.transform.position));
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 3, player.transform.position));
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", UnityEngine.Random.value < 0.5f ? 1 : 2, player.transform.position));
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 2, player.transform.position));
                     } 
-                    else
+                    else if (Data.enemy_wave_number < 9)
                     {
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 1, player.transform.position));
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 4, player.transform.position));                        
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", UnityEngine.Random.value < 0.5f ? 3 : 6, player.transform.position));
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", UnityEngine.Random.value < 0.5f ? 2 : 3, player.transform.position));                        
+                    }
+                    else if (Data.enemy_wave_number == 9)
+                    {
+                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy2", 2 , player.transform.position));                     
                     }
                     Data.enemy_wave_number += 1;
                 }
