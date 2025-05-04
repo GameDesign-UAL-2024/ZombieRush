@@ -53,6 +53,7 @@ public class Enemy1 : Enemy
         target = player;
     }
 
+
     void LateUpdate()
     {
         Vector3 pos = transform.position;
@@ -60,6 +61,7 @@ public class Enemy1 : Enemy
         pos.y = Mathf.Clamp(pos.y, 0f, 199f);
         transform.position = pos;
     }
+
 
     void Update()
     {
@@ -97,6 +99,8 @@ public class Enemy1 : Enemy
     {
         if (current_state != EnemyState.Attack)
             RB.velocity = Vector2.Lerp(RB.velocity, Vector2.zero, 2f * Time.fixedDeltaTime);
+        if (current_state != EnemyState.Attack)
+            RB.velocity = Vector2.Lerp(RB.velocity, Vector2.zero, 2f * Time.fixedDeltaTime);
     }
 
     public override bool TakeDamage(Vector3 source, float amount, bool Instant_kill)
@@ -119,7 +123,6 @@ public class Enemy1 : Enemy
         navigation.SetNavActive(false);
 
         current_state = newState;
-
         switch (newState)
         {
             case EnemyState.Wait:
@@ -132,7 +135,6 @@ public class Enemy1 : Enemy
                 break;
             case EnemyState.Attack:
                 animator.SetTrigger("Attacking");
-                navigation.SetNavActive(false);
                 break;
         }
     }
