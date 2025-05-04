@@ -13,7 +13,6 @@ public class DefaultShoot : Items
     static string bullet_prefab = "Prefabs/DefultBullet";
     public List<Bullet> bullets = new List<Bullet>();
     Vector2 mouse_position;
-    public int fire_rate = 3;  // 每秒最多发射 3 颗子弹
     private float nextFireTime = 0f; // 记录下次可以射击的时间
     PlayerController player;
 
@@ -26,7 +25,9 @@ public class DefaultShoot : Items
         if (Input.GetMouseButtonDown(0) && !IsPointerOverUI() && Time.time >= nextFireTime)
         {
             // 计算下次射击时间
-            nextFireTime = Time.time + (1f / fire_rate);
+            float atkSpeed = player.player_properties.atk_speed;
+            if (atkSpeed <= 0f) atkSpeed = 1f;  // 防止除零
+            nextFireTime = Time.time + 1f / atkSpeed;
 
             // 生成子弹
             Addressables.LoadAssetAsync<GameObject>(bullet_prefab).Completed += OnBulletLoaded;

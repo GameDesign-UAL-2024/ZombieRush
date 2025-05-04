@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class BlackResource : MonoBehaviour
 {
     Rigidbody2D RB;
+
     void Start()
     {
         RB = transform.GetComponent<Rigidbody2D>();
+        
     }
     void OnTriggerEnter2D(Collider2D collision)
     {

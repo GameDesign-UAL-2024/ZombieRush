@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.Events;
-using System.Drawing;
 
 public class PlayerUI : MonoBehaviour
 {
     public GameObject building_panel_content;
+    public GameObject building_panel;
     const string building_button = "Prefabs/BuildingButton";
     [SerializeField]public UnityEngine.UI.Image ProactiveItemImage;
     public TextMeshProUGUI CoolDownText;
@@ -19,6 +19,9 @@ public class PlayerUI : MonoBehaviour
     public Dictionary<int, Dictionary<string, string>> All_Buildings_Data;
     Dictionary<int, Dictionary<string, int>> Buildings_Need = new Dictionary<int, Dictionary<string, int>>();
     static Dictionary<int, BuildingButton> BuildingButtonList = new Dictionary<int, BuildingButton>();
+    public Image BuildingPanelButton;
+    private Coroutine panelFlashCoroutine;
+
     string Green_Need_Key = "Resources_Green_Need";
     string Black_Need_Key = "Resources_Black_Need";
     string Pink_Need_Key = "Resources_Pink_Need";
@@ -119,10 +122,19 @@ public class PlayerUI : MonoBehaviour
                 {
                     if (!BuildingButtonList.ContainsKey(buildingID))
                     {
-                        BuildingButton button = Instantiate(button_prefab, building_panel_content.transform).GetComponent<BuildingButton>();
-                        BuildingButtonList.Add(buildingID, button);
-                        button.Initialize(All_Buildings_Data[buildingID]["UI_Image_Path"], buildingID, All_Buildings_Data[buildingID],
-                                          greenNeeded, blackNeeded, pinkNeeded, OnClickingBuilding);
+                        var btn = Instantiate(button_prefab, building_panel_content.transform)
+                                    .GetComponent<BuildingButton>();
+                        BuildingButtonList.Add(buildingID, btn);
+                        btn.Initialize(
+                            All_Buildings_Data[buildingID]["UI_Image_Path"],
+                            buildingID,
+                            All_Buildings_Data[buildingID],
+                            greenNeeded, blackNeeded, pinkNeeded,
+                            OnClickingBuilding
+                        );
+                        btn.StartFlash();
+                        // △—— 新增：玩家面板按钮开始闪烁，提示有新建筑按钮
+                        StartPanelFlash();
                     }
                 }
                 else
@@ -209,16 +221,97 @@ public class PlayerUI : MonoBehaviour
                 globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Green,-g_need);
                 globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Black,-b_need);
                 globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Pink,-p_need);
+                OnClickingBuildingPanelButton(building_panel);
                 Destroy(buildingPreview);
                 yield break;
             }
             // 检测右键：直接销毁对象
             if (Input.GetMouseButtonDown(1))
             {
+                OnClickingBuildingPanelButton(building_panel);
                 Destroy(buildingPreview);
                 yield break;
             }
             yield return null;
+        }
+    }
+    /// <summary>开始面板按钮闪烁</summary>
+    private void StartPanelFlash()
+    {
+        if (panelFlashCoroutine == null && BuildingPanelButton != null)
+            panelFlashCoroutine = StartCoroutine(PanelFlashCoroutine());
+    }
+
+    /// <summary>停止面板按钮闪烁</summary>
+    private void StopPanelFlash()
+    {
+        if (panelFlashCoroutine != null)
+        {
+            StopCoroutine(panelFlashCoroutine);
+            panelFlashCoroutine = null;
+        }
+        // 立即恢复为不透明
+        BuildingPanelButton.CrossFadeAlpha(1f, 0f, true);
+    }
+
+    /// <summary>面板按钮闪烁效果</summary>
+    private IEnumerator PanelFlashCoroutine()
+    {
+        float minAlpha = 0.2f, maxAlpha = 1f;
+        float minScale = 1f, maxScale = 1.25f;
+        float duration = 0.3f;
+
+        var img = BuildingPanelButton;
+        var rect = img.rectTransform;
+        Color c = img.color;
+
+        while (true)
+        {
+            // 阶段一：从 max → min（透明度降低 & 放大）
+            float t = 0f;
+            while (t < duration)
+            {
+                t += Time.unscaledDeltaTime;
+                float normalized = t / duration;
+                // 透明度从 maxAlpha 拉到 minAlpha
+                c.a = Mathf.Lerp(maxAlpha, minAlpha, normalized);
+                img.color = c;
+                // 缩放从 minScale 拉到 maxScale
+                float s = Mathf.Lerp(minScale, maxScale, normalized);
+                rect.localScale = Vector3.one * s;
+                yield return null;
+            }
+
+            // 阶段二：从 min → max（透明度升高 & 缩回）
+            t = 0f;
+            while (t < duration)
+            {
+                t += Time.unscaledDeltaTime;
+                float normalized = t / duration;
+                c.a = Mathf.Lerp(minAlpha, maxAlpha, normalized);
+                img.color = c;
+                float s = Mathf.Lerp(maxScale, minScale, normalized);
+                rect.localScale = Vector3.one * s;
+                yield return null;
+            }
+        }
+    }
+    // 在玩家真正点击打开/收起建筑面板时，记得调用 StopPanelFlash():
+    public void OnClickingBuildingPanelButton(GameObject panel)
+    {
+        CanvasGroup cg = panel.GetComponent<CanvasGroup>();
+        if (cg != null)
+        {
+            bool isOpen = cg.alpha == 0f;
+            cg.alpha = isOpen ? 1f : 0f;
+            cg.interactable = isOpen;
+            cg.blocksRaycasts = isOpen;
+
+            if (isOpen)
+            {
+                // 玩家点开面板，就关闭闪烁提示
+                StopPanelFlash();
+            }
         }
     }
     public void ShowDescription(int id , int type)
@@ -228,15 +321,5 @@ public class PlayerUI : MonoBehaviour
     public void ClearDescription()
     {
         description.ClearLocalizationReferences();
-    }
-    public void OnClickingBuildingPanelButton(GameObject panel)
-    {
-        CanvasGroup cg = panel.GetComponent<CanvasGroup>();
-        if (cg != null)
-        {
-            cg.alpha = (cg.alpha == 0f) ? 1f : 0f;
-            cg.interactable = cg.alpha == 1f;
-            cg.blocksRaycasts = cg.alpha == 1f;
-        }
     }
 }

@@ -23,7 +23,7 @@ public class Globals : MonoBehaviour
         public Levels current_level;
         public enum ResourcesType{ Green , Pink , Black }
         public GlobalTimer timer;
-        Dictionary<ResourcesType , int> player_current_resources;
+        public Dictionary<ResourcesType , int> player_current_resources {get; private set;}
         public static List<Enemy> EnemyPool;
         public int enemy_wave_number;
         public float last_enemy_wave_time;
@@ -241,108 +241,151 @@ public class Globals : MonoBehaviour
 
         while (true)
         {
-            // 优先判断：如果游戏处于 playing 状态、计时器存在、敌人池为空且不在战斗中，则触发生成敌人波
-            if (Event.current_state == Events.GameState.playing && Data.timer != null &&
-                Datas.EnemyPool.Count == 0 && Event.in_battle == false)
+            // 1) 等待满足：正在 play、计时器就绪、敌人池清空、未在战斗中
+            if (Event.current_state == Events.GameState.playing &&
+                Data.timer != null &&
+                Datas.EnemyPool.Count == 0 &&
+                Event.in_battle == false)
             {
-                // 检查等待时间条件
-                if (((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) >= Data.waiting_time) && Data.enemy_wave_number <= 2)
+                float elapsed = Data.timer.GetCurrentTime() - Data.last_enemy_wave_time;
+                if (elapsed >= Data.waiting_time)
                 {
-                    // 更新开始生成波的时间，同时标记为战斗中，防止重复触发
-                    Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                    // 2) 跨越到下一波
+                    Data.enemy_wave_number++;
+                    Data.last_enemy_wave_time = Data.timer.GetCurrentTime();
                     Event.in_battle = true;
-                    StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 5, player.transform.position));
-                    Data.enemy_wave_number += 1;
-                    if (Data.enemy_wave_number == 3)
+
+                    Vector3 spawnCenter = player.transform.position;
+                    int wave = Data.enemy_wave_number;
+
+                    // 3) 根据波数选择出怪规则
+                    switch (wave)
                     {
-                        Data.waiting_time += 10f;
+                        case 1:
+                        case 2:
+                            // 第1、2波：5只 Enemy0
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 5, spawnCenter));
+                            break;
+
+                        case 3:
+                            // 第3波：10只 Enemy0，且延长下次间隔
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 10, spawnCenter));
+                            Data.waiting_time += 10f;
+                            break;
+
+                        case 4:
+                        case 5:
+                            // 第4、5波：3～5 只 Enemy0 + 2 只 Enemy1
+                            StartCoroutine(LoadAndSpawnEnemyWave(
+                                "Prefabs/Enemy0",
+                                UnityEngine.Random.value < 0.5f ? 3 : 5,
+                                spawnCenter
+                            ));
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 2, spawnCenter));
+                            break;
+
+                        case 6:
+                        case 7:
+                        case 8:
+                            // 第6～8波：3～7 只 Enemy0 + 2～4 只 Enemy1
+                            StartCoroutine(LoadAndSpawnEnemyWave(
+                                "Prefabs/Enemy0",
+                                UnityEngine.Random.value < 0.5f ? 3 : 7,
+                                spawnCenter
+                            ));
+                            StartCoroutine(LoadAndSpawnEnemyWave(
+                                "Prefabs/Enemy1",
+                                UnityEngine.Random.value < 0.5f ? 2 : 4,
+                                spawnCenter
+                            ));
+                            break;
+
+                        case 9:
+                            // 第9波：4只 Enemy2
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy2", 4, spawnCenter));
+                            break;
+
+                        default:
+                            // 之后的波数可自行扩展或循环
+                            break;
                     }
-                }
-                else if (((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) >= Data.waiting_time) && Data.enemy_wave_number <= 9 && Data.enemy_wave_number > 2)
-                {
-                    Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
-                    Event.in_battle = true;
-                    if (Data.enemy_wave_number == 3)
-                    {
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 6 , player.transform.position));
-                    } 
-                    else if (Data.enemy_wave_number < 6)
-                    {
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", UnityEngine.Random.value < 0.5f ? 1 : 2, player.transform.position));
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 2, player.transform.position));
-                    } 
-                    else if (Data.enemy_wave_number < 9)
-                    {
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", UnityEngine.Random.value < 0.5f ? 3 : 6, player.transform.position));
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", UnityEngine.Random.value < 0.5f ? 2 : 3, player.transform.position));                        
-                    }
-                    else if (Data.enemy_wave_number == 9)
-                    {
-                        StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy2", 2 , player.transform.position));                     
-                    }
-                    Data.enemy_wave_number += 1;
                 }
             }
-            // 奖励生成：只有当敌人池为空且仍处于战斗状态，并且距离上次记录的时间超过1秒后才发放奖励
+            // 4) 波内敌人清空后发奖励
             else if (Datas.EnemyPool.Count == 0 && Event.in_battle)
             {
                 if ((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) > 1f)
                 {
-                    // 战斗结束：生成奖励道具，并重置状态
+                    // 战斗结束，发奖励并重置状态
                     if (Data.enemy_wave_number % 3 == 0)
                     {
-
-                        Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                        // 每第三波的大奖励逻辑（带雕像 + 3件）
+                        Data.last_enemy_wave_time = Data.timer.GetCurrentTime();
                         Event.in_battle = false;
-                        PlayerController player_controller = player.GetComponent<PlayerController>();
-                        if (player_controller.player_properties.current_health > 0.65f * player_controller.player_properties.max_health)
+                        PlayerController pc = player.GetComponent<PlayerController>();
+                        if (pc.player_properties.current_health > 0.65f * pc.player_properties.max_health)
                         {
-                            GameObject statue = Instantiate(Data.GetSatanPrefab() , player.transform.position + new Vector3(0,3,0) , Quaternion.identity);
-                            GameObject generated_item1 = GenerateRewardItem(player.transform.position + new Vector3(-3,0,0), ItemFactory.PropertieItems, ItemFactory.AdvancedItems , 0.7f);
-                            GameObject generated_item2 = GenerateRewardItem(player.transform.position, ItemFactory.PropertieItems, ItemFactory.BulletEffectItems);
-                            GameObject generated_item3 = GenerateRewardItem(player.transform.position + new Vector3(3,0,0), ItemFactory.PropertieItems, ItemFactory.AdditionalAttack, 0.65f);
-                            if (generated_item1 != null && generated_item2 != null && generated_item3 != null)
-                                statue.GetComponent<Statues>().write_items(generated_item1,generated_item2,generated_item3);
+                            GameObject statue = Instantiate(Data.GetSatanPrefab(),
+                                                            player.transform.position + new Vector3(0, 3, 0),
+                                                            Quaternion.identity);
+                            GameObject i1 = GenerateRewardItem(player.transform.position + new Vector3(-3, 0, 0),
+                                                                ItemFactory.PropertieItems,
+                                                                ItemFactory.AdvancedItems, 0.7f);
+                            GameObject i2 = GenerateRewardItem(player.transform.position,
+                                                                ItemFactory.PropertieItems,
+                                                                ItemFactory.BulletEffectItems);
+                            GameObject i3 = GenerateRewardItem(player.transform.position + new Vector3(3, 0, 0),
+                                                                ItemFactory.PropertieItems,
+                                                                ItemFactory.AdditionalAttack, 0.65f);
+                            if (i1 != null && i2 != null && i3 != null)
+                                statue.GetComponent<Statues>().write_items(i1, i2, i3);
                         }
                         else
                         {
-                            GameObject statue = Instantiate(Data.GetAnglePrefab() , player.transform.position + new Vector3(0,3,0) , Quaternion.identity);
-                            GameObject generated_item1 = GenerateRewardItem(player.transform.position + new Vector3(-3,0,0), ItemFactory.PropertieItems, ItemFactory.AdvancedItems , 0.85f);
-                            GameObject generated_item2 = GenerateRewardItem(player.transform.position, ItemFactory.PropertieItems, ItemFactory.ProactiveItems , 0.65f);
-                            GameObject generated_item3 = GenerateRewardItem(player.transform.position + new Vector3(3,0,0), ItemFactory.PropertieItems, ItemFactory.AdditionalAttack , 0.75f);
-                            if (generated_item1 != null && generated_item2 != null && generated_item3 != null)
-                                statue.GetComponent<Statues>().write_items(generated_item1,generated_item2,generated_item3);
+                            GameObject statue = Instantiate(Data.GetAnglePrefab(),
+                                                            player.transform.position + new Vector3(0, 3, 0),
+                                                            Quaternion.identity);
+                            GameObject i1 = GenerateRewardItem(player.transform.position + new Vector3(-3, 0, 0),
+                                                                ItemFactory.PropertieItems,
+                                                                ItemFactory.AdvancedItems, 0.85f);
+                            GameObject i2 = GenerateRewardItem(player.transform.position,
+                                                                ItemFactory.PropertieItems,
+                                                                ItemFactory.ProactiveItems, 0.65f);
+                            GameObject i3 = GenerateRewardItem(player.transform.position + new Vector3(3, 0, 0),
+                                                                ItemFactory.PropertieItems,
+                                                                ItemFactory.AdditionalAttack, 0.75f);
+                            if (i1 != null && i2 != null && i3 != null)
+                                statue.GetComponent<Statues>().write_items(i1, i2, i3);
                         }
                     }
                     else
                     {
-                        int generating_item_id;
+                        // 其它波次奖励逻辑
+                        int id;
                         if (UnityEngine.Random.value < 0.6f)
-                        {
-                            generating_item_id = ItemFactory.PropertieItems[UnityEngine.Random.Range(0, ItemFactory.PropertieItems.Count)];
-                        }
-                        else if(ItemFactory.BulletEffectItems.Count != 0)
-                        {
-                            generating_item_id = ItemFactory.BulletEffectItems[UnityEngine.Random.Range(0, ItemFactory.BulletEffectItems.Count)];
-                        }
+                            id = ItemFactory.PropertieItems[UnityEngine.Random.Range(0, ItemFactory.PropertieItems.Count)];
+                        else if (ItemFactory.BulletEffectItems.Count > 0)
+                            id = ItemFactory.BulletEffectItems[UnityEngine.Random.Range(0, ItemFactory.BulletEffectItems.Count)];
                         else
-                        {
-                            generating_item_id = ItemFactory.PropertieItems[UnityEngine.Random.Range(0, ItemFactory.PropertieItems.Count)];
-                        }
-                        GameObject world_item_instance = Instantiate(this.Event.world_item, player.transform.position + new Vector3(0, 2, 0), Quaternion.identity);
-                        Items.ItemRanks? rank = ItemFactory.GetRankByID(generating_item_id);
+                            id = ItemFactory.PropertieItems[UnityEngine.Random.Range(0, ItemFactory.PropertieItems.Count)];
+
+                        GameObject item = Instantiate(this.Event.world_item,
+                                                    player.transform.position + new Vector3(0, 2, 0),
+                                                    Quaternion.identity);
+                        var rank = ItemFactory.GetRankByID(id);
                         if (rank != null)
-                        {
-                            world_item_instance.GetComponent<ItemInWorld>().Initialize(generating_item_id, (Items.ItemRanks)rank);
-                        }
-                        Data.last_enemy_wave_time = GlobalTimer.Instance.GetCurrentTime();
+                            item.GetComponent<ItemInWorld>().Initialize(id, rank.Value);
+
+                        Data.last_enemy_wave_time = Data.timer.GetCurrentTime();
                         Event.in_battle = false;
                     }
                 }
             }
+
             yield return null;
         }
     }
+
     private GameObject GenerateRewardItem(Vector3 position, List<int> primaryList, List<int> fallbackList, float primaryChance = 0.6f)
     {
         int generating_item_id;

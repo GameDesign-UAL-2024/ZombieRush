@@ -4,30 +4,25 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+
 public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    // 本地化按钮是否初始化
-    private bool initialized;
     // 当前按钮对应的 id
-    int this_id;
+    private int this_id;
     // 按钮相关属性
-    Dictionary<string, string> this_properties;
+    private Dictionary<string, string> this_properties;
     // 按钮组件引用
-    UnityEngine.UI.Button button_comp;
+    private Button button_comp;
     // 按钮图片引用
     public Image image;
-    // 资源需求数值
-    int green_value;
-    int black_value;
-    int pink_value;
+    // 闪烁协程引用
+    private Coroutine flashCoroutine;
     // PlayerUI 实例引用
-    PlayerUI UI_Instance;
-    // 描述文本
-    string dectribe_text;
+    private PlayerUI UI_Instance;
 
     void Awake()
     {
-        button_comp = transform.GetComponent<Button>();
+        button_comp = GetComponent<Button>();
     }
 
     void Start()
@@ -35,22 +30,35 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         UI_Instance = PlayerUI.Instance;
     }
 
+    /// <summary>
+    /// 初始化按钮并启动闪烁提示
+    /// </summary>
     public void Initialize(string img_path, int id, Dictionary<string, string> properties, int Green_Need, int Black_Need, int Pink_Need, UnityAction<int> Listener)
     {
-        green_value = Green_Need;
-        black_value = Black_Need;
-        pink_value = Pink_Need;
         this_id = id;
         this_properties = properties;
-        button_comp.onClick.AddListener(() => Listener(this_id));
+
+        // 点击时先停止闪烁，再执行放置逻辑
+        button_comp.onClick.AddListener(() =>
+        {
+            StopFlash();
+            Listener.Invoke(this_id);
+        });
+
         SetImageSprite(img_path);
+
+        // 确保 Image 初始 alpha 为 1
+        if (image != null)
+        {
+            image.canvasRenderer.SetAlpha(1f);
+        }
+
+        StartFlash();  // 开始闪烁提示
     }
 
     private void SetImageSprite(string img_path)
     {
-        // 从 Resources 文件夹加载 Sprite
         Sprite newSprite = Resources.Load<Sprite>(img_path);
-
         if (newSprite != null)
         {
             image.sprite = newSprite;
@@ -58,23 +66,59 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         else
         {
             image.color = Color.cyan;
-            Debug.Log($"无法加载路径为 '{img_path}' 的图片。请确保该图片位于 Resources 文件夹内，且路径正确。");
+            Debug.LogWarning($"无法加载路径为 '{img_path}' 的图片。请确保图片位于 Resources 文件夹，且路径正确。");
+        }
+    }
+
+    /// <summary>
+    /// 启动闪烁协程
+    /// </summary>
+    public void StartFlash()
+    {
+        if (flashCoroutine == null && image != null)
+            flashCoroutine = StartCoroutine(FlashCoroutine());
+    }
+
+    /// <summary>
+    /// 停止闪烁，并恢复不透明状态
+    /// </summary>
+    public void StopFlash()
+    {
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
+        if (image != null)
+        {
+            image.CrossFadeAlpha(1f, 0f, true);
+        }
+    }
+
+    /// <summary>
+    /// 简化的闪烁效果：在 50%~100% alpha 之间交替
+    /// </summary>
+    private IEnumerator FlashCoroutine()
+    {
+        while (true)
+        {
+            // 渐隐到 50% alpha
+            image.CrossFadeAlpha(0.5f, 0.5f, true);
+            yield return new WaitForSecondsRealtime(0.5f);
+
+            // 渐显到 100% alpha
+            image.CrossFadeAlpha(1f, 0.5f, true);
+            yield return new WaitForSecondsRealtime(0.5f);
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (UI_Instance != null)
-        {
-            UI_Instance.ShowDescription(this_id, 1);
-        }
+        UI_Instance?.ShowDescription(this_id, 1);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (UI_Instance != null)
-        {
-            UI_Instance.ClearDescription();
-        }
+        UI_Instance?.ClearDescription();
     }
 }

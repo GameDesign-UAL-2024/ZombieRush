@@ -1,219 +1,129 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 [RequireComponent(typeof(EnemyNav))]
 public class Enemy1 : Enemy
 {
-    // —— 新增：内部状态枚举 —— 
-    public enum EnemyState
-    {
-        Wait,
-        Moving,
-        Attack
-    }
-
-    // —— 新增：存储当前状态的字段与属性 —— 
+    public enum EnemyState { Wait, Moving, Attack }
     private EnemyState _currentState;
-    public EnemyState current_state
-    {
-        get => _currentState;
-        set => _currentState = value;
-    }
+    public EnemyState current_state { get => _currentState; private set => _currentState = value; }
 
-    public override float max_health { get; set; } = 4f;
+    public override float max_health { get; set; } = 5f;
     public override float current_health { get; set; }
     public override float speed { get; set; } = 4f;
-    bool could_hurt;
     public override GameObject target { get; set; }
 
-    [SerializeField] ParticleSystem attacking_effect;
-    [SerializeField] Vector3 rightDirectionRotation = Vector3.zero;
-    [SerializeField] Vector3 leftDirectionRotation = new Vector3(0f, 0f, 180f);
+    [Header("Attack Settings")]
+    [SerializeField] float dashDuration = 2f;
+    [SerializeField] float dashMultiplier = 0.8f;
 
-    private Vector3 particleOriginalLocalPos;
-    EnemyNav navigation;
-    GlobalTimer g_timer;
-    GameObject player;
-    GameObject hitted_prefab;
-    Animator animator;
-    Rigidbody2D RB;
-    SpriteRenderer sprite_renderer;
-    float behaviour_time;
-    float behaviour_gap = 3f;
-    bool dying;
-    EnemyNav self_nav;
-    Dictionary<Vector2, GameObject> player_objects;
+    [Header("Rotation Settings")]
+    [SerializeField] float rotationSpeed = 1f;
+
+    [SerializeField] ParticleSystem attacking_effect;
+
+    private EnemyNav navigation;
+    private GlobalTimer g_timer;
+    private GameObject player;
+    private Animator animator;
+    private Rigidbody2D RB;
+    private SpriteRenderer sprite_renderer;
+    private Vector3 originalScale;
+    private float behaviour_time;
+    private readonly float behaviour_gap = 3f;
+    private bool could_hurt = true;
+    private bool dying = false;
 
     void Start()
     {
         DeactiveAttackEffect();
         current_health = max_health;
-        self_nav = GetComponent<EnemyNav>();
-        particleOriginalLocalPos = attacking_effect.transform.localPosition;
-        hitted_prefab = Addressables.LoadAssetAsync<GameObject>(hitted_prefab_path).WaitForCompletion();
-
-        // 初始化内部状态
-        current_state = EnemyState.Wait;
-
-        could_hurt = true;
-        g_timer = GlobalTimer.Instance;
         navigation = GetComponent<EnemyNav>();
         RB = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         sprite_renderer = GetComponent<SpriteRenderer>();
-        behaviour_time = g_timer.GetCurrentTime();
+        originalScale = transform.localScale;
 
-        // 查找玩家对象
-        foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            if (p.GetComponent<PlayerController>() != null)
-            {
-                player = p;
-                break;
-            }
-        }
+        g_timer = GlobalTimer.Instance;
+        behaviour_time = g_timer.GetCurrentTime();
+        current_state = EnemyState.Wait;
+
+        player = GameObject.FindGameObjectWithTag("Player");
         target = player;
     }
+
     void LateUpdate()
     {
-        Vector2 newPosition = transform.position;
-        newPosition.x = Mathf.Clamp(newPosition.x, 0, 199);
-        newPosition.y = Mathf.Clamp(newPosition.y, 0, 199);
-        transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Clamp(pos.x, 0f, 199f);
+        pos.y = Mathf.Clamp(pos.y, 0f, 199f);
+        transform.position = pos;
     }
+
     void Update()
     {
-        // 简单地不断右移
-        transform.position += Vector3.right * 0.1f * Time.deltaTime;
+        if (dying) return;
 
-        if (!dying)
+        float dist = Vector2.Distance(transform.position, player.transform.position);
+        float now = g_timer.GetCurrentTime();
+
+        if (current_state != EnemyState.Attack)
         {
-            float distance = Vector2.Distance(transform.position, player.transform.position);
+            float sign = player.transform.position.x < transform.position.x ? -1f : 1f;
+            transform.localScale = new Vector3(originalScale.x * sign, originalScale.y, originalScale.z);
 
-            // Wait -> Moving
-            if (g_timer.GetCurrentTime() - behaviour_time >= behaviour_gap &&
-                current_state == EnemyState.Wait)
-            {
+            var shape = attacking_effect.shape;
+            shape.rotation = new Vector3(0f, 0f, sign > 0 ? 90f : -90f);
+
+            if (now - behaviour_time >= behaviour_gap && current_state == EnemyState.Wait)
                 SetState(EnemyState.Moving);
-            }
-            // 近距离且冷却到 -> Attack
-            else if (distance <= 10f &&
-                     (g_timer.GetCurrentTime() - behaviour_time) > behaviour_gap &&
-                     current_state != EnemyState.Attack)
-            {
-                navigation.SetNavActive(false);
+
+            if (dist <= 10f && now - behaviour_time > behaviour_gap)
                 SetState(EnemyState.Attack);
-            }
-            // 进入范围但冷却未到 -> Wait
-            else if (distance <= 10f &&
-                     current_state != EnemyState.Attack)
-            {
-                navigation.SetNavActive(false);
-                SetState(EnemyState.Wait);
-            }
-
-            // 朝向及移动
-            if (current_state != EnemyState.Attack)
-            {
-                float xOffset = player.transform.position.x - transform.position.x;
-                bool facingLeft = xOffset < 0;
-
-                if (sprite_renderer.flipX != facingLeft)
-                {
-                    sprite_renderer.flipX = facingLeft;
-
-                    var shape = attacking_effect.shape;
-                    shape.rotation = facingLeft ? leftDirectionRotation : rightDirectionRotation;
-
-                    Vector3 flippedLocalPos = particleOriginalLocalPos;
-                    flippedLocalPos.x *= facingLeft ? -1 : 1;
-                    attacking_effect.transform.localPosition = flippedLocalPos;
-                }
-
-                if (!navigation.is_activing && current_state == EnemyState.Moving)
-                {
-                    navigation.SetNavActive(true);
-                }
-            }
-        }
-        else
-        {
-            navigation.SetNavActive(false);
         }
 
-        if (current_health <= 0)
+        if (current_health <= 0 && !dying)
         {
-            SetState(EnemyState.Wait);
-            navigation.SetNavActive(false);
             dying = true;
             could_hurt = false;
+            SetState(EnemyState.Wait);
             animator.SetBool("Dead", true);
+            navigation.SetNavActive(false);
         }
     }
 
     void FixedUpdate()
     {
-        RB.velocity = Vector2.Lerp(RB.velocity, Vector2.zero, 2f * Time.fixedDeltaTime);
-    }
-
-    public override void SetTarget(GameObject tar)
-    {
-        target = tar;
+        if (current_state != EnemyState.Attack)
+            RB.velocity = Vector2.Lerp(RB.velocity, Vector2.zero, 2f * Time.fixedDeltaTime);
     }
 
     public override bool TakeDamage(Vector3 source, float amount, bool Instant_kill)
     {
-        if (could_hurt)
-        {
-            current_health -= amount;
-            animator.SetTrigger("Hurt");
-            Vector2 goback_direction = -((Vector2)source - (Vector2)transform.position).normalized;
-            RB.velocity = goback_direction * 2f;
-            navigation.SetNavActive(false);
-            return true;
-        }
-        return false;
+        if (!could_hurt) return false;
+        current_health -= amount;
+        animator.SetTrigger("Hurt");
+        Vector2 backDir = -(source - transform.position).normalized;
+        RB.velocity = backDir * 2f;
+        navigation.SetNavActive(false);
+        return true;
     }
 
-    IEnumerator AttackDash()
+    void SetState(EnemyState newState)
     {
-        float startTime = g_timer.GetCurrentTime();
-        Vector2 currentDirection = (target.transform.position - transform.position).normalized;
+        if (newState == current_state) return;
 
-        while (g_timer.GetCurrentTime() - startTime <= 2f)
-        {
-            // 平滑旋转与移动逻辑...
-            // 保持与原有实现一致
-            yield return null;
-        }
-
-        // 恢复朝向
-        bool facingLeft = currentDirection.x < 0;
-        sprite_renderer.flipX = facingLeft;
-        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-    }
-
-    public void OnAttackEnd()
-    {
-        SetState(EnemyState.Wait);
-        behaviour_time = g_timer.GetCurrentTime();
-    }
-
-    private void SetState(EnemyState newState)
-    {
-        if (current_state == newState) return;
-
+        animator.ResetTrigger("Attacking");
         animator.SetBool("Moving", false);
         navigation.SetNavActive(false);
+
         current_state = newState;
 
         switch (newState)
         {
             case EnemyState.Wait:
-                navigation.SetNavActive(false);
+                behaviour_time = g_timer.GetCurrentTime();
                 break;
             case EnemyState.Moving:
                 animator.SetBool("Moving", true);
@@ -226,23 +136,41 @@ public class Enemy1 : Enemy
                 break;
         }
     }
-
-    public void ActiveAttackEffect()
+    public void StartAttackDash()
     {
-        attacking_effect.Play();
+        StartCoroutine(AttackDash());
+    }
+    IEnumerator AttackDash()
+    {
+        navigation.SetNavActive(false);
+        ActiveAttackEffect();
+
+        float start = g_timer.GetCurrentTime();
+
+        while (g_timer.GetCurrentTime() - start <= dashDuration)
+        {
+            Vector2 dir = (player.transform.position - transform.position).normalized;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            if (transform.localScale.x < 0) angle += 180f;
+            Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * 0.25f * Time.deltaTime);
+
+            transform.Translate((transform.localScale.x > 0 ? transform.right : -transform.right) * speed * dashMultiplier * Time.deltaTime, Space.World);
+            yield return null;
+        }
+
+        DeactiveAttackEffect();
+        transform.rotation = Quaternion.identity;
+        SetState(EnemyState.Wait);
     }
 
-    public void DeactiveAttackEffect()
-    {
-        attacking_effect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-    }
-
+    public override void SetTarget(GameObject tar) => target = tar;
+    public void ActiveAttackEffect() => attacking_effect.Play();
+    public void DeactiveAttackEffect() => attacking_effect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     public void DestroyEnemy()
     {
         if (Globals.Datas.EnemyPool.Contains(this))
-        {
             Globals.Datas.EnemyPool.Remove(this);
-        }
         Destroy(gameObject);
     }
 }

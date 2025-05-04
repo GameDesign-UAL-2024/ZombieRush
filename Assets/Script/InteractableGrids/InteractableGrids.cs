@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -11,12 +12,18 @@ public class InteractableGrids : MonoBehaviour
     public enum GridType { Trees, Bushes, Rocks };
     public float interacting_time;
     public GridType this_type;
+
     float start_time;
     Animator animator;
     GameObject bar_object;
     static string bar_prefab = "Prefabs/Bar";
     static string green_path = "Prefabs/GreenBlock";
     static string black_path = "Prefabs/BlackBlock";
+    static string Notice_Path_B = "Prefabs/Notice_Resource_Black";
+    static string Notice_Path_G = "Prefabs/Notice_Resource_Green";
+
+    GameObject NoticeObject_prefab;
+    GameObject NoticeObject;
     public int release_number;
     [SerializeField]
     int released = 0;
@@ -25,27 +32,41 @@ public class InteractableGrids : MonoBehaviour
     bool on_sprite;
     bool in_area;
     bool interactionCompleted = false;
-
-    private AsyncOperationHandle<GameObject>? barLoadHandle; // 存储加载句柄
+    private AsyncOperationHandle<GameObject>? barLoadHandle;
+    Globals global;
 
     // 用于鼠标像素检测
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     public float alphaThreshold = 0.1f;
 
+    // 新增：用于对 NoticeObject 子节点做距离衰减
+    private List<SpriteRenderer> noticeSpriteRenderers;
+
+    // 阈值配置
+    private float noticeThreshold = 10f;
+    private float attenuationStart = 6f;
+    private float attenuationEnd = 20f;
+    private float curveExponent = 0.5f;
+
     void Start()
     {
         is_interacting = false;
         on_sprite = false;
+        global = Globals.Instance;
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
 
-        // 获取 SpriteRenderer 并保存原始颜色
+        // 预载提示预制
+        if (this_type == GridType.Rocks)
+            NoticeObject_prefab = Addressables.LoadAssetAsync<GameObject>(Notice_Path_B).WaitForCompletion();
+        else
+            NoticeObject_prefab = Addressables.LoadAssetAsync<GameObject>(Notice_Path_G).WaitForCompletion();
+
+        // 获取自身SpriteRenderer
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
-        {
             originalColor = spriteRenderer.color;
-        }
     }
 
     void Update()
@@ -53,12 +74,39 @@ public class InteractableGrids : MonoBehaviour
         IsInArea();
         OnPlayerClick();
 
-        if (animator != null)
+        // 根据类型与资源量判断是否需要提示
+        var data = global.Data;
+        bool needNotice = false;
+        switch (this_type)
         {
-            animator.SetBool("Interacting", is_interacting);
+            case GridType.Rocks:
+                needNotice = data.player_current_resources[Globals.Datas.ResourcesType.Black] <= noticeThreshold;
+                break;
+            case GridType.Trees:
+            case GridType.Bushes:
+                needNotice = data.player_current_resources[Globals.Datas.ResourcesType.Green] <= noticeThreshold;
+                break;
         }
 
-        if (bar_object != null && interacting_time != 0)
+        // 只有状态变化时才创建或销毁
+        if (needNotice && NoticeObject == null)
+        {
+            NoticeObject = Instantiate(NoticeObject_prefab, transform, worldPositionStays: false);
+            noticeSpriteRenderers = new List<SpriteRenderer>(NoticeObject.GetComponentsInChildren<SpriteRenderer>());
+        }
+        else if (!needNotice && NoticeObject != null)
+        {
+            Destroy(NoticeObject);
+            NoticeObject = null;
+            noticeSpriteRenderers = null;
+        }
+
+        // 动画状态
+        if (animator != null)
+            animator.SetBool("Interacting", is_interacting);
+
+        // 交互进度条逻辑
+        if (bar_object != null && interacting_time > 0f)
         {
             float progress = (GlobalTimer.Instance.GetCurrentTime() - start_time) / interacting_time;
             if (!in_area || !is_interacting)
@@ -68,94 +116,90 @@ public class InteractableGrids : MonoBehaviour
             }
             else
             {
-                bar_object.transform.GetComponent<Bar>().SetValue(progress);
+                bar_object.GetComponent<Bar>().SetValue(progress);
             }
 
-            if (progress >= 1 && !interactionCompleted)
+            if (progress >= 1f && !interactionCompleted)
             {
-                interactionCompleted = true;  // 标记交互完成
+                interactionCompleted = true;
                 Destroy(bar_object);
                 bar_object = null;
 
-                // 生成资源
-                if (this_type == GridType.Trees)
-                {
-                    for (int i = 0; i < release_number; i++)
-                    {
-                        Addressables.LoadAssetAsync<GameObject>(green_path).Completed += OnResourcesLoaded;
-                    }
-                }
-                else if (this_type == GridType.Rocks)
-                {
-                    for (int i = 0; i < release_number; i++)
-                    {
-                        Addressables.LoadAssetAsync<GameObject>(black_path).Completed += OnResourcesLoaded;
-                    }
-                }
+                // 释放资源
+                string path = (this_type == GridType.Rocks) ? black_path : green_path;
+                for (int i = 0; i < release_number; i++)
+                    Addressables.LoadAssetAsync<GameObject>(path).Completed += OnResourcesLoaded;
 
-                // 延迟一段时间再移除当前对象，给生成的效果留出展示时间
                 StartCoroutine(RemoveObjectWithDelay(0.1f));
             }
         }
 
-        // —— 以下部分用于改变自身亮度，当鼠标悬停在 Sprite 非透明区域内时降低亮度 50% ——
+        // 鼠标悬停亮度变化
         if (spriteRenderer != null)
         {
             if (IsMouseOverSpritePixel() && in_area)
-            {
-                spriteRenderer.color = new Color(originalColor.r * 0.80f,
-                                                   originalColor.g * 0.80f,
-                                                   originalColor.b * 0.80f,
-                                                   originalColor.a);
-            }
+                spriteRenderer.color = originalColor * 0.8f;
             else
-            {
                 spriteRenderer.color = originalColor;
-            }
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (noticeSpriteRenderers == null || player == null)
+            return;
+
+        // 清理已销毁引用
+        noticeSpriteRenderers.RemoveAll(sr => sr == null);
+        if (noticeSpriteRenderers.Count == 0)
+        {
+            noticeSpriteRenderers = null;
+            return;
+        }
+
+        // 计算距离衰减
+        float dist = Vector3.Distance(player.transform.position, transform.position);
+        float raw = Mathf.Clamp01((dist - attenuationStart) / (attenuationEnd - attenuationStart));
+        float attenuation = 1f - Mathf.Pow(raw, curveExponent);
+
+        // 应用于提示子元素
+        foreach (var sr in noticeSpriteRenderers)
+        {
+            Color c = sr.color;
+            c.a = c.a * attenuation;
+            sr.color = c;
         }
     }
 
     private IEnumerator RemoveObjectWithDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        GameObject objectSpawner = GameObject.FindGameObjectWithTag("ObjectSpawner");
-        if (objectSpawner != null)
-        {
-            objectSpawner.GetComponent<ObjectSpawner>().RemoveObject(gameObject);
-        }
+        var spawner = GameObject.FindGameObjectWithTag("ObjectSpawner");
+        spawner?.GetComponent<ObjectSpawner>()?.RemoveObject(gameObject);
     }
 
     private void OnResourcesLoaded(AsyncOperationHandle<GameObject> handle)
     {
-        if (this == null || gameObject == null) return; // 确保物体未被销毁
-
-        GameObject resourceInstance = Instantiate(handle.Result, transform.position, Quaternion.identity);
-        Rigidbody2D rb = resourceInstance.GetComponent<Rigidbody2D>();
-
+        if (gameObject == null) return;
+        var instance = Instantiate(handle.Result, transform.position, Quaternion.identity);
+        var rb = instance.GetComponent<Rigidbody2D>();
         if (rb != null)
-        {
             rb.AddForce(UnityEngine.Random.insideUnitCircle.normalized * 10f, ForceMode2D.Impulse);
-            StartCoroutine(DelayedReleaseIncrement());
-        }
+        StartCoroutine(DelayedReleaseIncrement());
     }
 
     private IEnumerator DelayedReleaseIncrement()
     {
         yield return new WaitForSeconds(0.02f);
-        released += 1;
+        released++;
     }
 
     private void OnBarLoaded(AsyncOperationHandle<GameObject> handle)
     {
-        if (this == null || gameObject == null) return; // 防止访问已销毁的对象
-
+        if (gameObject == null) return;
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            GameObject bar = handle.Result;
-            if (bar != null)
-            {
-                bar_object = Instantiate(bar, transform);
-            }
+            bar_object = Instantiate(handle.Result, transform);
         }
     }
 
@@ -165,72 +209,55 @@ public class InteractableGrids : MonoBehaviour
         {
             is_interacting = true;
             start_time = GlobalTimer.Instance.GetCurrentTime();
-
-            if (release_number > 0)
-            {
-                release_number = (int)UnityEngine.Random.Range(1, release_number);
-            }
+            release_number = UnityEngine.Random.Range(1, release_number + 1);
 
             if (barLoadHandle.HasValue && barLoadHandle.Value.IsValid())
-            {
                 Addressables.Release(barLoadHandle.Value);
-            }
 
             barLoadHandle = Addressables.LoadAssetAsync<GameObject>(bar_prefab);
             barLoadHandle.Value.Completed += OnBarLoaded;
         }
     }
 
+    void OnDestroy()
+    {
+        if (NoticeObject != null)
+            Destroy(NoticeObject);
+    }
 
     void IsInArea()
     {
         if (player != null)
         {
-            if (Vector2.Distance(player.transform.position, transform.position) > 3f)
-            {
-                in_area = false;
-                is_interacting = false;
-            }
-            else
-            {
-                in_area = true;
-            }
+            float d = Vector2.Distance(player.transform.position, transform.position);
+            in_area = d <= 3f;
+            if (!in_area) is_interacting = false;
         }
     }
 
-    // 判断鼠标是否在 Sprite 的非透明像素区域内（无需 Collider）
     bool IsMouseOverSpritePixel()
     {
-        if (spriteRenderer == null || spriteRenderer.sprite == null)
-            return false;
-
-        // 获取鼠标在世界坐标中的位置
+        if (spriteRenderer?.sprite == null) return false;
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         worldPos.z = transform.position.z;
-
-        // 转换为 Sprite 的局部坐标
         Vector2 localPos = transform.InverseTransformPoint(worldPos);
 
-        Sprite sprite = spriteRenderer.sprite;
-        Rect textureRect = sprite.textureRect;
-        Vector2 pivot = sprite.pivot;
-        float pixelsPerUnit = sprite.pixelsPerUnit;
+        var sprite = spriteRenderer.sprite;
+        var texRect = sprite.textureRect;
+        var pivot = sprite.pivot;
+        float ppu = sprite.pixelsPerUnit;
 
-        // 将局部坐标转换为以像素为单位的坐标（参照 Sprite 的 pivot）
-        Vector2 pixelPos = new Vector2(localPos.x * pixelsPerUnit + pivot.x,
-                                       localPos.y * pixelsPerUnit + pivot.y);
+        Vector2 pixelPos = new Vector2(
+            localPos.x * ppu + pivot.x,
+            localPos.y * ppu + pivot.y
+        );
 
-        // 检查是否在 Sprite 纹理矩形内
-        if (pixelPos.x < 0 || pixelPos.x > textureRect.width ||
-            pixelPos.y < 0 || pixelPos.y > textureRect.height)
-        {
+        if (pixelPos.x < 0 || pixelPos.x > texRect.width || pixelPos.y < 0 || pixelPos.y > texRect.height)
             return false;
-        }
 
-        int texX = Mathf.FloorToInt(pixelPos.x + textureRect.x);
-        int texY = Mathf.FloorToInt(pixelPos.y + textureRect.y);
-
-        Color pixelColor = sprite.texture.GetPixel(texX, texY);
-        return on_sprite = pixelColor.a > alphaThreshold;
+        int x = Mathf.FloorToInt(pixelPos.x + texRect.x);
+        int y = Mathf.FloorToInt(pixelPos.y + texRect.y);
+        Color col = sprite.texture.GetPixel(x, y);
+        return on_sprite = col.a > alphaThreshold;
     }
 }

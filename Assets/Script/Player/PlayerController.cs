@@ -24,12 +24,14 @@ public class PlayerController : MonoBehaviour
         public float damage;
         public float max_health;
         public float current_health;
+        public float atk_speed;//per second
         public float bullet_exist_time;
         public float luck;
         
         public Properties()
         {
             bullet_speed = 5f;
+            atk_speed = 2;
             damage = 1f;
             max_health = 6;
             current_health = max_health;

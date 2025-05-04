@@ -157,4 +157,5 @@ MonoBehaviour:
   interacting_time: 3
   this_type: 2
   release_number: 8
-  released: 2
+  released: 0
+  alphaThreshold: 0.1
