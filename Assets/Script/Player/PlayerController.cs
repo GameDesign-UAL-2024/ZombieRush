@@ -18,6 +18,11 @@ public class PlayerController : MonoBehaviour
     GameObject properties_up_prefab;
     [SerializeField] Transform properties_up_location;
     Globals global;
+    
+    //音频
+    [SerializeField] AudioClip move;
+    [SerializeField] AudioClip watermove1;
+    [SerializeField] AudioClip watermove2;
     public class Properties
     {
         public float bullet_speed;
@@ -79,9 +84,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (global.Event.current_state != Globals.Events.GameState.playing)
-        {
             return;
-        }
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         moveInput = new Vector2(moveX, moveY).normalized;
@@ -133,6 +136,35 @@ public class PlayerController : MonoBehaviour
         // 如果检测到的UI元素数量大于0，则返回true
         return results.Count > 0;
     }
+    void PlayMovingSound()
+    {
+        if (AudioSysManager.Instance == null) return;
+
+        AudioSource moveSrc = AudioSysManager.Instance
+            .PlaySound(gameObject, move , transform.position, 0.15f, true);
+
+        // 2) 检测脚下是否是水
+        if (ChunkGenerator.Instance != null &&
+            ChunkGenerator.Instance.IsTileOfType(transform.position, ChunkGenerator.Instance.waterTile))
+        {
+            // 3) “减弱”之前的移动音效
+            if (moveSrc != null)
+            {
+                AudioSysManager.Instance.SetLoopVolume(moveSrc, 0.05f);
+                // 或者直接 SetVolume(moveSrc, 0.05f) 
+            }
+
+            // 4) 播放水上移动音效
+            AudioSysManager.Instance
+                .PlaySound(gameObject,
+                        Random.value < 0.5f ? watermove1 : watermove2,
+                        transform.position,
+                        0.23f,
+                        false);
+        }
+    }
+
+
     public void PlayPropertieUpAnimation()
     {
         if (properties_up_location != null && properties_up_prefab != null)

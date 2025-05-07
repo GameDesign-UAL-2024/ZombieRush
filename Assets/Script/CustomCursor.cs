@@ -8,7 +8,8 @@ public class CustomCursor : MonoBehaviour
     public static CustomCursor  Instance;
     public enum MouseNoticeType {Left , Right};
     [SerializeField] SpriteRenderer MouseNotice;
-    [SerializeField]
+    [SerializeField] Sprite LeftNotice;
+    [SerializeField] Sprite RightNotice;
     void Awake()
     {
         if (Instance != null)
@@ -20,11 +21,6 @@ public class CustomCursor : MonoBehaviour
             Instance = this;
         }
     }
-
-    void Start()
-    {
-        MouseNotice.enabled = false;
-    }
     void Update()
     {
         // 将鼠标位置转换为世界坐标
@@ -34,11 +30,18 @@ public class CustomCursor : MonoBehaviour
 
     public void UseMouseNotice(MouseNoticeType type)
     {
-        
+        if(type == MouseNoticeType.Left)
+        {
+            MouseNotice.sprite = LeftNotice;
+        }
+        else
+        {
+            MouseNotice.sprite = RightNotice;
+        }
     }
 
     public void ClearMouseNotice()
     {
-        
+        MouseNotice.sprite = null;
     }
 }

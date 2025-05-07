@@ -39,7 +39,10 @@ public class Enemy0 : Enemy
     bool dying;
     EnemyNav self_nav;
     Dictionary<Vector2 , GameObject> player_objects;
-    
+    //音频
+    [SerializeField] AudioClip move;
+    [SerializeField] AudioClip watermove1;
+    [SerializeField] AudioClip watermove2;
     static GameObject hitted_prefab;
     void Start()
     {
@@ -128,7 +131,29 @@ public class Enemy0 : Enemy
             animator.SetBool("Dead", true);
         }
     }
+    void PlayMovingSound()
+    {
+        if (AudioSysManager.Instance == null) return;
 
+
+        // 2) 检测脚下是否是水
+        if (ChunkGenerator.Instance != null &&
+            ChunkGenerator.Instance.IsTileOfType(transform.position, ChunkGenerator.Instance.waterTile))
+        {
+            // 4) 播放水上移动音效
+            AudioSysManager.Instance
+                .PlaySound(gameObject,
+                        UnityEngine.Random.value < 0.5f ? watermove1 : watermove2,
+                        transform.position,
+                        0.8f,
+                        false);
+        }
+        else
+        {
+            AudioSource moveSrc = AudioSysManager.Instance
+                .PlaySound(gameObject, move , transform.position, 0.6f, true);
+        }
+    }
     void LateUpdate()
     {
         Vector2 newPosition = transform.position;

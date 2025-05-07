@@ -8,8 +8,10 @@ public class Item2 : Items
     public override int ID { get; set; } = 1;
     public override ItemRanks Rank { get; set; } = ItemRanks.S;
     public override ItemTypes Type { get; set; } = ItemTypes.ShootBehaviour_Bullet;
-    string bullet_prefab = "Prefabs/DefultBullet";
+    string bullet_prefab_path = "Prefabs/DefultBullet";
+    GameObject bullet_prefab;
     public List<Bullet> bullets = new List<Bullet>();
+    AudioClip hit_sound;
     Vector2 mouse_position;
     public int fire_rate = 3;  // 每秒最多发射 3 颗子弹
     private float nextFireTime = 0f; // 记录下次可以射击的时间
@@ -17,30 +19,40 @@ public class Item2 : Items
 
     public void SetBullet(string prefab_adress)
     {
-        bullet_prefab = "Prefabs/DefultBullet";
+        bullet_prefab_path = "Prefabs/DefultBullet";
+       
+        bullet_prefab = Addressables.LoadAssetAsync<GameObject>(bullet_prefab_path).WaitForCompletion();
+        hit_sound = Addressables.LoadAssetAsync<AudioClip>(bullet_prefab.GetComponent<Bullet>().hit_sound_path).WaitForCompletion();
     }
     void Start()
     {
-        player = transform.GetComponent<PlayerController>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        bullet_prefab = Addressables.LoadAssetAsync<GameObject>(bullet_prefab_path).WaitForCompletion();
+        hit_sound = Addressables.LoadAssetAsync<AudioClip>(bullet_prefab.GetComponent<Bullet>().hit_sound_path).WaitForCompletion();
+        GlobalEventBus.OnHitEnemy.AddListener(PlayHitSound);
     }
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && !IsPointerOverUI() && Time.time >= nextFireTime)
         {
-            // 计算下次射击时间
+            // 1. 先计算下次射击时间
             float atkSpeed = player.player_properties.atk_speed;
-            if (atkSpeed <= 0f) atkSpeed = 1f;  // 防止除零
+            if (atkSpeed <= 0f) atkSpeed = 1f;
             nextFireTime = Time.time + 1f / atkSpeed;
 
-            // 生成子弹
-            Addressables.LoadAssetAsync<GameObject>(bullet_prefab).Completed += OnBulletLoaded;
-
-            // 获取鼠标点击的世界坐标
+            // 2. **先获取本次点击的世界坐标**，并存到 mouse_position
             Vector3 screenPos = Input.mousePosition;
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+            Vector3 worldPos  = Camera.main.ScreenToWorldPoint(screenPos);
+            worldPos.z = 0f;  // 忽略 Z 轴
             mouse_position = new Vector2(worldPos.x, worldPos.y);
+
+            // 3. 再生成子弹（使用已经更新过的 mouse_position）
+            GenerateBullet();
         }
+
+        bullets.RemoveAll(b => b == null);
     }
+
     private bool IsPointerOverUI()
     {
         // 创建一个指针事件数据，使用当前鼠标位置
@@ -52,9 +64,8 @@ public class Item2 : Items
         // 如果检测到的UI元素数量大于0，则返回true
         return results.Count > 0;
     }
-    private void OnBulletLoaded(AsyncOperationHandle<GameObject> handle)
+    private void GenerateBullet()
     {
-        GameObject bulletPrefab = handle.Result;
         if (player != null && player.player_properties != null)
         {
             // 子弹初始位置：中间子弹使用 transform.position，其左右两侧偏移 0.5 个单位
@@ -79,7 +90,7 @@ public class Item2 : Items
             Vector2 targetRight  = (Vector2)spawnPosRight  + dirRight  * distance;
 
             // 生成中间子弹
-            GameObject bulletMiddle = Instantiate(bulletPrefab, spawnPosMiddle, Quaternion.identity);
+            GameObject bulletMiddle = Instantiate(bullet_prefab, spawnPosMiddle, Quaternion.identity);
             Bullet bulletCompMiddle = bulletMiddle.GetComponent<Bullet>();
             bulletCompMiddle.Initialize(spawnPosMiddle, targetMiddle, 
                 bulletMiddle.GetComponent<Rigidbody2D>(), 
@@ -89,7 +100,7 @@ public class Item2 : Items
             bullets.Add(bulletCompMiddle);
 
             // 生成左侧子弹
-            GameObject bulletLeft = Instantiate(bulletPrefab, spawnPosLeft, Quaternion.identity);
+            GameObject bulletLeft = Instantiate(bullet_prefab, spawnPosLeft, Quaternion.identity);
             Bullet bulletCompLeft = bulletLeft.GetComponent<Bullet>();
             bulletCompLeft.Initialize(spawnPosLeft, targetLeft, 
                 bulletLeft.GetComponent<Rigidbody2D>(), 
@@ -99,7 +110,7 @@ public class Item2 : Items
             bullets.Add(bulletCompLeft);
 
             // 生成右侧子弹
-            GameObject bulletRight = Instantiate(bulletPrefab, spawnPosRight, Quaternion.identity);
+            GameObject bulletRight = Instantiate(bullet_prefab, spawnPosRight, Quaternion.identity);
             Bullet bulletCompRight = bulletRight.GetComponent<Bullet>();
             bulletCompRight.Initialize(spawnPosRight, targetRight, 
                 bulletRight.GetComponent<Rigidbody2D>(), 
@@ -129,6 +140,14 @@ public class Item2 : Items
         if (bullets.Contains(bullet))
         {
             bullets.Remove(bullet);
+        }
+    }
+
+    void PlayHitSound(GameObject source)
+    {
+        if (AudioSysManager.Instance != null && hit_sound != null)
+        {
+            AudioSysManager.Instance.PlaySound(source,hit_sound,source.transform.position,0.5f,false);
         }
     }
 }

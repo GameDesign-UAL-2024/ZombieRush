@@ -69,7 +69,7 @@ public static class ItemFactory
                 BulletEffectItems.Add(id);
             else if (itemType == Items.ItemTypes.Additional_Attack)
                 AdditionalAttack.Add(id);
-            else
+            else if (itemType == Items.ItemTypes.Proactive)
                 ProactiveItems.Add(id);
 
             // 销毁刚才挂载的临时实例

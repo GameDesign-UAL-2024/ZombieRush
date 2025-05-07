@@ -79,7 +79,10 @@ public class ItemInWorld : MonoBehaviour
         {
             // 只要悬停就持续显示
             UI_INSTANCE.ShowDescription(self_item_id, 0);
-
+            if (CustomCursor.Instance != null)
+            {
+                CustomCursor.Instance.UseMouseNotice(CustomCursor.MouseNoticeType.Right);
+            }
             if (Input.GetMouseButtonDown(1))
             {
                 PIM.AddItem(self_item_id);
@@ -91,11 +94,21 @@ public class ItemInWorld : MonoBehaviour
         else if (wasHovering)
         {
             // 只有从“悬停”到“未悬停”这一帧，才清一次
+            if (CustomCursor.Instance != null)
+            {
+                CustomCursor.Instance.ClearMouseNotice();
+            }
             UI_INSTANCE.ClearDescription();
         }
-
+    
         // 更新状态给下一帧用
         wasHovering = isHovering;
     }
-
+    void OnDestroy()
+    {
+        if (CustomCursor.Instance != null)
+        {
+            CustomCursor.Instance.ClearMouseNotice();
+        }
+    }
 }

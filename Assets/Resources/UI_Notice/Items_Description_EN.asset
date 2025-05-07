@@ -60,6 +60,10 @@ MonoBehaviour:
       can pierce through enemies
     m_Metadata:
       m_Items: []
+  - m_Id: 15134705311059968
+    m_Localized: "\u201CHuman arms forged by magic\u2014Ora Ora Ora Ora!\u201D\r\n"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

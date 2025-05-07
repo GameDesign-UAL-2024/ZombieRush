@@ -61,6 +61,6 @@ public class HumanArmsController : Items
     {
         // 如果手臂还在场上就一并销毁
         if (arms_instance != null)
-            Destroy(arms_instance.gameObject);
+            DestroyImmediate(arms_instance.gameObject);
     }
 }

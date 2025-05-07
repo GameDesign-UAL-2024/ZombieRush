@@ -125,6 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffe1ea2dacb34a243a8a3daf33625dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  move: {fileID: 8300000, guid: dd855a4a793bbcf449230c2ba085dff4, type: 3}
+  watermove1: {fileID: 8300000, guid: 21d577fef3634384090f1b50294b79e5, type: 3}
+  watermove2: {fileID: 8300000, guid: 715377d253d394b4292ae40e07b2b58f, type: 3}
 --- !u!114 &4750541361656434661
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -26,8 +26,7 @@ public class InteractableGrids : MonoBehaviour
     GameObject NoticeObject;
     public int release_number;
     [SerializeField]
-    int released = 0;
-
+    GameObject resource_prefab;
     bool is_interacting;
     bool on_sprite;
     bool in_area;
@@ -56,7 +55,7 @@ public class InteractableGrids : MonoBehaviour
         global = Globals.Instance;
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
-
+        resource_prefab = Addressables.LoadAssetAsync<GameObject>(this_type == GridType.Rocks ? black_path : green_path).WaitForCompletion();
         // 预载提示预制
         if (this_type == GridType.Rocks)
             NoticeObject_prefab = Addressables.LoadAssetAsync<GameObject>(Notice_Path_B).WaitForCompletion();
@@ -124,13 +123,22 @@ public class InteractableGrids : MonoBehaviour
                 interactionCompleted = true;
                 Destroy(bar_object);
                 bar_object = null;
-
-                // 释放资源
-                string path = (this_type == GridType.Rocks) ? black_path : green_path;
+                if (resource_prefab == null)
+                    return;
                 for (int i = 0; i < release_number; i++)
-                    Addressables.LoadAssetAsync<GameObject>(path).Completed += OnResourcesLoaded;
-
-                StartCoroutine(RemoveObjectWithDelay(0.1f));
+                {
+                    var instance = Instantiate(resource_prefab, transform.position, Quaternion.identity);
+                    var rb = instance.GetComponent<Rigidbody2D>();
+                    if (rb != null)
+                        rb.AddForce(UnityEngine.Random.insideUnitCircle.normalized * 10f, ForceMode2D.Impulse);
+                }
+                var spawner = GameObject
+                    .FindGameObjectWithTag("ObjectSpawner")
+                    ?.GetComponent<ObjectSpawner>();
+                if (spawner != null)
+                    spawner.RemoveObject(this.gameObject);
+                else
+                    Destroy(gameObject);  // 兜底，确保不会遗留
             }
         }
 
@@ -178,21 +186,6 @@ public class InteractableGrids : MonoBehaviour
         spawner?.GetComponent<ObjectSpawner>()?.RemoveObject(gameObject);
     }
 
-    private void OnResourcesLoaded(AsyncOperationHandle<GameObject> handle)
-    {
-        if (gameObject == null) return;
-        var instance = Instantiate(handle.Result, transform.position, Quaternion.identity);
-        var rb = instance.GetComponent<Rigidbody2D>();
-        if (rb != null)
-            rb.AddForce(UnityEngine.Random.insideUnitCircle.normalized * 10f, ForceMode2D.Impulse);
-        StartCoroutine(DelayedReleaseIncrement());
-    }
-
-    private IEnumerator DelayedReleaseIncrement()
-    {
-        yield return new WaitForSeconds(0.02f);
-        released++;
-    }
 
     private void OnBarLoaded(AsyncOperationHandle<GameObject> handle)
     {

@@ -135,5 +135,16 @@ public class ChunkGenerator : MonoBehaviour
     public Dictionary<Vector3Int, RuleTile> GetTileDictionary()
     {
         return tileDictionary;
-    }    
+    }        
+    public bool IsTileOfType(Vector3 worldPos, RuleTile type)
+    {
+        Vector3Int cellPos = tilemap.WorldToCell(worldPos);
+        cellPos.z = 0;
+
+        // 二：从缓存里查
+        if (tileDictionary.TryGetValue(cellPos, out var tile))
+            return tile == type;
+
+        return false;
+    }
 }

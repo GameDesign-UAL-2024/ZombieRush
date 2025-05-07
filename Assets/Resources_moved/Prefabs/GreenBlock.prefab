@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1164390718086744982}
   - component: {fileID: 9068686260094406013}
-  - component: {fileID: 6728486136909483135}
   - component: {fileID: 4343069394539565834}
   - component: {fileID: 5677667946069057528}
   - component: {fileID: -7610367869195521333}
+  - component: {fileID: 3512523426441708164}
   m_Layer: 0
   m_Name: GreenBlock
   m_TagString: Resources
@@ -88,18 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6728486136909483135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8830297436666989542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea0e5176cec883a48b6fb91ceedaddf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &4343069394539565834
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -193,3 +181,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &3512523426441708164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8830297436666989542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e4fcd5d14aa1b749bb3f9f425ae47fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceType: 0
+  amount: 5
+  dragFactor: 0.9

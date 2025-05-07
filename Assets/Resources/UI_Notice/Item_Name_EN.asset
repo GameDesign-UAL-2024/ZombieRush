@@ -58,6 +58,10 @@ MonoBehaviour:
     m_Localized: Blade Storm
     m_Metadata:
       m_Items: []
+  - m_Id: 14996837490003968
+    m_Localized: Fist of Freedom
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -1,0 +1,94 @@
+Date : 2025-05-05 20:57:05
+Directory : c:\Users\2020m\Desktop\ZombieRush\Assets\Script
+Total : 46 files,  1072 codes, 149 comments, 184 blanks, all 1405 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |         46 |      1,072 |        149 |        184 |      1,405 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                    | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                       |         46 |      1,072 |        149 |        184 |      1,405 |
+| . (Files)                                                                                               |          6 |        112 |         19 |         23 |        154 |
+| AudioSystem                                                                                             |          2 |        135 |         38 |         29 |        202 |
+| Enemy                                                                                                   |          5 |        217 |         25 |         38 |        280 |
+| Enemy (Files)                                                                                           |          1 |         -1 |          0 |         -1 |         -2 |
+| Enemy\E0                                                                                                |          1 |         49 |         13 |          9 |         71 |
+| Enemy\E1                                                                                                |          1 |        -74 |        -25 |         -5 |       -104 |
+| Enemy\E2                                                                                                |          2 |        243 |         37 |         35 |        315 |
+| InteractableGrids                                                                                       |          1 |         19 |          3 |         -2 |         20 |
+| Items                                                                                                   |         19 |        340 |         34 |         32 |        406 |
+| Items (Files)                                                                                           |          3 |        131 |         14 |          4 |        149 |
+| Items\AdditionalAttack                                                                                  |          3 |        125 |         13 |         17 |        155 |
+| Items\AdditionalAttack\HumanArms                                                                        |          3 |        125 |         13 |         17 |        155 |
+| Items\BulletBehaviour                                                                                   |          1 |          1 |          0 |          0 |          1 |
+| Items\BulletShoot                                                                                       |          3 |         45 |          7 |         16 |         68 |
+| Items\BulletShoot\2                                                                                     |          1 |         17 |          0 |          4 |         21 |
+| Items\BulletShoot\Default                                                                               |          2 |         28 |          7 |         12 |         47 |
+| Items\Others                                                                                            |          7 |          7 |          0 |          0 |          7 |
+| Items\Proactive                                                                                         |          2 |         31 |          0 |         -5 |         26 |
+| Items\Proactive\BladeStorm                                                                              |          2 |         31 |          0 |         -5 |         26 |
+| Map                                                                                                     |          1 |          8 |          1 |          2 |         11 |
+| Player                                                                                                  |          8 |        287 |         28 |         61 |        376 |
+| Player (Files)                                                                                          |          2 |         53 |          5 |          9 |         67 |
+| PlayerResource                                                                                          |          4 |        -46 |          1 |          1 |        -44 |
+| Player\UI                                                                                               |          6 |        234 |         23 |         52 |        309 |
++---------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\AudioSystem\AudioRegistrant.cs                          | C#       |         11 |          0 |          1 |         12 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\AudioSystem\AudioSysManager.cs                          | C#       |        124 |         38 |         28 |        190 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\CameraEffects.cs                                        | C#       |         -1 |          0 |          0 |         -1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\CustomCursor.cs                                         | C#       |         32 |          0 |          2 |         34 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\DestoryOnEnd.cs                                         | C#       |         10 |          0 |          2 |         12 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Enemy\E0\Enemy0.cs                                      | C#       |         49 |         13 |          9 |         71 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Enemy\E1\Enemy1.cs                                      | C#       |        -74 |        -25 |         -5 |       -104 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Enemy\E2\E2AttackRange.cs                               | C#       |         51 |          6 |          7 |         64 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Enemy\E2\Enemy2.cs                                      | C#       |        192 |         31 |         28 |        251 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Enemy\Enemy.cs                                          | C#       |         -1 |          0 |         -1 |         -2 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Globals.cs                                              | C#       |         44 |         15 |         11 |         70 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\HitEnemyEvent.cs                                        | C#       |          8 |          2 |          3 |         13 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\InteractableGrids\InteractableGrids.cs                  | C#       |         19 |          3 |         -2 |         20 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\AdditionalAttack\HumanArms\ArmAttackRange.cs      | C#       |         18 |          0 |          3 |         21 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\AdditionalAttack\HumanArms\HumanArms.cs           | C#       |         60 |          4 |          3 |         67 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\AdditionalAttack\HumanArms\HumanArmsController.cs | C#       |         47 |          9 |         11 |         67 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\BulletBehaviour\Bullet.cs                         | C#       |          1 |          0 |          0 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\BulletShoot\2\Item2.cs                            | C#       |         17 |          0 |          4 |         21 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\BulletShoot\Default\BulletBehaviour_0.cs          | C#       |         13 |          7 |          9 |         29 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\BulletShoot\Default\DefaultShoot.cs               | C#       |         15 |          0 |          3 |         18 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\ItemFactory.cs                                    | C#       |         -2 |          3 |          0 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\ItemInWorld.cs                                    | C#       |          9 |          0 |         -4 |          5 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Others\BubbleJelly Soda.cs                        | C#       |          1 |          0 |          0 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Others\FourLeaf.cs                                | C#       |          1 |          0 |          0 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Others\HighVelocityBullets.cs                     | C#       |          1 |          0 |          0 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Others\Hyperplasia.cs                             | C#       |          1 |          0 |          0 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Others\Momentum.cs                                | C#       |          1 |          0 |          0 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Others\SlimeAcid.cs                               | C#       |          1 |          0 |          0 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Others\SlimeSupercharge.cs                        | C#       |          1 |          0 |          0 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Proactive\BladeStorm\BladeStorm.cs                | C#       |         26 |          0 |         -3 |         23 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Proactive\BladeStorm\BladeStormBullet.cs          | C#       |          5 |          0 |         -2 |          3 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Items\Statues.cs                                        | C#       |        124 |         11 |          8 |        143 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\LogFilter.cs                                            | C#       |         19 |          2 |          5 |         26 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Map\ChunkGenerator.cs                                   | C#       |          8 |          1 |          2 |         11 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\PlayerResource\BlackResource.cs                         | C#       |        -29 |          0 |         -2 |        -31 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\PlayerResource\GreenResource.cs                         | C#       |        -30 |          0 |         -2 |        -32 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\PlayerResource\PinkResource.cs                          | C#       |        -29 |          0 |         -2 |        -31 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\PlayerResource\ResourcePickUp.cs                        | C#       |         42 |          1 |          7 |         50 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\PlayerController.cs                              | C#       |         40 |          5 |          6 |         51 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\PropertiesUpAnimation.cs                         | C#       |         13 |          0 |          3 |         16 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\UI\BuildingButton.cs                             | C#       |         23 |         13 |          8 |         44 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\UI\LittleMap.cs                                  | C#       |         17 |          2 |          4 |         23 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\UI\Notices.cs                                    | C#       |          2 |          0 |         -1 |          1 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\UI\PlayerUI.cs                                   | C#       |         49 |         -8 |         19 |         60 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\UI\TimerTextUpdater.cs                           | C#       |         20 |          0 |         -1 |         19 |
+| c:\Users\2020m\Desktop\ZombieRush\Assets\Script\Player\UI\UIProperties.cs                               | C#       |        123 |         16 |         23 |        162 |
+| Total                                                                                                   |          |      1,072 |        149 |        184 |      1,405 |
++---------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

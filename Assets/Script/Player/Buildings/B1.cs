@@ -10,6 +10,7 @@ public class B1 : Buildings
     public override float max_health { get; set; } = 20f;
     public override BuildingType this_type { get; set;} = BuildingType.Attack;
     public Transform shot_point;
+    public override int ID {get; set;} = 1;
     bool initialized;
     int max_attack_number = 3;
     float attack_range = 15f;

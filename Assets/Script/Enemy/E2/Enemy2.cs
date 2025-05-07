@@ -120,6 +120,15 @@ public class Enemy2 : Enemy
     /// </summary>
     public override bool TakeDamage(Vector3 source, float amount, bool instantKill)
     {
+        const float minBlockInterval = 0.15f;
+        // —— 新增 —— 如果上次动作距今还不到 minBlockInterval，就免伤
+        if (Time.time - lastActionTime < minBlockInterval)
+        {
+            // 同时延长一下免伤冷却，防止紧接着又被打进来
+            blockImmunityEndTime = Time.time + minBlockInterval;
+            return false;
+        }
+
         // 1) 如果还在 block 免伤冷却内，直接免伤
         if (Time.time < blockImmunityEndTime)
             return false;
