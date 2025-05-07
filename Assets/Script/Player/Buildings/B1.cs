@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class B1 : Buildings
 {
     public override float current_health { get; set; }
-    public override float max_health { get; set; } = 20f;
+    public override float max_health { get; set; } = 6f;
     public override BuildingType this_type { get; set;} = BuildingType.Attack;
     public Transform shot_point;
     public override int ID {get; set;} = 1;
@@ -100,6 +100,11 @@ public class B1 : Buildings
     public override void TakeDamage(float amount)
     {
         current_health -= amount;
+        if (current_health <= 0)
+        {
+            BuildingDestroy();
+        }
+        
     }
 
     void DestroyBullet(B1_Bullet bullet)

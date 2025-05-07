@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public Properties player_properties;
     CameraEffects camera_effect;
     static string properties_up_animation = "Prefabs/PropertiesUp";
+    string water_drop_step = "Prefabs/WaterDrops";
+    GameObject water_drop_step_prefab;
     GameObject properties_up_prefab;
     [SerializeField] Transform properties_up_location;
     Globals global;
@@ -79,6 +81,7 @@ public class PlayerController : MonoBehaviour
         RB = transform.GetComponent<Rigidbody2D>();
         camera_effect = CameraEffects.Instance;
         properties_up_prefab = Addressables.LoadAssetAsync<GameObject>(properties_up_animation).WaitForCompletion();
+        water_drop_step_prefab = Addressables.LoadAssetAsync<GameObject>(water_drop_step).WaitForCompletion();
     }
     
     void Update()
@@ -147,6 +150,7 @@ public class PlayerController : MonoBehaviour
         if (ChunkGenerator.Instance != null &&
             ChunkGenerator.Instance.IsTileOfType(transform.position, ChunkGenerator.Instance.waterTile))
         {
+            Instantiate(water_drop_step_prefab,transform.position-new Vector3(0,0.5f,0.05f),Quaternion.identity,transform);
             // 3) “减弱”之前的移动音效
             if (moveSrc != null)
             {

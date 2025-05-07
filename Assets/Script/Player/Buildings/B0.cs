@@ -8,7 +8,7 @@ public class B0 : Buildings
 {
     // —— 实现基类接口 —— 
     public override BuildingType this_type    { get; set; } = BuildingType.Trap;
-    public override float max_health          { get; set; } = 15f;
+    public override float max_health          { get; set; } = 3f;
     public override float current_health      { get; set; }
     public override int ID {get; set;} = 0;
     private UnityEvent<Buildings> destroyEvent = new UnityEvent<Buildings>();

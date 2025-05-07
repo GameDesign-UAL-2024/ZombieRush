@@ -75,10 +75,12 @@ public class Statues : MonoBehaviour
         }
         else
         {
-            // —— 1. item1 被拾走时（第一次从非 null 变成 null）扣血并“吃掉”这次状态 —— 
+            // 标记：本帧是否有 item 被拾取
+            bool anyPicked = false;
+
+            // —— 1. item1 被拾走时 —— 
             if (item1 == null)
             {
-                // 扣血逻辑
                 float ratio1 = rank1 switch
                 {
                     Items.ItemRanks.S => 0.05f,
@@ -88,8 +90,9 @@ public class Statues : MonoBehaviour
                 };
                 player.player_properties.current_health += player.player_properties.max_health * ratio1;
 
-                // 将 item1 标记为“已处理”——指向自身，使它不再为 null
+                // 把自己当“已处理”标记
                 item1 = this.gameObject;
+                anyPicked = true;
             }
 
             // —— 2. item2 同理 —— 
@@ -104,6 +107,7 @@ public class Statues : MonoBehaviour
                 };
                 player.player_properties.current_health += player.player_properties.max_health * ratio2;
                 item2 = this.gameObject;
+                anyPicked = true;
             }
 
             // —— 3. item3 同理 —— 
@@ -118,13 +122,17 @@ public class Statues : MonoBehaviour
                 };
                 player.player_properties.current_health += player.player_properties.max_health * ratio3;
                 item3 = this.gameObject;
-            }            
+                anyPicked = true;
+            }
+
+            // —— 有任意一个被拾取，就执行“之前全部处理完之后”的逻辑 —— 
+            if (anyPicked)
+            {
+                // … 这里放原本在“全部处理完再销毁”后的那段逻辑 …
+                Destroy(gameObject);
+            }
         }
-        // —— 4. 全都处理完（此时 item1/2/3 都不会再是 null）就销毁 Statues —— 
-        if (item1 == this.gameObject && item2 == this.gameObject && item3 == this.gameObject)
-        {
-            Destroy(gameObject);
-        }
+
     }
 
 

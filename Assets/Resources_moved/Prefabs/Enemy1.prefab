@@ -304,9 +304,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f56bee2fbc57f4288c764fe10a1f1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  move: {fileID: 8300000, guid: dd855a4a793bbcf449230c2ba085dff4, type: 3}
+  watermove1: {fileID: 8300000, guid: 715377d253d394b4292ae40e07b2b58f, type: 3}
+  watermove2: {fileID: 8300000, guid: 21d577fef3634384090f1b50294b79e5, type: 3}
+  dashDuration: 2
+  dashMultiplier: 2
+  rotationSpeed: 120
   attacking_effect: {fileID: 8211885380999903862}
-  rightDirectionRotation: {x: 0, y: 0, z: 90}
-  leftDirectionRotation: {x: 0, y: 0, z: -90}
 --- !u!1 &5612491860516382489
 GameObject:
   m_ObjectHideFlags: 0

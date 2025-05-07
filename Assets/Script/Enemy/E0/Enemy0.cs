@@ -22,7 +22,8 @@ public class Enemy0 : Enemy
         get => _currentState;
         set => _currentState = value;
     }
-
+    string water_drop_step = "Prefabs/WaterDrops";
+    GameObject water_drop_step_prefab;
     public override float max_health { get; set;} = 3f;
     public override float current_health { get; set;}
     public override float speed { get; set;} = 3.5f;
@@ -48,6 +49,7 @@ public class Enemy0 : Enemy
     {
         current_health = max_health;
         self_nav = transform.GetComponent<EnemyNav>();
+        water_drop_step_prefab = Addressables.LoadAssetAsync<GameObject>(water_drop_step).WaitForCompletion();
         foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
         {
             if (p.GetComponent<PlayerController>() != null)
@@ -141,6 +143,7 @@ public class Enemy0 : Enemy
             ChunkGenerator.Instance.IsTileOfType(transform.position, ChunkGenerator.Instance.waterTile))
         {
             // 4) 播放水上移动音效
+            Instantiate(water_drop_step_prefab,transform.position,Quaternion.identity,transform);
             AudioSysManager.Instance
                 .PlaySound(gameObject,
                         UnityEngine.Random.value < 0.5f ? watermove1 : watermove2,

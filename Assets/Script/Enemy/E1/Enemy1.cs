@@ -8,7 +8,12 @@ public class Enemy1 : Enemy
     public enum EnemyState { Wait, Moving, Attack }
     private EnemyState _currentState;
     public EnemyState current_state { get => _currentState; private set => _currentState = value; }
-
+    string water_drop_step = "Prefabs/WaterDrops";
+    GameObject water_drop_step_prefab;
+    //音频
+    [SerializeField] AudioClip move;
+    [SerializeField] AudioClip watermove1;
+    [SerializeField] AudioClip watermove2;
     public override float max_health { get; set; } = 5f;
     public override float current_health { get; set; }
     public override float speed { get; set; } = 4f;
@@ -44,7 +49,7 @@ public class Enemy1 : Enemy
         animator = GetComponent<Animator>();
         sprite_renderer = GetComponent<SpriteRenderer>();
         originalScale = transform.localScale;
-
+        water_drop_step_prefab = Addressables.LoadAssetAsync<GameObject>(water_drop_step).WaitForCompletion();
         g_timer = GlobalTimer.Instance;
         behaviour_time = g_timer.GetCurrentTime();
         current_state = EnemyState.Wait;
@@ -66,6 +71,11 @@ public class Enemy1 : Enemy
     void Update()
     {
         if (dying) return;
+        // —— 修复：只要是 Moving 状态就保证导航激活 —— 
+        if (current_state == EnemyState.Moving && !navigation.is_activing)
+        {
+            navigation.SetNavActive(true);
+        }
 
         float dist = Vector2.Distance(transform.position, player.transform.position);
         float now = g_timer.GetCurrentTime();
@@ -142,6 +152,30 @@ public class Enemy1 : Enemy
     {
         StartCoroutine(AttackDash());
     }
+    void PlayMovingSound()
+    {
+        if (AudioSysManager.Instance == null) return;
+
+
+        // 2) 检测脚下是否是水
+        if (ChunkGenerator.Instance != null &&
+            ChunkGenerator.Instance.IsTileOfType(transform.position, ChunkGenerator.Instance.waterTile))
+        {
+            // 4) 播放水上移动音效
+            Instantiate(water_drop_step_prefab,transform.position,Quaternion.identity,transform);
+            AudioSysManager.Instance
+                .PlaySound(gameObject,
+                        UnityEngine.Random.value < 0.5f ? watermove1 : watermove2,
+                        transform.position,
+                        0.8f,
+                        false);
+        }
+        else
+        {
+            AudioSource moveSrc = AudioSysManager.Instance
+                .PlaySound(gameObject, move , transform.position, 0.6f, true);
+        }
+    }
     IEnumerator AttackDash()
     {
         navigation.SetNavActive(false);
@@ -176,3 +210,5 @@ public class Enemy1 : Enemy
         Destroy(gameObject);
     }
 }
+
+
