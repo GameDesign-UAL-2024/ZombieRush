@@ -4,13 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Text;
 using ExcelDataReader;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.ResourceManagement.AsyncOperations;
-
+using System.Text;
 public class Globals : MonoBehaviour
 {
     public static Globals Instance { get; private set; }
@@ -21,6 +20,7 @@ public class Globals : MonoBehaviour
 
     private void Awake()
     {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         if (Instance == null)
         {
             Instance = this;
@@ -34,6 +34,7 @@ public class Globals : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
     }
 
     private void Start()
@@ -131,7 +132,6 @@ public class Globals : MonoBehaviour
         private IEnumerator LoadBuildingDatasCoroutine(string path, Action<Dictionary<int, Dictionary<string, string>>> callback)
         {
             byte[] fileData;
-
             if (path.Contains("://"))
             {
                 UnityWebRequest www = UnityWebRequest.Get(path);
@@ -152,7 +152,7 @@ public class Globals : MonoBehaviour
             var buildingData = new Dictionary<int, Dictionary<string, string>>();
 
             using (var stream = new MemoryStream(fileData))
-            using (var reader = ExcelReaderFactory.CreateReader(stream))
+            using (var reader = ExcelReaderFactory.CreateOpenXmlReader(stream))
             {
                 var result = reader.AsDataSet();
                 DataTable table = result.Tables[0];

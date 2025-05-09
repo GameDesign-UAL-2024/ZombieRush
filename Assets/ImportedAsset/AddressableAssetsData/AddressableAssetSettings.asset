@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 34b41d20a8362b34a9fedb0d61608428
   m_currentHash:
     serializedVersion: 2
-    Hash: b32fc0abd19f8007d28826d5ad529c3b
+    Hash: 5b99f301539ed82ae1b7d50d2f170fa2
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -71,9 +71,9 @@ MonoBehaviour:
       - m_Id: 23c374cd699b00c458347e3bfabc53e9
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: 8f658e1dbf4c6254db112795846f0280
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+        m_Value: '[UnityEngine.Application.dataPath]/StreamingAssets/Addressables'
       - m_Id: e2cd2f818bf60104797db1a4cbca44bb
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+        m_Value: '[UnityEngine.Application.streamingAssetsPath]/Addressables'
       - m_Id: b6813fbdba03ca746b2bf29b5232a08d
         m_Value: ServerData/[BuildTarget]
       - m_Id: 98b686cd0360b434a9743664265b45d8

@@ -29,7 +29,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Descriptions description;
 
     // 同步加载并缓存好的按钮 Prefab
-    private GameObject button_prefab;
+    private  static GameObject button_prefab;
 
     // 协程控制
     private Coroutine get_data;
@@ -49,17 +49,31 @@ public class PlayerUI : MonoBehaviour
     void Awake()
     {
         if (Instance == null) Instance = this;
+
         else { Destroy(gameObject); return; }
+        Addressables.InitializeAsync().Completed += handle =>
+        {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+                Debug.Log("Addressables 初始化成功");
+            else
+                Debug.LogError("Addressables 初始化失败：" + handle.OperationException);
+        };
+        // 提前加载，确保其它脚本访问时已准备好
+        button_prefab = Addressables.LoadAssetAsync<GameObject>(building_button_path).WaitForCompletion();
+
+        if (button_prefab == null)
+            Debug.LogError($"加载 {building_button_path} 失败");
     }
 
     void Start()
     {
         globals = Globals.Instance;
         
-        // 必须同步加载 Prefab 保证稳定
-        GameObject button_prefab = Addressables.LoadAssetAsync<GameObject>(building_button_path).WaitForCompletion();
-        if (button_prefab == null)
-            Debug.LogError($"加载 {building_button_path} 失败");
+        // // 必须同步加载 Prefab 保证稳定
+        // GameObject button_prefab = Addressables.LoadAssetAsync<GameObject>(building_button_path).WaitForCompletion();
+        // print(button_prefab);
+        // if (button_prefab == null)
+        //     Debug.LogError($"加载 {building_button_path} 失败");
 
         get_data = StartCoroutine(GetBuildingsData());
     }
@@ -105,7 +119,7 @@ public class PlayerUI : MonoBehaviour
 
     private IEnumerator ValidBuildings()
     {
-        if (Buildings_Need.Count == 0 || All_Buildings_Data == null)
+        if (Buildings_Need.Count == 0 || All_Buildings_Data == null || button_prefab == null)
             yield break;
 
         keysToRemove.Clear();
