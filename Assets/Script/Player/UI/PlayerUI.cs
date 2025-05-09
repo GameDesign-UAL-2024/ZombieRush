@@ -99,7 +99,6 @@ public class PlayerUI : MonoBehaviour
             };
             yield return null;
         }
-        TriggerValidBuildingsUpdate();
         Debug.Log($"[PlayerUI] 成功读取建筑配置：{Buildings_Need.Count} 个建筑");
     }
 

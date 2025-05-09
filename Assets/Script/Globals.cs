@@ -21,6 +21,7 @@ public class Globals : MonoBehaviour
     private void Awake()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        Application.targetFrameRate = 60;
         if (Instance == null)
         {
             Instance = this;
