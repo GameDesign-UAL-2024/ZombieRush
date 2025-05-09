@@ -24,7 +24,14 @@ public class Enemy2 : Enemy
     //—— 内部数据 —— 
     private float lastActionTime;
     private float _currentHealth;
-
+    string water_drop_step = "Prefabs/WaterDrops";
+    GameObject water_drop_step_prefab;
+    //音频
+    [SerializeField] AudioClip move;
+    [SerializeField] AudioClip watermove1;
+    [SerializeField] AudioClip watermove2;
+    [SerializeField] AudioClip In_Block;
+    [SerializeField] AudioClip Block;
     //—— 基类抽象属性实现 —— 
     public override float max_health { get; set; }
     public override float current_health 
@@ -34,7 +41,34 @@ public class Enemy2 : Enemy
     }
     public override float speed { get; set; }
     public override GameObject target { get; set; }
+    void PlayMovingSound()
+    {
+        if (AudioSysManager.Instance == null) return;
 
+
+        // 2) 检测脚下是否是水
+        if (ChunkGenerator.Instance != null &&
+            ChunkGenerator.Instance.IsTileOfType(transform.position, ChunkGenerator.Instance.waterTile))
+        {
+            // 4) 播放水上移动音效
+            Instantiate(water_drop_step_prefab,transform.position,Quaternion.identity,transform);
+            AudioSysManager.Instance
+                .PlaySound(gameObject,
+                        UnityEngine.Random.value < 0.5f ? watermove1 : watermove2,
+                        transform.position,
+                        0.8f,
+                        false);
+        }
+        else
+        {
+            AudioSource moveSrc = AudioSysManager.Instance
+                .PlaySound(gameObject, move , transform.position, 0.6f, true);
+        }
+    }
+    public void AttackSound()
+    {
+        PlayAttackSound(gameObject, transform.position);
+    }
     void Start()
     {
         // 缓存组件
@@ -42,6 +76,7 @@ public class Enemy2 : Enemy
         animator = GetComponent<Animator>();
         rb2d     = GetComponent<Rigidbody2D>();
         block_effect = Addressables.LoadAssetAsync<GameObject>(block_prefab_path).WaitForCompletion();
+        water_drop_step_prefab = Addressables.LoadAssetAsync<GameObject>(water_drop_step).WaitForCompletion();
         // 找到玩家对象
         target = GameObject.FindGameObjectWithTag("Player");
         if (target != null) player = target.transform;
@@ -137,13 +172,14 @@ public class Enemy2 : Enemy
         if (_state == State.Block)
         {
             blockImmunityEndTime = Time.time + 1f;
-            
+            AudioSysManager.Instance.PlaySound(gameObject,Block,transform.position,2,true);
             // 镜头抖动
             CameraEffects.Instance.Shake(
                 shakeDuration: 0.25f,
                 shakeAmplitude: 0.9f,
                 shakeFrequency: 2.5f,
-                zoomAmount: 0.7f
+                zoomAmount: 0.7f,
+                0.3f
             );
             Instantiate(block_effect,transform.position+new Vector3(0,1.5f,-0.1f),Quaternion.identity);
             var prb = target.GetComponent<Rigidbody2D>();
@@ -222,9 +258,11 @@ public class Enemy2 : Enemy
         {
             case State.Idle:
                 // 待机：无需额外动作
+                rb2d.velocity = Vector2.Lerp(rb2d.velocity , Vector2.zero , 0.2f);
                 break;
 
             case State.Moving:
+                rb2d.velocity = Vector2.Lerp(rb2d.velocity , Vector2.zero , 0.2f);
                 nav.SetNavActive(true);
                 nav.SetTarget(target);
                 animator.SetBool("Moving", true);
@@ -236,6 +274,7 @@ public class Enemy2 : Enemy
 
             case State.Block:
                 animator.SetTrigger("Block");
+                AudioSysManager.Instance.PlaySound(gameObject,In_Block,transform.position,2,true);
                 break;
         }
     }

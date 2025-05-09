@@ -137,8 +137,10 @@ public class Enemy1 : Enemy
         {
             case EnemyState.Wait:
                 behaviour_time = g_timer.GetCurrentTime();
+                RB.velocity = Vector2.Lerp(RB.velocity , Vector2.zero , 0.2f);
                 break;
             case EnemyState.Moving:
+                RB.velocity = Vector2.Lerp(RB.velocity , Vector2.zero , 0.2f);
                 animator.SetBool("Moving", true);
                 navigation.SetTarget(player);
                 navigation.SetNavActive(true);

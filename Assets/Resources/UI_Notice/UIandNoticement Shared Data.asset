@@ -35,6 +35,10 @@ MonoBehaviour:
     m_Key: Battleing
     m_Metadata:
       m_Items: []
+  - m_Id: 16070714680971264
+    m_Key: Finishing
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

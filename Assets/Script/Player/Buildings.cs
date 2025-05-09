@@ -11,5 +11,4 @@ public abstract class Buildings : MonoBehaviour
     public abstract int ID  {get; set;}
     public abstract void Initialize(UnityAction<Buildings> on_building_destroy);
     public abstract void TakeDamage(float amount);
-    
 }

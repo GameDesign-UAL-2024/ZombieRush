@@ -5,6 +5,7 @@ using UnityEngine;
 public class BladeStormBullet : MonoBehaviour
 {
     Vector2 target_direction;
+    [SerializeField] AudioClip hit_sound;
     bool initialized;
     public event Action<BladeStormBullet> OnDestroyed;
     PlayerController player;
@@ -40,6 +41,7 @@ public class BladeStormBullet : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
+            AudioSysManager.Instance.PlaySound(gameObject , hit_sound , transform.position , 1);
             var enemy = collision.GetComponent<Enemy>();
             if (enemy != null)
             {

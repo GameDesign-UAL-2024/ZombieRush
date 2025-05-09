@@ -151,12 +151,12 @@ TextureImporter:
       name: Attack2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 150
-        height: 150
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 32
+        y: 55
+        width: 52
+        height: 53
+      alignment: 9
+      pivot: {x: 0.85041136, y: 0.001297285}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -172,12 +172,12 @@ TextureImporter:
       name: Attack2_1
       rect:
         serializedVersion: 2
-        x: 150
-        y: 0
-        width: 150
-        height: 150
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 183
+        y: 55
+        width: 51
+        height: 54
+      alignment: 9
+      pivot: {x: 0.8414956, y: 0.004300294}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -193,12 +193,12 @@ TextureImporter:
       name: Attack2_2
       rect:
         serializedVersion: 2
-        x: 300
-        y: 0
-        width: 150
-        height: 150
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 337
+        y: 55
+        width: 111
+        height: 74
+      alignment: 9
+      pivot: {x: 0.4037181, y: 0.0025225459}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -214,12 +214,12 @@ TextureImporter:
       name: Attack2_3
       rect:
         serializedVersion: 2
-        x: 450
-        y: 0
-        width: 150
-        height: 150
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 521
+        y: 55
+        width: 61
+        height: 34
+      alignment: 9
+      pivot: {x: 0.1803159, y: 0.008312225}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -246,6 +246,7 @@ TextureImporter:
       Attack2_1: 8288915215451595207
       Attack2_2: 4668938655123782945
       Attack2_3: 5683539909772271658
+      Attack2_4: 563485305
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

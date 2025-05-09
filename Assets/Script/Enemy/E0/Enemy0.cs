@@ -208,6 +208,10 @@ public class Enemy0 : Enemy
             RB.velocity = direction * 5f;
         }
     }
+    public void AttackSound()
+    {
+        PlayAttackSound(gameObject, transform.position);
+    }
     private void SetState(EnemyState newState)
     {
         // 如果状态没有变化，直接返回

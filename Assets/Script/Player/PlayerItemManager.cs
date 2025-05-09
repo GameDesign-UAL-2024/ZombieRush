@@ -12,7 +12,7 @@ public class PlayerItemManager : MonoBehaviour
 
     // 当前持有的射击行为道具（只能一个）
     public int current_ShootBehaviour{ get; private set; } = 0; // -1 表示没有
-    public int current_Proactive{ get; private set; } = 9;
+    public int current_Proactive{ get; private set; } = -1;
     public List<int> Additional_Attacks{ get; private set; } = new List<int>(){};
 
     GameObject player;
@@ -55,7 +55,7 @@ public class PlayerItemManager : MonoBehaviour
                 ItemFactory.CreateItemByID(id, player);
             }
         }
-        if (!player.GetComponents<Items>().Any(item => item.ID == current_Proactive))
+        if (!player.GetComponents<Items>().Any(item => item.ID == current_Proactive) && current_Proactive >=0)
         {
             ItemFactory.CreateItemByID(current_Proactive,player);
         }
@@ -120,8 +120,12 @@ public class PlayerItemManager : MonoBehaviour
         }
         else if (newItemType == Items.ItemTypes.Additional_Attack)
         {
-            Additional_Attacks.Add(newItemID);
-            ItemFactory.CreateItemByID(newItemID, player);
+            // —— 新增：只有当前列表里没有该 ID 才添加 —— 
+            if (!Additional_Attacks.Contains(newItemID))
+            {
+                Additional_Attacks.Add(newItemID);
+                ItemFactory.CreateItemByID(newItemID, player);
+            }
         }
         else if (newItemType == Items.ItemTypes.Proactive)
         {

@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     Globals global;
     
     //音频
+    [SerializeField] AudioClip HitSound;
     [SerializeField] AudioClip move;
     [SerializeField] AudioClip watermove1;
     [SerializeField] AudioClip watermove2;
@@ -50,20 +51,21 @@ public class PlayerController : MonoBehaviour
     {
         if (player_properties == null){return false;}
         player_properties.current_health -= value;
+        AudioSysManager.Instance.PlaySound(this.gameObject,HitSound,transform.position,1,true);
         if (player_properties.current_health < 0){ player_properties.current_health = 0; }
         if (camera_effect != null)
         { 
             if ((value/player_properties.max_health) < 0.1)
             {
-                camera_effect.Shake(0.3f , 1f , 1.5f , 3); 
+                camera_effect.Shake(0.2f , 1f , 1.5f , 3); 
             }
             else if ((value/player_properties.max_health) > 0.3)
             {
-                camera_effect.Shake(0.5f , 1f , 1.5f , 5.5f); 
+                camera_effect.Shake(0.5f , 2f , 2f , 4f , 0.1f); 
             }
             else
             {
-                camera_effect.Shake(0.4f , 1f , 1.5f , 4); 
+                camera_effect.Shake(0.3f , 1f , 2.5f , 2 , 0.8f); 
             }            
         }
         return true;
@@ -86,7 +88,7 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        if (global.Event.current_state != Globals.Events.GameState.playing)
+        if (global.Event.current_state == Globals.Events.GameState.pausing)
             return;
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");

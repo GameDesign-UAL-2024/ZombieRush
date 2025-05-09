@@ -9,7 +9,7 @@ public class PlayerBuildingManager : MonoBehaviour
     public static PlayerBuildingManager Instance;
 
     // 用单一整数键（例如：x * 1000 + y）记录当前已放置的建筑
-    Dictionary<int, Buildings> current_buildings = new Dictionary<int, Buildings>();
+    public static Dictionary<int, Buildings> current_buildings = new Dictionary<int, Buildings>();
 
     // 缓存已加载的预制体，避免重复加载
     Dictionary<string, GameObject> loadedPrefabs = new Dictionary<string, GameObject>();
@@ -122,5 +122,6 @@ public class PlayerBuildingManager : MonoBehaviour
         {
             current_buildings.Remove(key);
         }
+        Destroy(building.gameObject);
     }
 }

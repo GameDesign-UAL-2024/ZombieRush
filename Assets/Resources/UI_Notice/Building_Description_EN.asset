@@ -19,8 +19,9 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 519642320896
-    m_Localized: Wood Elves spawned with slime essence form a barrier that is difficult
-      for adventurers to cross, blocking and slowing down incoming adventurers.
+    m_Localized: 'Can slow down nearby enemies.
+
+      Who knows how it was grown?'
     m_Metadata:
       m_Items: []
   - m_Id: 522662219776

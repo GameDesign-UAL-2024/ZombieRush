@@ -1,182 +1,21 @@
-using System.Collections.Generic;
+
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Text;
+using ExcelDataReader;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Networking;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using ExcelDataReader;
-using System.IO;       // 用于 File 类
-using System.Data;  
-using System.Text;   // 用于 DataTable 和 DataSet
-using System.Collections;
-using Unity.VisualScripting;
+
 public class Globals : MonoBehaviour
 {
     public static Globals Instance { get; private set; }
-    public class Datas 
-    {
-        public static string L1_Grid = "Prefabs/Level1_Grid";
-        public static string L1_Objects = "Prefabs/Level1_Objects";
-        GameObject Angle;
-        GameObject Satan;
-        public int seed;
-        public enum Levels { Level1 , Level2 , Level3};
-        public Levels current_level;
-        public enum ResourcesType{ Green , Pink , Black }
-        public GlobalTimer timer;
-        public Dictionary<ResourcesType , int> player_current_resources {get; private set;}
-        public static List<Enemy> EnemyPool;
-        public int enemy_wave_number;
-        public float last_enemy_wave_time;
-        public float waiting_time;
-        public Dictionary<int, Dictionary<string, string>> Bulding_Datas { get; private set;} = new Dictionary<int, Dictionary<string, string>>();
-        public Datas()
-        {
-            Angle = Addressables.LoadAssetAsync<GameObject>("Prefabs/Angle").WaitForCompletion();
-            Satan = Addressables.LoadAssetAsync<GameObject>("Prefabs/Satan").WaitForCompletion();
-            enemy_wave_number = 0;
-            last_enemy_wave_time = 0;
-            waiting_time = 5f;
-            current_level = Levels.Level1;
-            EnemyPool = new List<Enemy>() ;
-            long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            string timestampStr = timestamp.ToString();
-            string lastFourDigits = timestampStr.Length >= 4 ? timestampStr.Substring(timestampStr.Length - 4) : timestampStr;
-            player_current_resources = new Dictionary<ResourcesType, int>
-            {
-                { ResourcesType.Green, 0},
-                { ResourcesType.Black, 0},
-                { ResourcesType.Pink , 0}
-            };
-            // 转换为整数
-            seed = int.Parse(lastFourDigits);
-            Bulding_Datas = LoadBuldingDatas("Assets/Resources/Excels/Building_Properties.xlsx");
-        }
-        public int GetResourceAmount(ResourcesType target_type)
-        {
-            return player_current_resources[target_type];
-        }
-        public void AddResourceAmount(ResourcesType target_type , int amount)
-        {
-            player_current_resources[target_type] += amount;
-            PlayerUI player_ui = PlayerUI.Instance;
-            if (player_ui != null)
-            {
-                player_ui.UpdateValues(target_type,player_current_resources[target_type]);
-            }
-        }
+    [SerializeField] AudioClip BattleBGM;
 
-        public GameObject GetAnglePrefab()
-        {
-            return Angle;
-        }
-
-        public GameObject GetSatanPrefab()
-        {
-            return Satan;
-        }
-
-        Dictionary<int, Dictionary<string, string>> LoadBuldingDatas(string filePath)
-        {
-            // 创建一个字典用于保存数据
-            var buildingData = new Dictionary<int, Dictionary<string, string>>();
-
-            // 设置编码为 UTF-8
-            var encoding = Encoding.GetEncoding(1252); 
-            var configuration = new ExcelReaderConfiguration()
-            {
-                FallbackEncoding = encoding,
-                LeaveOpen = false // 在使用 ExcelDataReader 库读取 Excel 文件时，ExcelReaderConfiguration 类中的 LeaveOpen 属性用于控制在读取完成后，是否保持原始数据流（Stream）的打开状态
-            };
-
-            using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
-            using (var reader = ExcelReaderFactory.CreateReader(stream, configuration))
-            {
-                var result = reader.AsDataSet();
-                DataTable table = result.Tables[0];
-
-                if (table.Rows.Count < 2)
-                {
-                    Debug.LogError("Excel 文件数据不足！");
-                    return null;
-                }
-                // 读取表头（第一行）
-                var headers = new List<string>();
-                for (int col = 0; col < table.Columns.Count; col++)
-                {
-                    headers.Add(table.Rows[0][col].ToString());
-                }
-
-                // 遍历数据行（从第二行开始）
-                for (int row = 1; row < table.Rows.Count; row++)
-                {
-                    var currentRow = table.Rows[row];
-                    if (currentRow.ItemArray.Length == 0)
-                        continue;
-
-                    // 解析 ID（第一列必须为可转换成 int 的 ID）
-                    if (!int.TryParse(currentRow[0].ToString(), out int id))
-                    {
-                        Debug.LogWarning($"ID 解析失败，行 {row + 1} 被跳过");
-                        continue;
-                    }
-
-                    // 构建行数据（包含所有列）
-                    var rowData = new Dictionary<string, string>();
-                    for (int col = 0; col < headers.Count; col++)
-                    {
-                        string value = currentRow[col]?.ToString() ?? "null"; // 显式处理空值
-                        rowData[headers[col]] = value;
-                    }
-                    
-                    buildingData[id] = rowData;
-                }
-
-                Debug.Log("Excel 读取完成！");
-            }
-
-            // 返回构造好的数据字典
-            return buildingData;
-        }
-    }
-
-    public class Events 
-    { 
-        // 在 Globals.Datas 内或 Globals 类中新增标志变量：
-        public bool waveActive = false;
-        public enum GameState{ playing , pausing , timer_off}
-        public GameState current_state;
-        public GameObject world_item {get; private set;}
-        public bool in_battle;
-        public void GameStart()
-        {
-            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>("Prefabs/ItemInWorld");
-            handle.Completed += op => world_item = handle.Result;
-            GameObject GridObject = GameObject.FindGameObjectWithTag("ChunkGenerator");
-            if (GridObject != null){Destroy(GridObject);}
-            Addressables.LoadAssetAsync<GameObject>(Globals.Datas.L1_Grid).Completed += OnGridPrefabLoaded;
-        }
-        private void OnGridPrefabLoaded(AsyncOperationHandle<GameObject> handle)
-        {
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                GameObject gridPrefab = handle.Result;
-                if (gridPrefab != null)
-                {
-                    // 实例化 Prefab 到场景中
-                    
-                    Instantiate(gridPrefab, new Vector3(0,0,10), Quaternion.identity);
-                }
-                else
-                {
-                    Debug.LogError("Grid Prefab is null.");
-                }
-            }
-            else
-            {
-                Debug.LogError("Failed to load the Grid Prefab.");
-            }
-        }
-    }
     public Datas Data { get; private set; }
     public Events Event { get; private set; }
 
@@ -188,7 +27,7 @@ public class Globals : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             Data = new Datas();
             Event = new Events();
-            Event.current_state = Events.GameState.pausing; 
+            Event.current_state = Events.GameState.pausing;
             Event.in_battle = false;
         }
         else
@@ -196,43 +35,193 @@ public class Globals : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    void Start()
+
+    private void Start()
     {
-            
         Screen.SetResolution(1920, 1080, false);
-        this.Data.timer = GlobalTimer.Instance;
+        Data.timer = GlobalTimer.Instance;
+        StartCoroutine(InitializeGlobals());
+    }
+
+    private IEnumerator InitializeGlobals()
+    {
+        yield return Addressables.InitializeAsync();
+        yield return StartCoroutine(Data.InitializeDatas());
+
         StartCoroutine(EnemyWavesCoroutine());
     }
+
     void Update()
     {
-        // 检测窗口是否聚焦
         if (Application.isFocused)
         {
-            // 获取鼠标位置（屏幕坐标）
             Vector2 mousePosition = Input.mousePosition;
-            
-            // 获取当前窗口的安全区域
             Rect screenRect = new Rect(0, 0, Screen.width, Screen.height);
 
-            // 如果鼠标在窗口内部，则隐藏鼠标
             if (screenRect.Contains(mousePosition))
             {
-                Cursor.lockState = CursorLockMode.Confined; // 限制鼠标在窗口内
-                Cursor.visible = false; // 隐藏鼠标
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = false;
             }
             else
             {
-                Cursor.lockState = CursorLockMode.None; // 允许鼠标自由移动
-                Cursor.visible = true; // 显示鼠标
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
         }
         else
         {
-            // 窗口不在聚焦状态时，解锁鼠标并显示
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
     }
+
+    public class Datas
+    {
+        public static string L1_Grid = "Prefabs/Level1_Grid";
+        public static string L1_Objects = "Prefabs/Level1_Objects";
+        private GameObject Angle;
+        private GameObject Satan;
+        public int seed;
+        public enum Levels { Level1, Level2, Level3 }
+        public Levels current_level;
+        public enum ResourcesType { Green, Pink, Black }
+        public GlobalTimer timer;
+        public Dictionary<ResourcesType, int> player_current_resources { get; private set; }
+        public static List<Enemy> EnemyPool;
+        public int enemy_wave_number;
+        public float last_enemy_wave_time;
+        public float waiting_time;
+        public Dictionary<int, Dictionary<string, string>> Bulding_Datas { get; private set; }
+
+        public Datas()
+        {
+            enemy_wave_number = 0;
+            last_enemy_wave_time = 0;
+            waiting_time = 5f;
+            current_level = Levels.Level1;
+            EnemyPool = new List<Enemy>();
+
+            long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            string lastFourDigits = timestamp.ToString("D4")[^4..];
+            seed = int.Parse(lastFourDigits);
+
+            player_current_resources = new Dictionary<ResourcesType, int>
+            {
+                { ResourcesType.Green, 0 },
+                { ResourcesType.Black, 0 },
+                { ResourcesType.Pink, 0 }
+            };
+        }
+
+        public IEnumerator InitializeDatas()
+        {
+            var angleHandle = Addressables.LoadAssetAsync<GameObject>("Prefabs/Angle");
+            yield return angleHandle;
+            Angle = angleHandle.Result;
+
+            var satanHandle = Addressables.LoadAssetAsync<GameObject>("Prefabs/Satan");
+            yield return satanHandle;
+            Satan = satanHandle.Result;
+
+            string excelPath = Path.Combine(Application.streamingAssetsPath, "Excels/Building_Properties.xlsx");
+            yield return Globals.Instance.StartCoroutine(LoadBuildingDatasCoroutine(excelPath, dict => Bulding_Datas = dict));
+        }
+
+        private IEnumerator LoadBuildingDatasCoroutine(string path, Action<Dictionary<int, Dictionary<string, string>>> callback)
+        {
+            byte[] fileData;
+
+            if (path.Contains("://"))
+            {
+                UnityWebRequest www = UnityWebRequest.Get(path);
+                yield return www.SendWebRequest();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Failed to load Excel file: " + www.error);
+                    yield break;
+                }
+                fileData = www.downloadHandler.data;
+            }
+            else
+            {
+                fileData = File.ReadAllBytes(path);
+            }
+
+            var buildingData = new Dictionary<int, Dictionary<string, string>>();
+
+            using (var stream = new MemoryStream(fileData))
+            using (var reader = ExcelReaderFactory.CreateReader(stream))
+            {
+                var result = reader.AsDataSet();
+                DataTable table = result.Tables[0];
+                if (table.Rows.Count < 2)
+                {
+                    Debug.LogError("Excel 文件数据不足！");
+                    yield break;
+                }
+
+                var headers = new List<string>();
+                for (int col = 0; col < table.Columns.Count; col++)
+                    headers.Add(table.Rows[0][col].ToString());
+
+                for (int row = 1; row < table.Rows.Count; row++)
+                {
+                    var currentRow = table.Rows[row];
+                    if (!int.TryParse(currentRow[0]?.ToString(), out int id))
+                        continue;
+
+                    var rowData = new Dictionary<string, string>();
+                    for (int col = 0; col < headers.Count; col++)
+                        rowData[headers[col]] = currentRow[col]?.ToString() ?? "null";
+
+                    buildingData[id] = rowData;
+                }
+
+                Debug.Log("Excel 读取完成！");
+                callback?.Invoke(buildingData);
+            }
+        }
+
+        public int GetResourceAmount(ResourcesType target_type) => player_current_resources[target_type];
+
+        public void AddResourceAmount(ResourcesType target_type, int amount)
+        {
+            player_current_resources[target_type] += amount;
+            PlayerUI player_ui = PlayerUI.Instance;
+            player_ui?.UpdateValues(target_type, player_current_resources[target_type]);
+        }
+
+        public GameObject GetAnglePrefab() => Angle;
+        public GameObject GetSatanPrefab() => Satan;
+    }
+
+    public class Events
+    {
+        public bool waveActive = false;
+        public enum GameState { playing, pausing, timer_off }
+        public GameState current_state;
+        public GameObject world_item { get; private set; }
+        public bool in_battle;
+
+        public void GameStart()
+        {
+            Addressables.LoadAssetAsync<GameObject>("Prefabs/ItemInWorld")
+                .Completed += op => world_item = op.Result;
+
+            GameObject GridObject = GameObject.FindGameObjectWithTag("ChunkGenerator");
+            if (GridObject != null) GameObject.Destroy(GridObject);
+
+            Addressables.LoadAssetAsync<GameObject>(Globals.Datas.L1_Grid)
+                .Completed += handle =>
+                {
+                    if (handle.Status == AsyncOperationStatus.Succeeded && handle.Result != null)
+                        GameObject.Instantiate(handle.Result, new Vector3(0, 0, 10), Quaternion.identity);
+                };
+        }
+    }
+
     private static Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
     private IEnumerator EnemyWavesCoroutine()
     {
@@ -257,7 +246,7 @@ public class Globals : MonoBehaviour
 
                     Vector3 spawnCenter = player.transform.position;
                     int wave = Data.enemy_wave_number;
-
+                    AudioSysManager.Instance.PlayBGM(BattleBGM,120);
                     // 3) 根据波数选择出怪规则
                     switch (wave)
                     {
@@ -265,32 +254,44 @@ public class Globals : MonoBehaviour
                         case 2:
                             // 第1、2波：5只 Enemy0
                             StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 5, spawnCenter));
+                            
                             break;
 
                         case 3:
                             // 第3波：10只 Enemy0，且延长下次间隔
                             StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy0", 10, spawnCenter));
+                            
                             Data.waiting_time += 10f;
                             break;
 
                         case 4:
                         case 5:
-                            // 第4、5波：3～5 只 Enemy0 + 2 只 Enemy1
+                            StartCoroutine(LoadAndSpawnEnemyWave(
+                                "Prefabs/Enemy0",
+                                UnityEngine.Random.value < 0.5f ? 4 : 6,
+                                spawnCenter
+                            ));
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 2, spawnCenter));
+                            
+                            
+                            break;
+
+                        case 6:
                             StartCoroutine(LoadAndSpawnEnemyWave(
                                 "Prefabs/Enemy0",
                                 UnityEngine.Random.value < 0.5f ? 3 : 5,
                                 spawnCenter
                             ));
-                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 2, spawnCenter));
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy4", 1, spawnCenter));
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy1", 1, spawnCenter));
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/E3",2,spawnCenter));
+                            
                             break;
-
-                        case 6:
                         case 7:
                         case 8:
-                            // 第6～8波：3～7 只 Enemy0 + 2～4 只 Enemy1
                             StartCoroutine(LoadAndSpawnEnemyWave(
                                 "Prefabs/Enemy0",
-                                UnityEngine.Random.value < 0.5f ? 3 : 7,
+                                UnityEngine.Random.value < 0.5f ? 4 : 6,
                                 spawnCenter
                             ));
                             StartCoroutine(LoadAndSpawnEnemyWave(
@@ -298,15 +299,20 @@ public class Globals : MonoBehaviour
                                 UnityEngine.Random.value < 0.5f ? 2 : 4,
                                 spawnCenter
                             ));
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/E3",3,spawnCenter));
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy4", 2, spawnCenter));
+                            
                             break;
 
                         case 9:
                             // 第9波：4只 Enemy2
                             StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy2", 4, spawnCenter));
+                            
                             break;
 
-                        default:
+                        case 10:
                             // 之后的波数可自行扩展或循环
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy5", 1 , spawnCenter));
                             break;
                     }
                 }
@@ -314,9 +320,11 @@ public class Globals : MonoBehaviour
             // 4) 波内敌人清空后发奖励
             else if (Datas.EnemyPool.Count == 0 && Event.in_battle)
             {
+                
                 if ((Data.timer.GetCurrentTime() - Data.last_enemy_wave_time) > 1f)
                 {
                     // 战斗结束，发奖励并重置状态
+                    AudioSysManager.Instance.StopOverrideBGM();
                     if (Data.enemy_wave_number % 3 == 0)
                     {
                         // 每第三波的大奖励逻辑（带雕像 + 3件）
@@ -413,7 +421,7 @@ public class Globals : MonoBehaviour
         return world_item_instance;
     }
 
-    private IEnumerator LoadAndSpawnEnemyWave(string enemyKey, int count, Vector3 playerPosition)
+    public IEnumerator LoadAndSpawnEnemyWave(string enemyKey, int count, Vector3 playerPosition)
     {
         GameObject enemyPrefab = null;
 

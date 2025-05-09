@@ -57,7 +57,7 @@ public class CameraEffects : MonoBehaviour
     /// <param name="shakeAmplitude">抖动振幅，默认 2（可根据需求调整）</param>
     /// <param name="shakeFrequency">抖动频率，默认 2</param>
     /// <param name="zoomAmount">缩小视野的数值，默认 5</param>
-    public void Shake(float shakeDuration = 0.8f, float shakeAmplitude = 2f, float shakeFrequency = 2f, float zoomAmount = 5f)
+    public void Shake(float shakeDuration = 0.8f, float shakeAmplitude = 2f, float shakeFrequency = 2f, float zoomAmount = 5f , float timeAmount = 1f)
     {
         // 限制同时存在的 Shake 协程数量最多为 2
         if (activeShakeCount >= 2)
@@ -84,8 +84,8 @@ public class CameraEffects : MonoBehaviour
                 noiseComponent.m_FrequencyGain = shakeFrequency;
             }
 
-            // 应用慢动作效果（这里设为 0.1f，表示模拟速度大幅降低，但渲染帧率并不受影响）
-            Time.timeScale = 0.1f;
+            
+            Time.timeScale = timeAmount;
         }
 
         StartCoroutine(ShakeCoroutine(shakeDuration, zoomAmount));

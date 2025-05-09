@@ -72,6 +72,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   L: {fileID: 3761306481385062530}
   R: {fileID: 5906624927573225518}
+  attack_sound: {fileID: 8300000, guid: 608a7cee5cb40e74c95733b124f84d7a, type: 3}
+  hit_Sound: {fileID: 8300000, guid: 25329c2449bce924180062487369dab0, type: 3}
 --- !u!1 &1293689903991751540
 GameObject:
   m_ObjectHideFlags: 0

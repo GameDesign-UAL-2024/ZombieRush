@@ -75,9 +75,6 @@ public class Statues : MonoBehaviour
         }
         else
         {
-            // 标记：本帧是否有 item 被拾取
-            bool anyPicked = false;
-
             // —— 1. item1 被拾走时 —— 
             if (item1 == null)
             {
@@ -92,7 +89,9 @@ public class Statues : MonoBehaviour
 
                 // 把自己当“已处理”标记
                 item1 = this.gameObject;
-                anyPicked = true;
+                Destroy(item2,0.1f);
+                Destroy(item3,0.1f);
+                Destroy(this.gameObject,0.2f);
             }
 
             // —— 2. item2 同理 —— 
@@ -107,7 +106,9 @@ public class Statues : MonoBehaviour
                 };
                 player.player_properties.current_health += player.player_properties.max_health * ratio2;
                 item2 = this.gameObject;
-                anyPicked = true;
+                Destroy(item1,0.1f);
+                Destroy(item3,0.1f);
+                Destroy(this.gameObject,0.2f);
             }
 
             // —— 3. item3 同理 —— 
@@ -122,14 +123,9 @@ public class Statues : MonoBehaviour
                 };
                 player.player_properties.current_health += player.player_properties.max_health * ratio3;
                 item3 = this.gameObject;
-                anyPicked = true;
-            }
-
-            // —— 有任意一个被拾取，就执行“之前全部处理完之后”的逻辑 —— 
-            if (anyPicked)
-            {
-                // … 这里放原本在“全部处理完再销毁”后的那段逻辑 …
-                Destroy(gameObject);
+                Destroy(item2,0.1f);
+                Destroy(item1,0.1f);
+                Destroy(this.gameObject,0.2f);
             }
         }
 

@@ -3439,6 +3439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7734cc00de6d4b479f3c0c853cde535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BattleBGM: {fileID: 8300000, guid: 559c232a43caebe41870ce54786f604e, type: 3}
 --- !u!1 &1021976840
 GameObject:
   m_ObjectHideFlags: 0
@@ -4401,7 +4402,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.9
+  m_fontSize: 50
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4827,6 +4828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   properties_up_location: {fileID: 20936273}
+  HitSound: {fileID: 8300000, guid: 3b72cec30f5f89149baafab871dd6b67, type: 3}
   move: {fileID: 8300000, guid: 874f0d62d23d4c54c897e339ca06abe6, type: 3}
   watermove1: {fileID: 8300000, guid: 21d577fef3634384090f1b50294b79e5, type: 3}
   watermove2: {fileID: 8300000, guid: 715377d253d394b4292ae40e07b2b58f, type: 3}
@@ -4914,11 +4916,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f10fecee392d9aa4dbc06cdea7a10169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolSize: 20
-  sfxGroup: {fileID: 0}
+  sfxGroup: {fileID: 24300002, guid: 7b6bea53fadf5cf4581ec4dd6fe2e660, type: 2}
+  bgmGroup: {fileID: 24300002, guid: c7940cff620b6c142a75e0875a99b80b, type: 2}
+  default_BGM: {fileID: 8300000, guid: 0ad591428b0c18c4da51fe3bf98dbc63, type: 3}
+  defaultBGMVolume: 0.15
+  bgmFadeDuration: 1
+  poolSize: 80
   maxDistance: 20
   panDistance: 10
-  maxSoundsPerOwner: 3
+  maxSoundsPerOwner: 5
   duplicateTimeThreshold: 0.1
   duplicateDistanceThreshold: 5
 --- !u!1 &1505849072

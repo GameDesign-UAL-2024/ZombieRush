@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
+
 using UnityEngine.ResourceManagement.AsyncOperations;
 public class B0 : Buildings
 {
+    private Canvas   healthBarCanvas;
+    private Image    healthBarFill;
     // —— 实现基类接口 —— 
     public override BuildingType this_type    { get; set; } = BuildingType.Trap;
     public override float max_health          { get; set; } = 3f;
@@ -21,12 +25,13 @@ public class B0 : Buildings
     // —— 减速逻辑参数 —— 
     [Header("Slow Effect")]
     [Tooltip("减速半径")]
-    public float slowRadius   = 10f;
+    public float slowRadius   = 5f;
     [Tooltip("减速系数，如 0.5 表示原速 * 0.5")]
     public float slowFactor   = 0.5f;
+    [Tooltip("减速后允许的最低速度")]
+    public float minSpeed     = 1.5f;
     [Tooltip("扫描并应用减速的时间间隔（秒）")]
     public float interval     = 0.5f;
-
     // —— 存储已经被减速的敌人及其原速 —— 
     private Dictionary<Enemy, float> slowedEnemies = new Dictionary<Enemy, float>();
 
@@ -34,8 +39,64 @@ public class B0 : Buildings
     {
         // 初始化血量
         current_health = max_health;
+        CreateHealthBar();
+        UpdateHealthBar();
     }
 
+    private RectTransform fillRT;
+    private void CreateHealthBar()
+    {
+        // 1) Canvas
+        var canvasGO = new GameObject("HealthBarCanvas");
+        canvasGO.transform.SetParent(transform);
+        canvasGO.transform.localPosition = Vector3.up * 2f; // 根据模型高度调节
+        var canvas = canvasGO.AddComponent<Canvas>();
+        canvas.renderMode     = RenderMode.WorldSpace;
+        canvas.sortingOrder   =  100;
+        canvasGO.AddComponent<CanvasScaler>().dynamicPixelsPerUnit = 10f;
+        canvasGO.AddComponent<GraphicRaycaster>();
+
+        // 2) 背景
+        var bgGO = new GameObject("BG");
+        bgGO.transform.SetParent(canvasGO.transform, false);
+        var bg = bgGO.AddComponent<Image>();
+        bg.color = Color.gray;
+        var bgRT = bg.GetComponent<RectTransform>();
+        bgRT.sizeDelta = new Vector2(1f, 0.1f);
+
+        // 3) 填充条
+        var fillGO = new GameObject("Fill");
+        fillGO.transform.SetParent(bgGO.transform, false);
+        var fill = fillGO.AddComponent<Image>();
+        fill.color = Color.green;
+        // 不用 Filled 类型了，改用 scale
+        fill.type = Image.Type.Simple;
+
+        // 拿到 RectTransform 并设置 pivot.x = 0
+        fillRT = fill.GetComponent<RectTransform>();
+        // 让它和背景同尺寸、左对齐
+        fillRT.anchorMin = new Vector2(0f, 0f);
+        fillRT.anchorMax = new Vector2(0f, 1f);
+        fillRT.pivot     = new Vector2(0f, 0.5f);
+        fillRT.sizeDelta = new Vector2(bgRT.sizeDelta.x, bgRT.sizeDelta.y);
+
+        // 缓存引用
+        healthBarCanvas = canvas;
+        healthBarFill   = fill;
+
+        // 默认满血时隐藏
+        canvasGO.SetActive(false);
+    }
+    private void UpdateHealthBar()
+    {
+        if (healthBarCanvas == null) return;
+        float t = Mathf.Clamp01(current_health / max_health);
+
+        // 只改 X 方向 scale（从左侧伸缩）
+        fillRT.localScale = new Vector3(t, 1f, 1f);
+
+        healthBarCanvas.gameObject.SetActive(t < 1f);
+    }
     void Start()
     {
         // 1) 先同步加载一次图标预制件
@@ -72,9 +133,11 @@ public class B0 : Buildings
                     // 进入范围，且尚未减速
                     if (!slowedEnemies.ContainsKey(e))
                     {
+                        // 存原速
                         slowedEnemies[e] = e.speed;
-                        e.speed *= slowFactor;
-
+                        // 计算减速后速度，并 clamp 到 minSpeed
+                        float slowed = e.speed * slowFactor;
+                        e.speed = Mathf.Max(slowed, minSpeed);
                         // 实例化图标并记录
                         if (snailIconPrefab != null)
                         {
@@ -138,22 +201,26 @@ public class B0 : Buildings
     public override void TakeDamage(float amount)
     {
         current_health -= amount;
+        UpdateHealthBar();
+
         if (current_health <= 0f)
         {
-            // 1) 清理所有残留减速效果
+            // —— 原有销毁逻辑 —— 
             foreach (var kv in slowedEnemies)
                 if (kv.Key != null) kv.Key.speed = kv.Value;
             slowedEnemies.Clear();
-
-            // 2) 清理所有图标实例
             foreach (var icon in snailIcons.Values)
                 if (icon != null) Destroy(icon);
             snailIcons.Clear();
 
-            // 3) 通知外部销毁自己
+            // 销毁血条 Canvas
+            if (healthBarCanvas != null)
+                Destroy(healthBarCanvas.gameObject);
+
             if (initialized) destroyEvent.Invoke(this);
         }
     }
+
 
 
     /// <summary>

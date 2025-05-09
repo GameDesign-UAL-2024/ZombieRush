@@ -1,23 +1,42 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
 /// <summary>
 /// 高效管理 2D 俯视音效：
-/// • 池化 AudioSource（挂在本物体上，不移动 Transform）  
-/// • 手动距离衰减与可选动态 Pan  
-/// • 每 Owner 最多同时音源，超限替换最旧  
-/// • 全局池满时按优先级剔除最弱音源  
-/// • 去重：相同剪辑短时间内只保留最近的  
-/// • 支持循环音效：外部可 StopLoop/SetLoopVolume/SetLoopPosition  
+/// • 池化 AudioSource（挂在本物体上，不移动 Transform）
+/// • 手动距离衰减与可选动态 Pan
+/// • 每 Owner 最多同时音源，超限替换最旧
+/// • 全局池满时按优先级剔除最弱音源
+/// • 去重：相同剪辑短时间内只保留最近的
+/// • 支持循环音效：外部可 StopLoop/SetLoopVolume/SetLoopPosition
+/// • BGM 播放与过渡逻辑：平滑替换并恢复
 /// </summary>
 public class AudioSysManager : MonoBehaviour
 {
     public static AudioSysManager Instance { get; private set; }
 
-    [Header("Pool Settings")] public int poolSize = 20;
-    [Header("Audio Mixer")] public AudioMixerGroup sfxGroup;
+    [Header("Audio Mixers")]
+    [Tooltip("音效混音组")]
+    public AudioMixerGroup sfxGroup;
+    [Tooltip("BGM 混音组")]
+    public AudioMixerGroup bgmGroup;
+
+    [Header("BGM Settings")]
+    [Tooltip("默认循环播放的 BGM 音频剪辑")]
+    public AudioClip default_BGM;
+    [Tooltip("默认 BGM 音量 (0-1)")]
+    [Range(0f, 1f)] public float defaultBGMVolume = 0.15f;
+    [Tooltip("淡入淡出时长 (秒)")]
+    public float bgmFadeDuration = 1f;
+
+    private AudioSource defaultBGMSource;
+    private AudioSource overrideBGMSource;
+    private Coroutine bgmCoroutine;
+
+    [Header("Pool Settings")] public int poolSize = 30;
     [Header("Spatial Settings")] public float maxDistance = 20f;
     [Header("Pan Settings")] public float panDistance = 10f;
     [Header("Per-Owner Limits")] public int maxSoundsPerOwner = 3;
@@ -29,9 +48,9 @@ public class AudioSysManager : MonoBehaviour
     private Dictionary<GameObject, Queue<AudioSource>> registry;
     private Dictionary<AudioSource, GameObject> audioToOwner;
     private HashSet<AudioSource> dynamicPanSources;
-    private Dictionary<AudioClip, float> lastPlayTime = new Dictionary<AudioClip, float>();
+    private Dictionary<AudioClip, float> lastPlayTime;
     private Transform listenerTransform;
-    private Dictionary<AudioSource, Vector2> sourcePositions = new Dictionary<AudioSource, Vector2>();
+    private Dictionary<AudioSource, Vector2> sourcePositions;
     private enum AudioPriority { BGM = 0, UI = 0, Player = 1, Enemy = 2, Others = 3 }
 
     void Awake()
@@ -39,121 +58,225 @@ public class AudioSysManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else { Destroy(gameObject); return; }
 
-        sourcePool       = new Queue<AudioSource>(poolSize);
-        activeSources    = new List<AudioSource>(poolSize);
-        registry         = new Dictionary<GameObject, Queue<AudioSource>>();
-        audioToOwner     = new Dictionary<AudioSource, GameObject>(poolSize);
-        dynamicPanSources= new HashSet<AudioSource>(poolSize);
+        sourcePool = new Queue<AudioSource>(poolSize);
+        activeSources = new List<AudioSource>(poolSize);
+        registry = new Dictionary<GameObject, Queue<AudioSource>>();
+        audioToOwner = new Dictionary<AudioSource, GameObject>(poolSize);
+        dynamicPanSources = new HashSet<AudioSource>(poolSize);
+        lastPlayTime = new Dictionary<AudioClip, float>();
+        sourcePositions = new Dictionary<AudioSource, Vector2>();
 
         var listener = FindObjectOfType<AudioListener>();
         listenerTransform = listener ? listener.transform : null;
         if (listenerTransform == null)
-            Debug.LogWarning("AudioSysManager: 未找到 AudioListener");
+            Debug.LogWarning("AudioSysManager: 未找到 AudioListener，无法正常播放空间音效");
 
+        if (sfxGroup == null)
+            Debug.LogWarning("AudioSysManager: sfxGroup 未设置，将使用默认 Mixer");
+
+        // 初始化音效池
         for (int i = 0; i < poolSize; i++)
         {
-            var audioSrc = gameObject.AddComponent<AudioSource>();
-            audioSrc.playOnAwake           = false;
-            audioSrc.spatialBlend          = 0f;
-            audioSrc.outputAudioMixerGroup = sfxGroup;
-            audioSrc.hideFlags             = HideFlags.HideInInspector;
-            audioSrc.enabled               = false;
-            sourcePool.Enqueue(audioSrc);
+            var src = gameObject.AddComponent<AudioSource>();
+            src.playOnAwake = false;
+            src.spatialBlend = 0f;
+            src.outputAudioMixerGroup = sfxGroup;
+            src.hideFlags = HideFlags.HideInInspector;
+            src.enabled = false;
+            sourcePool.Enqueue(src);
         }
     }
 
+    void Start()
+    {
+        // 默认 BGM
+        defaultBGMSource = gameObject.AddComponent<AudioSource>();
+        defaultBGMSource.playOnAwake = false;
+        defaultBGMSource.clip = default_BGM;
+        defaultBGMSource.loop = true;
+        defaultBGMSource.outputAudioMixerGroup = bgmGroup;
+        defaultBGMSource.volume = defaultBGMVolume;
+        defaultBGMSource.spatialBlend = 0f;
+        defaultBGMSource.Play();
+
+        // Override BGM
+        overrideBGMSource = gameObject.AddComponent<AudioSource>();
+        overrideBGMSource.playOnAwake = false;
+        overrideBGMSource.loop = false;
+        overrideBGMSource.outputAudioMixerGroup = bgmGroup;
+        overrideBGMSource.volume = 0f;
+        overrideBGMSource.spatialBlend = 0f;
+    }
     void Update()
     {
-        if (listenerTransform == null || activeSources.Count == 0) 
+        // 如果没有监听器或当前没有活动音源，跳过
+        if (listenerTransform == null || activeSources.Count == 0)
             return;
 
+        // 缓存 Listener 的位置
         Vector2 listenerPos = listenerTransform.position;
 
-        // 倒序遍历以安全回收
+        // 倒序遍历，安全地回收与更新
         for (int i = activeSources.Count - 1; i >= 0; i--)
         {
-            var audioSrc = activeSources[i];
-            if (audioSrc == null || !audioToOwner.ContainsKey(audioSrc))
+            var src = activeSources[i];
+
+            // 1) 如果 AudioSource 已丢失或已不属于我们管理的，就移除引用
+            if (src == null || !audioToOwner.ContainsKey(src))
             {
                 activeSources.RemoveAt(i);
                 continue;
             }
 
-            // 非循环且播放结束：回收
-            if (!audioSrc.loop && !audioSrc.isPlaying)
+            // 2) 非循环且已经播放完毕：回收到池中
+            if (!src.loop && !src.isPlaying)
             {
-                ReleaseSource(audioSrc);
+                ReleaseSource(src);
                 activeSources.RemoveAt(i);
                 continue;
             }
 
-            // 动态 Pan 更新：用字典中的坐标
-            if (dynamicPanSources.Contains(audioSrc) 
-                && sourcePositions.TryGetValue(audioSrc, out Vector2 pos))
+            // 3) 如果启用了动态 Pan，则根据虚拟坐标更新左右声道平衡
+            if (dynamicPanSources.Contains(src)
+                && sourcePositions.TryGetValue(src, out Vector2 pos))
             {
-                audioSrc.panStereo = Mathf.Clamp((pos.x - listenerPos.x) / panDistance, -1f, 1f);
+                float pan = (pos.x - listenerPos.x) / panDistance;
+                src.panStereo = Mathf.Clamp(pan, -1f, 1f);
             }
         }
     }
-    /// <param name="owner">发声者，用于限额管理</param>
-    /// <param name="clip">要播放的 AudioClip</param>
-    /// <param name="position">虚拟世界坐标，用于手动衰减与 Pan</param>
-    /// <param name="volume">基础音量</param>
-    /// <param name="dynamicPan">是否在 Update 中动态更新 Pan</param>
+
+    /// <summary>
+    /// 播放 Override BGM，sec 秒后或片段结束后恢复默认 BGM
+    /// </summary>
+    public void PlayBGM(AudioClip clip, float sec)
+    {
+        if (clip == null) return;
+        if (bgmCoroutine != null) StopCoroutine(bgmCoroutine);
+        bgmCoroutine = StartCoroutine(BGMRoutine(clip, sec));
+    }
+
+    /// <summary>
+    /// 立即中断 Override，平滑恢复默认 BGM
+    /// </summary>
+    public void StopOverrideBGM()
+    {
+        if (bgmCoroutine != null)
+        {
+            StopCoroutine(bgmCoroutine);
+            bgmCoroutine = StartCoroutine(StopOverrideRoutine());
+        }
+    }
+
+    private IEnumerator BGMRoutine(AudioClip clip, float sec)
+    {
+        yield return StartCoroutine(CrossFadeToOverride(clip));
+        float timer = 0f;
+        while (timer < sec && overrideBGMSource.isPlaying)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        yield return StartCoroutine(CrossFadeToDefault());
+        bgmCoroutine = null;
+    }
+
+    private IEnumerator CrossFadeToOverride(AudioClip clip)
+    {
+        overrideBGMSource.clip = clip;
+        overrideBGMSource.time = 0f;
+        overrideBGMSource.Play();
+        float t = 0f;
+        while (t < bgmFadeDuration)
+        {
+            t += Time.deltaTime;
+            defaultBGMSource.volume = Mathf.Lerp(defaultBGMVolume, 0f, t / bgmFadeDuration);
+            overrideBGMSource.volume = Mathf.Lerp(0f, defaultBGMVolume, t / bgmFadeDuration);
+            yield return null;
+        }
+        defaultBGMSource.Pause();
+    }
+
+    private IEnumerator CrossFadeToDefault()
+    {
+        defaultBGMSource.UnPause();
+        float t = 0f;
+        while (t < bgmFadeDuration)
+        {
+            t += Time.deltaTime;
+            overrideBGMSource.volume = Mathf.Lerp(defaultBGMVolume, 0f, t / bgmFadeDuration);
+            defaultBGMSource.volume = Mathf.Lerp(0f, defaultBGMVolume, t / bgmFadeDuration);
+            yield return null;
+        }
+        overrideBGMSource.Stop();
+        overrideBGMSource.clip = null;
+        overrideBGMSource.volume = 0f;
+    }
+
+    private IEnumerator StopOverrideRoutine()
+    {
+        float t = 0f;
+        while (t < bgmFadeDuration)
+        {
+            t += Time.deltaTime;
+            overrideBGMSource.volume = Mathf.Lerp(defaultBGMVolume, 0f, t / bgmFadeDuration);
+            defaultBGMSource.volume = Mathf.Lerp(0f, defaultBGMVolume, t / bgmFadeDuration);
+            yield return null;
+        }
+        overrideBGMSource.Stop();
+        overrideBGMSource.clip = null;
+        overrideBGMSource.volume = 0f;
+        defaultBGMSource.UnPause();
+        defaultBGMSource.volume = defaultBGMVolume;
+        bgmCoroutine = null;
+    }
+
+    /// <summary>
+    /// 播放一次性音效
+    /// </summary>
     public AudioSource PlaySound(
         GameObject owner,
         AudioClip clip,
         Vector2 position,
         float volume = 1f,
-        bool dynamicPan = false
-    )
+        bool dynamicPan = false)
     {
-        // 基本校验
         if (clip == null || sourcePool.Count == 0 || listenerTransform == null)
+        {
             return null;
+        }
 
-        // 1) 按 Owner 限额
         if (!registry.TryGetValue(owner, out var queue))
         {
             queue = new Queue<AudioSource>(maxSoundsPerOwner);
             registry[owner] = queue;
-            if (!owner.TryGetComponent<AudioRegistrant>(out _))
-                owner.AddComponent<AudioRegistrant>();
         }
         if (queue.Count >= maxSoundsPerOwner)
         {
-            var oldest = queue.Dequeue();
-            ReleaseSource(oldest);
-            activeSources.Remove(oldest);
+            var old = queue.Dequeue();
+            ReleaseSource(old);
+            activeSources.Remove(old);
         }
 
-        // 2) 取出池中 AudioSource 并初始化
         var src = sourcePool.Dequeue();
         src.enabled = true;
-        src.clip    = clip;
+        src.loop = false;
+        src.clip = clip;
+        src.outputAudioMixerGroup = sfxGroup;
+        src.spatialBlend = 0f;
 
-        // —— 不要再写 src.transform.position —— 
-        // src.transform.position = new Vector3(position.x, position.y, 0f);
-
-        // 3) 记录“虚拟”坐标到字典
+        // 计算距离衰减与 Pan
+        src.volume = ComputeAttenuation(position, volume);
+        src.panStereo = dynamicPan ? ComputePan(position) : 0f;
+        if (dynamicPan) dynamicPanSources.Add(src);
         sourcePositions[src] = position;
 
-        // 4) 一次性计算距离衰减并赋值
-        float dist    = Vector2.Distance(listenerTransform.position, position);
-        src.volume    = Mathf.Clamp01(1f - dist / maxDistance) * volume;
-
-        // 5) 初始 Pan
-        src.panStereo = dynamicPan
-            ? Mathf.Clamp((position.x - listenerTransform.position.x) / panDistance, -1f, 1f)
-            : 0f;
-
-        // 6) 播放并注册
+        //Debug.Log($"PlaySound: {clip.name} at {position}, vol={src.volume}");
         src.Play();
+
         activeSources.Add(src);
         audioToOwner[src] = owner;
         queue.Enqueue(src);
-        if (dynamicPan) dynamicPanSources.Add(src);
-
         return src;
     }
 
@@ -178,7 +301,7 @@ public class AudioSysManager : MonoBehaviour
     {
         if (src != null && audioToOwner.ContainsKey(src))
         {
-            src.transform.position = (Vector3)position;
+            sourcePositions[src] = position;
             src.volume = ComputeAttenuation(position, src.volume);
             if (dynamicPanSources.Contains(src))
                 src.panStereo = ComputePan(position);
@@ -197,10 +320,20 @@ public class AudioSysManager : MonoBehaviour
         registry.Remove(owner);
     }
 
-    private float ComputeAttenuation(Vector2 pos, float vol)
+    private void ReleaseSource(AudioSource src)
+    {
+        dynamicPanSources.Remove(src);
+        audioToOwner.Remove(src);
+        sourcePositions.Remove(src);
+        src.Stop();
+        src.enabled = false;
+        sourcePool.Enqueue(src);
+    }
+
+    private float ComputeAttenuation(Vector2 pos, float baseVol)
     {
         float dist = Vector2.Distance(listenerTransform.position, pos);
-        return Mathf.Clamp01(1f - dist / maxDistance) * vol;
+        return Mathf.Clamp01(1f - dist / maxDistance) * baseVol;
     }
 
     private float ComputePan(Vector2 pos)
@@ -215,11 +348,10 @@ public class AudioSysManager : MonoBehaviour
         int worstPrio = -1;
         foreach (var candidate in activeSources)
         {
-            int p = candidate.priority;
+            int p = (int)MapTagToPriority(audioToOwner[candidate].tag);
             if (worst == null || p > worstPrio)
             {
-                worst = candidate;
-                worstPrio = p;
+                worst = candidate; worstPrio = p;
             }
         }
         if (worst != null && worstPrio > newPrio)
@@ -229,26 +361,13 @@ public class AudioSysManager : MonoBehaviour
         }
     }
 
-    private void ReleaseSource(AudioSource src)
-    {
-        dynamicPanSources.Remove(src);
-        audioToOwner.Remove(src);
-
-        // 从字典中移除记录的坐标
-        sourcePositions.Remove(src);
-
-        src.Stop();
-        src.enabled = false;
-        sourcePool.Enqueue(src);
-    }
-
     private AudioPriority MapTagToPriority(string tag)
     {
         switch (tag)
         {
             case "Player": return AudioPriority.Player;
-            case "Enemy":  return AudioPriority.Enemy;
-            default:       return AudioPriority.Others;
+            case "Enemy": return AudioPriority.Enemy;
+            default: return AudioPriority.Others;
         }
     }
 }

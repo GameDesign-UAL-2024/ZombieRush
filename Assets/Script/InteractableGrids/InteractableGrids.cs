@@ -21,7 +21,10 @@ public class InteractableGrids : MonoBehaviour
     static string black_path = "Prefabs/BlackBlock";
     static string Notice_Path_B = "Prefabs/Notice_Resource_Black";
     static string Notice_Path_G = "Prefabs/Notice_Resource_Green";
-
+    string tree_broke_sound = "Audios/TreeBroke";
+    string rock_broke_sound = "Audios/RockBroke";
+    AudioClip rock;
+    AudioClip tree;
     GameObject NoticeObject_prefab;
     GameObject NoticeObject;
     public int release_number;
@@ -56,6 +59,8 @@ public class InteractableGrids : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
         resource_prefab = Addressables.LoadAssetAsync<GameObject>(this_type == GridType.Rocks ? black_path : green_path).WaitForCompletion();
+        rock = Addressables.LoadAssetAsync<AudioClip>(rock_broke_sound).WaitForCompletion();
+        tree = Addressables.LoadAssetAsync<AudioClip>(tree_broke_sound).WaitForCompletion();
         // 预载提示预制
         if (this_type == GridType.Rocks)
             NoticeObject_prefab = Addressables.LoadAssetAsync<GameObject>(Notice_Path_B).WaitForCompletion();
@@ -123,6 +128,7 @@ public class InteractableGrids : MonoBehaviour
                 interactionCompleted = true;
                 Destroy(bar_object);
                 bar_object = null;
+                AudioSysManager.Instance.PlaySound(player,this_type == GridType.Rocks? rock:tree,transform.position,1,false);
                 if (resource_prefab == null)
                     return;
                 for (int i = 0; i < release_number; i++)

@@ -8,6 +8,8 @@ public class HumanArms : MonoBehaviour
     Animator animator;
     [SerializeField]ArmAttackRange L;
     [SerializeField]ArmAttackRange R;
+    [SerializeField] AudioClip attack_sound;
+    [SerializeField] AudioClip hit_Sound;
     UnityAction<Enemy> OnHitEnemiesFunc;
     PlayerController player;
     void Awake()
@@ -19,6 +21,10 @@ public class HumanArms : MonoBehaviour
             L.AddListenerForThis(OnHitEnemiesFunc);
             R.AddListenerForThis(OnHitEnemiesFunc);
         }
+    }
+    public void PlayAttackSound()
+    {
+        AudioSysManager.Instance.PlaySound(player.gameObject,attack_sound,player.transform.position,0.8f,false);
     }
     void Start()
     {
@@ -35,7 +41,7 @@ public class HumanArms : MonoBehaviour
     {
         if (CameraEffects.Instance != null)
         {
-            CameraEffects.Instance.Shake(0.05f , 1f , 0.8f , 0.2f);
+            CameraEffects.Instance.Shake(0.05f , 1f , 0.8f , 0.2f,0.5f);
         }
     }
     void OnHitEnemies(Enemy enemy)
@@ -43,6 +49,7 @@ public class HumanArms : MonoBehaviour
         if (player != null)
         {
             // 1. 先造成伤害
+            AudioSysManager.Instance.PlaySound(enemy.gameObject,hit_Sound,enemy.transform.position,1,true);
             enemy.TakeDamage(
                 player.transform.position,
                 player.player_properties.damage * 1.85f,
