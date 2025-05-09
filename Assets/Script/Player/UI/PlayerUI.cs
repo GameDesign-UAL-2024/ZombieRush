@@ -10,7 +10,7 @@ public class PlayerUI : MonoBehaviour
 {
     public GameObject building_panel_content;
     public GameObject building_panel;
-    const string building_button_path = "Prefabs/BuildingButton";
+    string building_button_path = "Prefabs/BuildingButton";
 
     [SerializeField] public Image ProactiveItemImage;
     public TextMeshProUGUI CoolDownText;
@@ -55,10 +55,9 @@ public class PlayerUI : MonoBehaviour
     void Start()
     {
         globals = Globals.Instance;
-
+        
         // 必须同步加载 Prefab 保证稳定
-        var handle = Addressables.LoadAssetAsync<GameObject>(building_button_path);
-        button_prefab = handle.WaitForCompletion();
+        GameObject button_prefab = Addressables.LoadAssetAsync<GameObject>(building_button_path).WaitForCompletion();
         if (button_prefab == null)
             Debug.LogError($"加载 {building_button_path} 失败");
 
@@ -67,24 +66,29 @@ public class PlayerUI : MonoBehaviour
 
     private IEnumerator GetBuildingsData()
     {
-        if (globals.Data.Bulding_Datas.Count != 0)
+        // 等待数据准备好
+        while (globals.Data.Bulding_Datas == null || globals.Data.Bulding_Datas.Count == 0)
+            yield return null;
+
+        All_Buildings_Data = globals.Data.Bulding_Datas;
+
+        foreach (var kv in All_Buildings_Data)
         {
-            All_Buildings_Data = globals.Data.Bulding_Datas;
-            foreach (var kv in All_Buildings_Data)
+            int g = int.Parse(kv.Value[Green_Need_Key]);
+            int b = int.Parse(kv.Value[Black_Need_Key]);
+            int p = int.Parse(kv.Value[Pink_Need_Key]);
+            Buildings_Need[kv.Key] = new Dictionary<string, int>
             {
-                int g = int.Parse(kv.Value[Green_Need_Key]);
-                int b = int.Parse(kv.Value[Black_Need_Key]);
-                int p = int.Parse(kv.Value[Pink_Need_Key]);
-                Buildings_Need[kv.Key] = new Dictionary<string, int>
-                {
-                    { Green_Need_Key, g },
-                    { Black_Need_Key, b },
-                    { Pink_Need_Key,  p }
-                };
-            }
+                { Green_Need_Key, g },
+                { Black_Need_Key, b },
+                { Pink_Need_Key,  p }
+            };
+            yield return null;
         }
-        yield break;
+        TriggerValidBuildingsUpdate();
+        Debug.Log($"[PlayerUI] 成功读取建筑配置：{Buildings_Need.Count} 个建筑");
     }
+
 
     public void TriggerValidBuildingsUpdate()
     {

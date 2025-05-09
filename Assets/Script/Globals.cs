@@ -125,7 +125,7 @@ public class Globals : MonoBehaviour
             Satan = satanHandle.Result;
 
             string excelPath = Path.Combine(Application.streamingAssetsPath, "Excels/Building_Properties.xlsx");
-            yield return Globals.Instance.StartCoroutine(LoadBuildingDatasCoroutine(excelPath, dict => Bulding_Datas = dict));
+            yield return Instance.StartCoroutine(LoadBuildingDatasCoroutine(excelPath, dict => Bulding_Datas = dict));
         }
 
         private IEnumerator LoadBuildingDatasCoroutine(string path, Action<Dictionary<int, Dictionary<string, string>>> callback)
