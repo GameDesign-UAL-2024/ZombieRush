@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 
 public class Enemy5 : Enemy
 {
-    public override float max_health {get; set;} = 500;
+    public override float max_health {get; set;} = 256;
     public override float speed {get; set;} = 4f;
     public override float current_health { get; set;}
     public override GameObject target{get; set;}
@@ -351,8 +351,6 @@ public class Enemy5 : Enemy
             Destroy(rangeGO);
             rangeGO = null;
         }  
-        GameObject finishing = Addressables.LoadAssetAsync<GameObject>("Prefabs/FinishChair").WaitForCompletion();
-        Instantiate(finishing , transform.position , Quaternion.identity);
         Destroy(gameObject);
     }
 }

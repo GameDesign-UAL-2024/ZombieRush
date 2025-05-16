@@ -1,0 +1,2261 @@
+fileFormatVersion: 2
+guid: 20641cc0e267aa64084a44a90d8420a7
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 35
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MaoDie_0
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 1782
+        width: 124
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ba0c84283f8d3c46b94ac15816faf0a
+      internalID: -699882486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_1
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 1779
+        width: 116
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7423497be7f74d4db33521de4bbb4ab
+      internalID: 874538432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_2
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 1778
+        width: 108
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d8115e60d91c174e8e7dd165d58950e
+      internalID: 2048284146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_3
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 1774
+        width: 112
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01cfa1f06f66b9b488e84fb0208ebc84
+      internalID: 2060179500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_4
+      rect:
+        serializedVersion: 2
+        x: 1063
+        y: 1779
+        width: 93
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd45c1eef2e0c8a4fa695d7504d4b906
+      internalID: -1076513005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_5
+      rect:
+        serializedVersion: 2
+        x: 1293
+        y: 1763
+        width: 114
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95700294d752d614e8adc7a7535c9b81
+      internalID: -1058910805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_6
+      rect:
+        serializedVersion: 2
+        x: 1389
+        y: 1796
+        width: 35
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fcfc90fe69560a4f89dd873e20741bf
+      internalID: 1057235719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_7
+      rect:
+        serializedVersion: 2
+        x: 1542
+        y: 1767
+        width: 113
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e261a7a806f2bba44bdd9b87b4964185
+      internalID: 613244617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_8
+      rect:
+        serializedVersion: 2
+        x: 1636
+        y: 1795
+        width: 35
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2bbd3fabdf8760e41ad6be8c8ccf4f57
+      internalID: -742804886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_9
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1773
+        width: 119
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ce551f60d6e5e54fb98492a8233592a
+      internalID: -1532605522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_10
+      rect:
+        serializedVersion: 2
+        x: 2040
+        y: 1778
+        width: 122
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 939245df447445a459dcabf095f2b3e0
+      internalID: 74807809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_11
+      rect:
+        serializedVersion: 2
+        x: 2289
+        y: 1782
+        width: 125
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bffa30ca2ab8d8c47ad17d642b5c473c
+      internalID: 1303697140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_12
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 1587
+        width: 125
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 629502bb86268284e9c4001bddb3e70d
+      internalID: 518441933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_13
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 1587
+        width: 124
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f905aedf6e6e1e545a5b09f00115931e
+      internalID: 878328276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_14
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 1586
+        width: 124
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b824000f7a008374f81dd900aec47748
+      internalID: 250806193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_15
+      rect:
+        serializedVersion: 2
+        x: 786
+        y: 1582
+        width: 124
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 974754918db4a414083094507e79f620
+      internalID: -626077726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_16
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 1576
+        width: 123
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acd74ad7fdfad854b9d1e93a4ae15d9f
+      internalID: -1801673250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_17
+      rect:
+        serializedVersion: 2
+        x: 1270
+        y: 1575
+        width: 123
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8158a30b36795141a3347aefe5dc694
+      internalID: -201375491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_18
+      rect:
+        serializedVersion: 2
+        x: 1514
+        y: 1571
+        width: 123
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5677418c9dcd3d40b67e5744f935588
+      internalID: -9767713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_19
+      rect:
+        serializedVersion: 2
+        x: 1778
+        y: 1585
+        width: 131
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3df3e7480de8ee4c875d38ce8e188f0
+      internalID: 1068169686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_20
+      rect:
+        serializedVersion: 2
+        x: 2064
+        y: 1580
+        width: 176
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a2cc95a12048524b872d988290d2f54
+      internalID: 1694200980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_21
+      rect:
+        serializedVersion: 2
+        x: 2306
+        y: 1576
+        width: 164
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed39c94b28d648e4e83bbb718a36110b
+      internalID: 615787674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_22
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 1383
+        width: 163
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f539ff913c07a1642882cef8f3cf94ad
+      internalID: 1692718741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_23
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 1387
+        width: 119
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb74f5923904f484787167b76526997b
+      internalID: 1585680594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_24
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 1393
+        width: 122
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb715ff303e6d2148a28b1a639d674de
+      internalID: 813233453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_25
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 1391
+        width: 123
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8664ebe163aaaf64b8b5aa760b982e4d
+      internalID: 1445481273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_26
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 1391
+        width: 124
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14a72c089f8686b409e991290b519820
+      internalID: -401486572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_27
+      rect:
+        serializedVersion: 2
+        x: 1302
+        y: 1389
+        width: 110
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a98a8eb548d9f34baae5e967d79d8a2
+      internalID: -1154850385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_28
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 1391
+        width: 126
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e4a4f4d01ada2040b9d04ac7b0aa8a2
+      internalID: -408770200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_29
+      rect:
+        serializedVersion: 2
+        x: 1779
+        y: 1390
+        width: 137
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5209cd4d31828549b7faa54c58c7284
+      internalID: -1333617157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_30
+      rect:
+        serializedVersion: 2
+        x: 2037
+        y: 1391
+        width: 125
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a709dcce7f8b19341a6f5c457538e2e4
+      internalID: -95570185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_31
+      rect:
+        serializedVersion: 2
+        x: 2289
+        y: 1391
+        width: 124
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fb1f5035f0f0d64794e9712cf2ecc7c
+      internalID: 1159637799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_32
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 1197
+        width: 124
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0874dae99f8aaae48a6e1c8547b6f576
+      internalID: 1896765789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_33
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 1192
+        width: 131
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a0b8a4bab58dd741a03c7f4e68738d3
+      internalID: 1038680594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_34
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 1188
+        width: 81
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d19a6aa836c37b64fa3c277c777ceed4
+      internalID: -825544018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_35
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 1193
+        width: 159
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a063caa3ffccbc4f8c5fd7b9b277a7e
+      internalID: -1010783870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_36
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 1193
+        width: 145
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cec060552b7e55d4aad358cc95241761
+      internalID: -737515531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_37
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 1193
+        width: 126
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2baa74c052ba3e49be2ea5779da8957
+      internalID: -545686949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_38
+      rect:
+        serializedVersion: 2
+        x: 1553
+        y: 1192
+        width: 112
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab0e9685eef801342815b90535d6bdbb
+      internalID: -1925699899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_39
+      rect:
+        serializedVersion: 2
+        x: 1804
+        y: 1192
+        width: 104
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f876c9b960497444ac438e2dc157ace
+      internalID: -2086879602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_40
+      rect:
+        serializedVersion: 2
+        x: 2031
+        y: 1197
+        width: 143
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56cd07e7aec585343a7ef8e99a6f37f1
+      internalID: 24999509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_41
+      rect:
+        serializedVersion: 2
+        x: 2283
+        y: 1184
+        width: 147
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70d897d5b97945f4392fd2cd3431f23c
+      internalID: 1096538996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_42
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 984
+        width: 114
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e52ace33de440746ac7caf335c764f0
+      internalID: 2025290912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_43
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 1017
+        width: 35
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bde5d1191bd662b41a6fbc2783c00582
+      internalID: -947833805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_44
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 980
+        width: 122
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98e00bf9bcae7a4428cc20abd0f3220e
+      internalID: 639911641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_45
+      rect:
+        serializedVersion: 2
+        x: 548
+        y: 990
+        width: 121
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75e4617729f3a9b43b93f9c6ddbc394f
+      internalID: 406145731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_46
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 1002
+        width: 122
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df6fffa6c8d5ace429c150c482ae3224
+      internalID: 1528722767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_47
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 1002
+        width: 124
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb2b33da8e286614e8de05561ff36247
+      internalID: -228793623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_48
+      rect:
+        serializedVersion: 2
+        x: 1293
+        y: 1002
+        width: 124
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ab2fe74845ec864a9b911fcc37b0f27
+      internalID: -1220377287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_49
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 1002
+        width: 123
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57db3a3eb96123447a590f5ff6337c48
+      internalID: -1620425362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_50
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 999
+        width: 109
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61fa8a1c83ab4414b9de9f827942c06e
+      internalID: -765357594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_51
+      rect:
+        serializedVersion: 2
+        x: 2031
+        y: 1002
+        width: 142
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51ef3589ddb50944f95b019f527a8b9f
+      internalID: 637264322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_52
+      rect:
+        serializedVersion: 2
+        x: 2290
+        y: 1001
+        width: 129
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b590e51bcade52f49a2545aefae8e2f4
+      internalID: 988040329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_53
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 807
+        width: 124
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bdf1cd923ce4cd43bece93d9345b860
+      internalID: 159867866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_54
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 799
+        width: 176
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70ecd8dad4560da48b994039b2dfe91d
+      internalID: -517376059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_55
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 802
+        width: 126
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1c427154e232884cb4168918d929c10
+      internalID: 568701203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_56
+      rect:
+        serializedVersion: 2
+        x: 752
+        y: 790
+        width: 198
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 711570dee899f1146ae5f10fc64f69b5
+      internalID: -6364937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_57
+      rect:
+        serializedVersion: 2
+        x: 1038
+        y: 799
+        width: 152
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1eeba45ba78ee1348b7d0ad3b86e08b6
+      internalID: -791862148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_58
+      rect:
+        serializedVersion: 2
+        x: 1289
+        y: 807
+        width: 140
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3604ca894df5a43458bb0d8864a9a87e
+      internalID: 724804812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_59
+      rect:
+        serializedVersion: 2
+        x: 1541
+        y: 807
+        width: 130
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5874997d55e65df4d974fbf1fdb0189e
+      internalID: 673090970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_60
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 807
+        width: 126
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62fcfc29c9b052645a9f254600a0e319
+      internalID: -1042293469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_61
+      rect:
+        serializedVersion: 2
+        x: 2050
+        y: 807
+        width: 110
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4cab83ddefe2e44f9d43041fe413477
+      internalID: 1324341013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_62
+      rect:
+        serializedVersion: 2
+        x: 2301
+        y: 810
+        width: 113
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f1ac599dc5e334409f8657892a0d94e
+      internalID: 262746852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_63
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 612
+        width: 100
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32b985bf938d1bb419558975700f1451
+      internalID: 673174540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_64
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 612
+        width: 96
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 789800a34acb19f4d990235e8b20ef93
+      internalID: 1356797870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_65
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 612
+        width: 86
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c1d1c5a8d4ddbf418bad5fa26b69f53
+      internalID: 1515953202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_66
+      rect:
+        serializedVersion: 2
+        x: 808
+        y: 606
+        width: 102
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be5d5b0a24648d44dbba3745229fe73f
+      internalID: 1008037830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_67
+      rect:
+        serializedVersion: 2
+        x: 1057
+        y: 601
+        width: 101
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 056e08a2253dbb34eb3d4ccd4797e2b1
+      internalID: 898343136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_68
+      rect:
+        serializedVersion: 2
+        x: 1308
+        y: 598
+        width: 97
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3939923a38f7dde46aefdcfd88a36891
+      internalID: 1164964562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_69
+      rect:
+        serializedVersion: 2
+        x: 1558
+        y: 596
+        width: 95
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd72e09d301777142a878b99e885b595
+      internalID: -680821640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_70
+      rect:
+        serializedVersion: 2
+        x: 1807
+        y: 595
+        width: 94
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbf742224ded7da4497d06ed1633d4b5
+      internalID: 1623673858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_71
+      rect:
+        serializedVersion: 2
+        x: 2057
+        y: 594
+        width: 94
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac0226d8634a4c042930bf744b8274d4
+      internalID: -144944822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_72
+      rect:
+        serializedVersion: 2
+        x: 2306
+        y: 594
+        width: 95
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25f0b2d74cbe46e4fb56c99a767cdc8e
+      internalID: -283620750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_73
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 397
+        width: 97
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18794ea5debafa640acb136482b01423
+      internalID: 1620658152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_74
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 410
+        width: 115
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fffd3baed52cf114f919040597366478
+      internalID: -1707273524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_75
+      rect:
+        serializedVersion: 2
+        x: 547
+        y: 412
+        width: 116
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c395545bec9658c4eb8d10b29e28142d
+      internalID: 1028923645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_76
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 415
+        width: 120
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b1556e5741feee4686f4d2edee00712
+      internalID: 1627616096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_77
+      rect:
+        serializedVersion: 2
+        x: 1057
+        y: 415
+        width: 95
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7524773a3f6098c42baffbece0ae760c
+      internalID: 1522565388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_78
+      rect:
+        serializedVersion: 2
+        x: 1286
+        y: 416
+        width: 120
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f769f0608a637f54f862128e128f75f5
+      internalID: 120066673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_79
+      rect:
+        serializedVersion: 2
+        x: 1529
+        y: 416
+        width: 131
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d17e6ad0a15ebde40bb063a048cd6dca
+      internalID: 1596130383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_80
+      rect:
+        serializedVersion: 2
+        x: 1773
+        y: 416
+        width: 136
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 233e410cedd81184693f3ecb7244460b
+      internalID: 2127359373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_81
+      rect:
+        serializedVersion: 2
+        x: 2021
+        y: 416
+        width: 139
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9032697368168f648b8588d23bf5e7bf
+      internalID: 957296144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_82
+      rect:
+        serializedVersion: 2
+        x: 2272
+        y: 416
+        width: 142
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a4366be2315a0a46abfae9d27a3c78c
+      internalID: 1548741835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_83
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 222
+        width: 93
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a31932c0618f7df49a5cea80bcf52b96
+      internalID: -1264117934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_84
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 221
+        width: 145
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1396f68f613122e41b819f2bc1e0323d
+      internalID: 432650586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_85
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 222
+        width: 140
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36fe4ed669528f74b98930d02c638698
+      internalID: -1289127732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_86
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 222
+        width: 123
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a43befe2a21165949929685c23d37e18
+      internalID: 2146278319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_87
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 222
+        width: 124
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ea4607303a7acd46920644640c913a7
+      internalID: -1229863491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_88
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 204
+        width: 143
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb3689976ef6a2f4a83dcfc1ac424cf7
+      internalID: 1803075842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_89
+      rect:
+        serializedVersion: 2
+        x: 1529
+        y: 211
+        width: 138
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2bbb5b9d85085024d8b8e73cf6f88744
+      internalID: -1811622764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_90
+      rect:
+        serializedVersion: 2
+        x: 1779
+        y: 212
+        width: 143
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9486ae7cd6c7dd4fbb84e29b1f847c7
+      internalID: -846758574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_91
+      rect:
+        serializedVersion: 2
+        x: 2030
+        y: 211
+        width: 144
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac78decb28e3bb0448e86c9e61d60b1b
+      internalID: 720439138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_92
+      rect:
+        serializedVersion: 2
+        x: 2280
+        y: 202
+        width: 147
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9ad14a713bfa24498322ccff0406f53
+      internalID: -1306180907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_93
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 15
+        width: 146
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e76aeda198c1cfa46bb59aa57e41d8b2
+      internalID: -656272266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_94
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 18
+        width: 145
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b41809d36fd79e248b9aa62968fb7319
+      internalID: -896939841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_95
+      rect:
+        serializedVersion: 2
+        x: 538
+        y: 16
+        width: 143
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 204c9e94ba5521349b60ccf0a759f17b
+      internalID: 1624138894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaoDie_96
+      rect:
+        serializedVersion: 2
+        x: 785
+        y: 10
+        width: 143
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 955b97131fff7f945b72aa7b35395603
+      internalID: -39065010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      MaoDie_0: -699882486
+      MaoDie_1: 874538432
+      MaoDie_10: 74807809
+      MaoDie_11: 1303697140
+      MaoDie_12: 518441933
+      MaoDie_13: 878328276
+      MaoDie_14: 250806193
+      MaoDie_15: -626077726
+      MaoDie_16: -1801673250
+      MaoDie_17: -201375491
+      MaoDie_18: -9767713
+      MaoDie_19: 1068169686
+      MaoDie_2: 2048284146
+      MaoDie_20: 1694200980
+      MaoDie_21: 615787674
+      MaoDie_22: 1692718741
+      MaoDie_23: 1585680594
+      MaoDie_24: 813233453
+      MaoDie_25: 1445481273
+      MaoDie_26: -401486572
+      MaoDie_27: -1154850385
+      MaoDie_28: -408770200
+      MaoDie_29: -1333617157
+      MaoDie_3: 2060179500
+      MaoDie_30: -95570185
+      MaoDie_31: 1159637799
+      MaoDie_32: 1896765789
+      MaoDie_33: 1038680594
+      MaoDie_34: -825544018
+      MaoDie_35: -1010783870
+      MaoDie_36: -737515531
+      MaoDie_37: -545686949
+      MaoDie_38: -1925699899
+      MaoDie_39: -2086879602
+      MaoDie_4: -1076513005
+      MaoDie_40: 24999509
+      MaoDie_41: 1096538996
+      MaoDie_42: 2025290912
+      MaoDie_43: -947833805
+      MaoDie_44: 639911641
+      MaoDie_45: 406145731
+      MaoDie_46: 1528722767
+      MaoDie_47: -228793623
+      MaoDie_48: -1220377287
+      MaoDie_49: -1620425362
+      MaoDie_5: -1058910805
+      MaoDie_50: -765357594
+      MaoDie_51: 637264322
+      MaoDie_52: 988040329
+      MaoDie_53: 159867866
+      MaoDie_54: -517376059
+      MaoDie_55: 568701203
+      MaoDie_56: -6364937
+      MaoDie_57: -791862148
+      MaoDie_58: 724804812
+      MaoDie_59: 673090970
+      MaoDie_6: 1057235719
+      MaoDie_60: -1042293469
+      MaoDie_61: 1324341013
+      MaoDie_62: 262746852
+      MaoDie_63: 673174540
+      MaoDie_64: 1356797870
+      MaoDie_65: 1515953202
+      MaoDie_66: 1008037830
+      MaoDie_67: 898343136
+      MaoDie_68: 1164964562
+      MaoDie_69: -680821640
+      MaoDie_7: 613244617
+      MaoDie_70: 1623673858
+      MaoDie_71: -144944822
+      MaoDie_72: -283620750
+      MaoDie_73: 1620658152
+      MaoDie_74: -1707273524
+      MaoDie_75: 1028923645
+      MaoDie_76: 1627616096
+      MaoDie_77: 1522565388
+      MaoDie_78: 120066673
+      MaoDie_79: 1596130383
+      MaoDie_8: -742804886
+      MaoDie_80: 2127359373
+      MaoDie_81: 957296144
+      MaoDie_82: 1548741835
+      MaoDie_83: -1264117934
+      MaoDie_84: 432650586
+      MaoDie_85: -1289127732
+      MaoDie_86: 2146278319
+      MaoDie_87: -1229863491
+      MaoDie_88: 1803075842
+      MaoDie_89: -1811622764
+      MaoDie_9: -1532605522
+      MaoDie_90: -846758574
+      MaoDie_91: 720439138
+      MaoDie_92: -1306180907
+      MaoDie_93: -656272266
+      MaoDie_94: -896939841
+      MaoDie_95: 1624138894
+      MaoDie_96: -39065010
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -96,8 +96,8 @@ public class Enemy4 : Enemy
     private IEnumerator BehaviorRoutine()
     {
         // 1) wait 1.5s before choosing
-        if (Globals.Instance.Event.current_state != Globals.Events.GameState.playing){ yield return null;}
-        yield return new WaitForSeconds(1.5f);
+        while (Globals.Instance.Event.current_state != Globals.Events.GameState.playing){ yield return null;}
+        yield return new WaitForSeconds(0.5f);
 
         // 2) pick at random (50/50)
         GameObject player = GameObject.FindGameObjectWithTag("Player");

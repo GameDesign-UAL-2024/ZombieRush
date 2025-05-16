@@ -61,7 +61,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 15134705311059968
-    m_Localized: "\u201CHuman arms forged by magic\u2014Ora Ora Ora Ora!\u201D\r\n"
+    m_Localized: "Human arms forged by magic\u2014Ora Ora Ora Ora!\n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18124023650619392
+    m_Localized: 'We are all living hard as we can~
+
+      Summon truck strike enemies.'
     m_Metadata:
       m_Items: []
   references:
