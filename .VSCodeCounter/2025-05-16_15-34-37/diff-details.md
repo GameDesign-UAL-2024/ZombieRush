@@ -1,0 +1,156 @@
+# Diff Details
+
+Date : 2025-05-16 15:34:37
+
+Directory c:\\Users\\24021691\\Desktop\\ZombieRush\\Assets\\Script
+
+Total : 141 files,  378 codes, 21 comments, 62 blanks, all 461 lines
+
+[Summary](results.md) / [Details](details.md) / [Diff Summary](diff.md) / Diff Details
+
+## Files
+| filename | language | code | comment | blank | total |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\AudioSystem\\AudioRegistrant.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CAudioSystem%5CAudioRegistrant.cs) | C# | -11 | 0 | -1 | -12 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\AudioSystem\\AudioSysManager.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CAudioSystem%5CAudioSysManager.cs) | C# | -304 | -30 | -40 | -374 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\CameraEffects.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CCameraEffects.cs) | C# | -77 | -24 | -17 | -118 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\CustomCursor.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CCustomCursor.cs) | C# | -43 | -1 | -4 | -48 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\DestoryOnEnd.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CDestoryOnEnd.cs) | C# | -10 | 0 | -2 | -12 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E0\\E0Attack.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE0%5CE0Attack.cs) | C# | -51 | -6 | -7 | -64 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E0\\Enemy0.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE0%5CEnemy0.cs) | C# | -216 | -19 | -20 | -255 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E1\\E1\_Attack.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE1%5CE1_Attack.cs) | C# | -51 | -6 | -7 | -64 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E1\\Enemy1.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE1%5CEnemy1.cs) | C# | -181 | -4 | -32 | -217 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E2\\E2AttackRange.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE2%5CE2AttackRange.cs) | C# | -51 | -6 | -7 | -64 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E2\\Enemy2.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE2%5CEnemy2.cs) | C# | -229 | -34 | -27 | -290 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E3\\Enemy3.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE3%5CEnemy3.cs) | C# | -247 | -22 | -35 | -304 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E3\\Enemy3Bullet.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE3%5CEnemy3Bullet.cs) | C# | -80 | -12 | -16 | -108 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E4\\Enemy4.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE4%5CEnemy4.cs) | C# | -219 | -28 | -25 | -272 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E5\\Enemy5.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE5%5CEnemy5.cs) | C# | -285 | -29 | -35 | -349 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E5\\Enemy5Attack.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE5%5CEnemy5Attack.cs) | C# | -13 | 0 | -2 | -15 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\E5\\FlyingSword.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CE5%5CFlyingSword.cs) | C# | -113 | -9 | -20 | -142 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\Enemy.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CEnemy.cs) | C# | -31 | -3 | -4 | -38 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Enemy\\EnemyNav.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CEnemy%5CEnemyNav.cs) | C# | -441 | -32 | -71 | -544 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\GlobalTimer.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CGlobalTimer.cs) | C# | -34 | 0 | -3 | -37 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Globals.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CGlobals.cs) | C# | -430 | -37 | -52 | -519 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\HitEnemyEvent.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CHitEnemyEvent.cs) | C# | -14 | -2 | -3 | -19 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\InteractableGrids\\Bar.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CInteractableGrids%5CBar.cs) | C# | -26 | -2 | -4 | -32 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\InteractableGrids\\InteractableGrids.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CInteractableGrids%5CInteractableGrids.cs) | C# | -218 | -13 | -32 | -263 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\AdditionalAttack\\HumanArms\\ArmAttackRange.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CAdditionalAttack%5CHumanArms%5CArmAttackRange.cs) | C# | -18 | 0 | -3 | -21 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\AdditionalAttack\\HumanArms\\HumanArms.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CAdditionalAttack%5CHumanArms%5CHumanArms.cs) | C# | -67 | -4 | -3 | -74 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\AdditionalAttack\\HumanArms\\HumanArmsController.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CAdditionalAttack%5CHumanArms%5CHumanArmsController.cs) | C# | -47 | -9 | -11 | -67 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\BulletBehaviour\\Bullet.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CBulletBehaviour%5CBullet.cs) | C# | -9 | 0 | -3 | -12 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\BulletShoot\\2\\Item2.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CBulletShoot%5C2%5CItem2.cs) | C# | -125 | -15 | -14 | -154 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\BulletShoot\\Default\\BulletBehaviour\_0.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CBulletShoot%5CDefault%5CBulletBehaviour_0.cs) | C# | -79 | -7 | -13 | -99 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\BulletShoot\\Default\\DefaultShoot.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CBulletShoot%5CDefault%5CDefaultShoot.cs) | C# | -93 | -6 | -9 | -108 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\ItemFactory.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CItemFactory.cs) | C# | -88 | -8 | -16 | -112 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\ItemInWorld.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CItemInWorld.cs) | C# | -99 | -6 | -10 | -115 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Items.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CItems.cs) | C# | -11 | 0 | -3 | -14 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Others\\BubbleJelly Soda.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5COthers%5CBubbleJelly%20Soda.cs) | C# | -19 | 0 | -3 | -22 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Others\\FourLeaf.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5COthers%5CFourLeaf.cs) | C# | -19 | -1 | -2 | -22 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Others\\HighVelocityBullets.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5COthers%5CHighVelocityBullets.cs) | C# | -19 | 0 | -3 | -22 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Others\\Hyperplasia.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5COthers%5CHyperplasia.cs) | C# | -20 | 0 | -3 | -23 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Others\\Momentum.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5COthers%5CMomentum.cs) | C# | -21 | 0 | -2 | -23 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Others\\SlimeAcid.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5COthers%5CSlimeAcid.cs) | C# | -20 | 0 | -3 | -23 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Others\\SlimeSupercharge.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5COthers%5CSlimeSupercharge.cs) | C# | -19 | 0 | -3 | -22 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Proactive\\BladeStorm\\BladeStorm.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CProactive%5CBladeStorm%5CBladeStorm.cs) | C# | -86 | -13 | -8 | -107 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Proactive\\BladeStorm\\BladeStormBullet.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CProactive%5CBladeStorm%5CBladeStormBullet.cs) | C# | -46 | -1 | -6 | -53 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Proactive\\DaYun\\DaYun.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CProactive%5CDaYun%5CDaYun.cs) | C# | -83 | -2 | -7 | -92 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Proactive\\DaYun\\DaYunAttack.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CProactive%5CDaYun%5CDaYunAttack.cs) | C# | -36 | -3 | -3 | -42 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Items\\Statues.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CItems%5CStatues.cs) | C# | -147 | -9 | -11 | -167 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Loading.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CLoading.cs) | C# | -33 | -3 | -9 | -45 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\LogFilter.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CLogFilter.cs) | C# | -19 | -2 | -5 | -26 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\MainMenuCanvas.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CMainMenuCanvas.cs) | C# | -50 | -2 | -6 | -58 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Map\\ChunkGenerator.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CMap%5CChunkGenerator.cs) | C# | -131 | -3 | -17 | -151 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Map\\ObjectSpawner.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CMap%5CObjectSpawner.cs) | C# | -257 | -5 | -29 | -291 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\PlayerResource\\ResourcePickUp.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayerResource%5CResourcePickUp.cs) | C# | -42 | -1 | -7 | -50 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\Buildings.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CBuildings.cs) | C# | -12 | 0 | -3 | -15 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\Buildings\\B0.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CBuildings%5CB0.cs) | C# | -170 | -38 | -27 | -235 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\Buildings\\B1.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CBuildings%5CB1.cs) | C# | -168 | -22 | -19 | -209 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\Buildings\\B1\_Bullet.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CBuildings%5CB1_Bullet.cs) | C# | -104 | -38 | -19 | -161 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\PlayerBuildingManager.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CPlayerBuildingManager.cs) | C# | -96 | -17 | -15 | -128 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\PlayerController.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CPlayerController.cs) | C# | -158 | -11 | -13 | -182 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\PlayerItemManager.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CPlayerItemManager.cs) | C# | -129 | -14 | -15 | -158 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\PropertiesUpAnimation.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CPropertiesUpAnimation.cs) | C# | -15 | 0 | -2 | -17 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\UI\\BuildingButton.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CUI%5CBuildingButton.cs) | C# | -87 | -22 | -16 | -125 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\UI\\Descriptions.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CUI%5CDescriptions.cs) | C# | -57 | -20 | -7 | -84 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\UI\\HealthBar.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CUI%5CHealthBar.cs) | C# | -33 | -2 | -4 | -39 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\UI\\Incoming.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CUI%5CIncoming.cs) | C# | -12 | -2 | -5 | -19 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\UI\\LittleMap.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CUI%5CLittleMap.cs) | C# | -17 | -2 | -4 | -23 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\UI\\Notices.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CUI%5CNotices.cs) | C# | -14 | -2 | -4 | -20 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\UI\\PlayerUI.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CUI%5CPlayerUI.cs) | C# | -255 | -5 | -41 | -301 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\UI\\TimerTextUpdater.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CUI%5CTimerTextUpdater.cs) | C# | -49 | -5 | -4 | -58 |
+| [c:\\Users\\2020m\\Desktop\\ZombieRush\\Assets\\Script\\Player\\UI\\UIProperties.cs](/c:%5CUsers%5C2020m%5CDesktop%5CZombieRush%5CAssets%5CScript%5CPlayer%5CUI%5CUIProperties.cs) | C# | -123 | -16 | -23 | -162 |
+| [Assets/Script/AudioSystem/AudioRegistrant.cs](/Assets/Script/AudioSystem/AudioRegistrant.cs) | C# | 11 | 0 | 1 | 12 |
+| [Assets/Script/AudioSystem/AudioSysManager.cs](/Assets/Script/AudioSystem/AudioSysManager.cs) | C# | 304 | 30 | 40 | 374 |
+| [Assets/Script/CameraEffects.cs](/Assets/Script/CameraEffects.cs) | C# | 77 | 24 | 17 | 118 |
+| [Assets/Script/CustomCursor.cs](/Assets/Script/CustomCursor.cs) | C# | 43 | 1 | 4 | 48 |
+| [Assets/Script/DestoryOnEnd.cs](/Assets/Script/DestoryOnEnd.cs) | C# | 10 | 0 | 2 | 12 |
+| [Assets/Script/Enemy/E0/E0Attack.cs](/Assets/Script/Enemy/E0/E0Attack.cs) | C# | 51 | 6 | 7 | 64 |
+| [Assets/Script/Enemy/E0/Enemy0.cs](/Assets/Script/Enemy/E0/Enemy0.cs) | C# | 216 | 19 | 20 | 255 |
+| [Assets/Script/Enemy/E1/E1\_Attack.cs](/Assets/Script/Enemy/E1/E1_Attack.cs) | C# | 51 | 6 | 7 | 64 |
+| [Assets/Script/Enemy/E1/Enemy1.cs](/Assets/Script/Enemy/E1/Enemy1.cs) | C# | 181 | 4 | 32 | 217 |
+| [Assets/Script/Enemy/E2/E2AttackRange.cs](/Assets/Script/Enemy/E2/E2AttackRange.cs) | C# | 51 | 6 | 7 | 64 |
+| [Assets/Script/Enemy/E2/Enemy2.cs](/Assets/Script/Enemy/E2/Enemy2.cs) | C# | 229 | 34 | 27 | 290 |
+| [Assets/Script/Enemy/E3/Enemy3.cs](/Assets/Script/Enemy/E3/Enemy3.cs) | C# | 247 | 22 | 35 | 304 |
+| [Assets/Script/Enemy/E3/Enemy3Bullet.cs](/Assets/Script/Enemy/E3/Enemy3Bullet.cs) | C# | 80 | 12 | 16 | 108 |
+| [Assets/Script/Enemy/E4/Enemy4.cs](/Assets/Script/Enemy/E4/Enemy4.cs) | C# | 219 | 28 | 25 | 272 |
+| [Assets/Script/Enemy/E5/Enemy5.cs](/Assets/Script/Enemy/E5/Enemy5.cs) | C# | 293 | 29 | 35 | 357 |
+| [Assets/Script/Enemy/E5/Enemy5Attack.cs](/Assets/Script/Enemy/E5/Enemy5Attack.cs) | C# | 13 | 0 | 2 | 15 |
+| [Assets/Script/Enemy/E5/FlyingSword.cs](/Assets/Script/Enemy/E5/FlyingSword.cs) | C# | 115 | 3 | 20 | 138 |
+| [Assets/Script/Enemy/E8/E8\_Bullet.cs](/Assets/Script/Enemy/E8/E8_Bullet.cs) | C# | 80 | 12 | 16 | 108 |
+| [Assets/Script/Enemy/E8/Enemy8.cs](/Assets/Script/Enemy/E8/Enemy8.cs) | C# | 200 | 5 | 8 | 213 |
+| [Assets/Script/Enemy/Enemy.cs](/Assets/Script/Enemy/Enemy.cs) | C# | 31 | 3 | 4 | 38 |
+| [Assets/Script/Enemy/EnemyNav.cs](/Assets/Script/Enemy/EnemyNav.cs) | C# | 441 | 32 | 71 | 544 |
+| [Assets/Script/FinishingChair.cs](/Assets/Script/FinishingChair.cs) | C# | 60 | 7 | 13 | 80 |
+| [Assets/Script/GlobalTimer.cs](/Assets/Script/GlobalTimer.cs) | C# | 34 | 0 | 3 | 37 |
+| [Assets/Script/Globals.cs](/Assets/Script/Globals.cs) | C# | 419 | 22 | 65 | 506 |
+| [Assets/Script/HitEnemyEvent.cs](/Assets/Script/HitEnemyEvent.cs) | C# | 14 | 2 | 3 | 19 |
+| [Assets/Script/InteractableGrids/Bar.cs](/Assets/Script/InteractableGrids/Bar.cs) | C# | 26 | 2 | 4 | 32 |
+| [Assets/Script/InteractableGrids/InteractableGrids.cs](/Assets/Script/InteractableGrids/InteractableGrids.cs) | C# | 218 | 13 | 32 | 263 |
+| [Assets/Script/Items/AdditionalAttack/HumanArms/ArmAttackRange.cs](/Assets/Script/Items/AdditionalAttack/HumanArms/ArmAttackRange.cs) | C# | 18 | 0 | 3 | 21 |
+| [Assets/Script/Items/AdditionalAttack/HumanArms/HumanArms.cs](/Assets/Script/Items/AdditionalAttack/HumanArms/HumanArms.cs) | C# | 67 | 4 | 3 | 74 |
+| [Assets/Script/Items/AdditionalAttack/HumanArms/HumanArmsController.cs](/Assets/Script/Items/AdditionalAttack/HumanArms/HumanArmsController.cs) | C# | 47 | 9 | 11 | 67 |
+| [Assets/Script/Items/BulletBehaviour/Bullet.cs](/Assets/Script/Items/BulletBehaviour/Bullet.cs) | C# | 9 | 0 | 3 | 12 |
+| [Assets/Script/Items/BulletShoot/2/Item2.cs](/Assets/Script/Items/BulletShoot/2/Item2.cs) | C# | 125 | 15 | 14 | 154 |
+| [Assets/Script/Items/BulletShoot/Default/BulletBehaviour\_0.cs](/Assets/Script/Items/BulletShoot/Default/BulletBehaviour_0.cs) | C# | 79 | 7 | 13 | 99 |
+| [Assets/Script/Items/BulletShoot/Default/DefaultShoot.cs](/Assets/Script/Items/BulletShoot/Default/DefaultShoot.cs) | C# | 93 | 6 | 9 | 108 |
+| [Assets/Script/Items/ItemFactory.cs](/Assets/Script/Items/ItemFactory.cs) | C# | 88 | 8 | 16 | 112 |
+| [Assets/Script/Items/ItemInWorld.cs](/Assets/Script/Items/ItemInWorld.cs) | C# | 99 | 6 | 10 | 115 |
+| [Assets/Script/Items/Items.cs](/Assets/Script/Items/Items.cs) | C# | 11 | 0 | 3 | 14 |
+| [Assets/Script/Items/Others/BubbleJelly Soda.cs](/Assets/Script/Items/Others/BubbleJelly%20Soda.cs) | C# | 19 | 0 | 3 | 22 |
+| [Assets/Script/Items/Others/FourLeaf.cs](/Assets/Script/Items/Others/FourLeaf.cs) | C# | 19 | 1 | 2 | 22 |
+| [Assets/Script/Items/Others/HighVelocityBullets.cs](/Assets/Script/Items/Others/HighVelocityBullets.cs) | C# | 19 | 0 | 3 | 22 |
+| [Assets/Script/Items/Others/Hyperplasia.cs](/Assets/Script/Items/Others/Hyperplasia.cs) | C# | 20 | 0 | 3 | 23 |
+| [Assets/Script/Items/Others/Momentum.cs](/Assets/Script/Items/Others/Momentum.cs) | C# | 21 | 0 | 2 | 23 |
+| [Assets/Script/Items/Others/SlimeAcid.cs](/Assets/Script/Items/Others/SlimeAcid.cs) | C# | 20 | 0 | 3 | 23 |
+| [Assets/Script/Items/Others/SlimeSupercharge.cs](/Assets/Script/Items/Others/SlimeSupercharge.cs) | C# | 19 | 0 | 3 | 22 |
+| [Assets/Script/Items/Proactive/BladeStorm/BladeStorm.cs](/Assets/Script/Items/Proactive/BladeStorm/BladeStorm.cs) | C# | 86 | 13 | 8 | 107 |
+| [Assets/Script/Items/Proactive/BladeStorm/BladeStormBullet.cs](/Assets/Script/Items/Proactive/BladeStorm/BladeStormBullet.cs) | C# | 46 | 1 | 6 | 53 |
+| [Assets/Script/Items/Proactive/DaYun/DaYun.cs](/Assets/Script/Items/Proactive/DaYun/DaYun.cs) | C# | 83 | 2 | 7 | 92 |
+| [Assets/Script/Items/Proactive/DaYun/DaYunAttack.cs](/Assets/Script/Items/Proactive/DaYun/DaYunAttack.cs) | C# | 36 | 3 | 3 | 42 |
+| [Assets/Script/Items/Statues.cs](/Assets/Script/Items/Statues.cs) | C# | 147 | 9 | 11 | 167 |
+| [Assets/Script/Loading.cs](/Assets/Script/Loading.cs) | C# | 33 | 3 | 9 | 45 |
+| [Assets/Script/LogFilter.cs](/Assets/Script/LogFilter.cs) | C# | 19 | 2 | 5 | 26 |
+| [Assets/Script/MainMenuCanvas.cs](/Assets/Script/MainMenuCanvas.cs) | C# | 83 | 14 | 14 | 111 |
+| [Assets/Script/Map/ChunkGenerator.cs](/Assets/Script/Map/ChunkGenerator.cs) | C# | 131 | 3 | 17 | 151 |
+| [Assets/Script/Map/ObjectSpawner.cs](/Assets/Script/Map/ObjectSpawner.cs) | C# | 257 | 5 | 29 | 291 |
+| [Assets/Script/PlayerResource/ResourcePickUp.cs](/Assets/Script/PlayerResource/ResourcePickUp.cs) | C# | 42 | 1 | 7 | 50 |
+| [Assets/Script/Player/Buildings.cs](/Assets/Script/Player/Buildings.cs) | C# | 12 | 0 | 3 | 15 |
+| [Assets/Script/Player/Buildings/B0.cs](/Assets/Script/Player/Buildings/B0.cs) | C# | 170 | 38 | 27 | 235 |
+| [Assets/Script/Player/Buildings/B1.cs](/Assets/Script/Player/Buildings/B1.cs) | C# | 168 | 22 | 19 | 209 |
+| [Assets/Script/Player/Buildings/B1\_Bullet.cs](/Assets/Script/Player/Buildings/B1_Bullet.cs) | C# | 104 | 38 | 19 | 161 |
+| [Assets/Script/Player/PlayerBuildingManager.cs](/Assets/Script/Player/PlayerBuildingManager.cs) | C# | 96 | 17 | 15 | 128 |
+| [Assets/Script/Player/PlayerController.cs](/Assets/Script/Player/PlayerController.cs) | C# | 158 | 11 | 13 | 182 |
+| [Assets/Script/Player/PlayerItemManager.cs](/Assets/Script/Player/PlayerItemManager.cs) | C# | 129 | 14 | 15 | 158 |
+| [Assets/Script/Player/PropertiesUpAnimation.cs](/Assets/Script/Player/PropertiesUpAnimation.cs) | C# | 15 | 0 | 2 | 17 |
+| [Assets/Script/Player/UI/BuildingButton.cs](/Assets/Script/Player/UI/BuildingButton.cs) | C# | 87 | 22 | 16 | 125 |
+| [Assets/Script/Player/UI/Descriptions.cs](/Assets/Script/Player/UI/Descriptions.cs) | C# | 57 | 20 | 7 | 84 |
+| [Assets/Script/Player/UI/HealthBar.cs](/Assets/Script/Player/UI/HealthBar.cs) | C# | 33 | 2 | 4 | 39 |
+| [Assets/Script/Player/UI/Incoming.cs](/Assets/Script/Player/UI/Incoming.cs) | C# | 12 | 2 | 5 | 19 |
+| [Assets/Script/Player/UI/LittleMap.cs](/Assets/Script/Player/UI/LittleMap.cs) | C# | 17 | 2 | 4 | 23 |
+| [Assets/Script/Player/UI/Notices.cs](/Assets/Script/Player/UI/Notices.cs) | C# | 14 | 2 | 4 | 20 |
+| [Assets/Script/Player/UI/PlayerUI.cs](/Assets/Script/Player/UI/PlayerUI.cs) | C# | 261 | 11 | 45 | 317 |
+| [Assets/Script/Player/UI/TimerTextUpdater.cs](/Assets/Script/Player/UI/TimerTextUpdater.cs) | C# | 49 | 5 | 4 | 58 |
+| [Assets/Script/Player/UI/UIProperties.cs](/Assets/Script/Player/UI/UIProperties.cs) | C# | 123 | 16 | 23 | 162 |
+
+[Summary](results.md) / [Details](details.md) / [Diff Summary](diff.md) / Diff Details
