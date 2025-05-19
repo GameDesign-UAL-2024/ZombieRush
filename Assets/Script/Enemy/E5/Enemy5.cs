@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 
 public class Enemy5 : Enemy
 {
-    public override float max_health {get; set;} = 256;
+    public override float max_health {get; set;} = 64f;
     public override float speed {get; set;} = 4f;
     public override float current_health { get; set;}
     public override GameObject target{get; set;}

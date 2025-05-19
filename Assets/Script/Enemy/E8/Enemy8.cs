@@ -1,19 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 public class Enemy8 : Enemy
 {
-    public override float max_health { get; set; } = 512;
+    public override float max_health { get; set; } = 128f;
     public override float speed { get; set; } = 4f;
     public override float current_health { get; set; }
     public override GameObject target { get; set; }
-    float behaviour_time = 1f;
+    float behaviour_time = 4f;
     float behaviour_cool = 0f;
     float hurt_exist;
     Animator animator;
+    string Attraction_path = "Prefabs/Attract";
+    GameObject attraction_pref;
     string water_drop_step = "Prefabs/WaterDrops";
     string E8B = "Prefabs/E8B";
     GameObject E8B_pref;
@@ -22,13 +25,31 @@ public class Enemy8 : Enemy
     [SerializeField] AudioClip watermove;
     Coroutine current_move;
     Rigidbody2D RB;
+    [SerializeField] AudioClip MaoBGM;
+    [SerializeField] AudioClip HaQi;
+    public void PlayMaoDieBGM()
+    {
+        AudioSysManager.Instance.PlayBGM(MaoBGM,150);
+    }
+    public void PlayHaQi()
+    {
+        AudioSysManager.Instance.PlaySound(gameObject,HaQi,transform.position,1.5f,true);
+    }
     private readonly string[] boolParams = {
         "Behaviour",
         "Hit",
         "Jump_Attack",
         "Healing",
         "Attack_Shoot",
-        "Moving"
+        "Moving",
+        "Attraction"
+    };
+    private readonly string[] attack_params = {
+        "Jump_Attack",
+        "Healing",
+        "Attack_Shoot",
+        "Moving",
+        "Attraction"
     };
     public void ResetAllBoolParameters()
     {
@@ -46,6 +67,7 @@ public class Enemy8 : Enemy
         animator = GetComponent<Animator>();
         RB = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player");
+        attraction_pref = Addressables.LoadAssetAsync<GameObject>(Attraction_path).WaitForCompletion();
         water_drop_step_prefab = Addressables.LoadAssetAsync<GameObject>(water_drop_step).WaitForCompletion();
         E8B_pref = Addressables.LoadAssetAsync<GameObject>(E8B).WaitForCompletion();
     }
@@ -59,11 +81,25 @@ public class Enemy8 : Enemy
         behaviour_cool += Time.deltaTime;
         if (behaviour_cool >= behaviour_time)
         {
-            animator.SetBool("Behaviour",true);
-        }   
+            animator.SetBool("Behaviour", true);
+        }
+        else
+        {
+            animator.SetBool("Behaviour", false);
+        }
         if (RB.velocity.magnitude > 0)
         {
-            RB.velocity = Vector2.Lerp(RB.velocity,Vector2.zero,0.5f);
+            RB.velocity = Vector2.Lerp(RB.velocity, Vector2.zero, 0.2f);
+        }
+        if (current_health < max_health / 2 && behaviour_time > 1f)
+        {
+            behaviour_time = 1.5f;
+        } 
+        if (target != null)
+        {
+            Vector3 scl = transform.localScale;
+            scl.x = (target.transform.position.x < transform.position.x) ? -1f : 1f;
+            transform.localScale = scl;   
         }
     }
     void FixedUpdate()
@@ -109,11 +145,17 @@ public class Enemy8 : Enemy
     {
         StartCoroutine(ShootCoruntine());
     }
+    public void ActiveAttraction()
+    {
+        Instantiate(attraction_pref,transform.position,Quaternion.identity);
+    }
     private IEnumerator ShootCoruntine()
     {
-        for (int i = 0; i <= 2 ; i++)
+        int round = current_health > max_health / 2 ? 1 : 2;
+        int number = current_health > max_health / 2 ? 2 : 5;
+        for (int i = 0; i <= round; i++)
         {
-            for (int n = 0; n <= 3 ; n++)
+            for (int n = 0; n <= number; n++)
             {
                 FireBullet();
                 yield return new WaitForSeconds(0.05f);
@@ -125,7 +167,7 @@ public class Enemy8 : Enemy
     {
         while (Vector2.Distance(transform.position, target_pos) > 0.1f)
         {
-            float speed = is_attack? 15f : 7f;
+            float speed = 20f;
             float step  = speed * Time.deltaTime;
             transform.position = Vector2.MoveTowards(
                 transform.position,
@@ -138,12 +180,42 @@ public class Enemy8 : Enemy
     public void MakeDecision()
     {
         ResetAllBoolParameters();
-        string[] states = {"Jump_Attack","Healing","Attack_Shoot","Moving"};
-        int idx = UnityEngine.Random.Range(0, states.Length);
-        // 打开选中的状态
-        animator.SetBool(states[idx], true);
+
+        // 计算距离
+        float dist = Vector2.Distance(transform.position, target.transform.position);
+
+        // 动态组装可选状态
+        List<string> available = new List<string>();
+
+        // Jump_Attack: 距离小于6
+        if (dist <= 7f)
+            available.Add("Jump_Attack");
+
+        // Healing: 血量低于 2/3 max
+        if (current_health < (max_health / 3f) * 2f)
+            available.Add("Healing");
+
+        // Attack_Shoot 和 Moving: 距离大于6
+        if (dist > 7f)
+        {
+            available.Add("Attack_Shoot");
+            available.Add("Moving");
+        }
+
+        // Attraction: 距离小于4.5
+        if (dist < 4.5f)
+            available.Add("Attraction");
+
+        // 如果无可用动作，默认Moving（你可以根据实际需求调整）
+        if (available.Count == 0)
+            available.Add("Moving");
+
+        // 随机挑一个
+        int idx = UnityEngine.Random.Range(0, available.Count);
+        animator.SetBool(available[idx], true);
+
         behaviour_cool = 0f;
-        animator.SetBool("Behaviour",false);
+        animator.SetBool("Behaviour", false);
     }
     public void FireBullet()
     {

@@ -289,31 +289,18 @@ public class Globals : MonoBehaviour
                             
                             break;
                         case 7:
-                        case 8:
-                            StartCoroutine(LoadAndSpawnEnemyWave(
-                                "Prefabs/Enemy0",
-                                UnityEngine.Random.value < 0.5f ? 4 : 6,
-                                spawnCenter
-                            ));
-                            StartCoroutine(LoadAndSpawnEnemyWave(
-                                "Prefabs/Enemy1",
-                                UnityEngine.Random.value < 0.5f ? 2 : 4,
-                                spawnCenter
-                            ));
-                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/E3",3,spawnCenter));
-                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy4", 2, spawnCenter));
-                            
-                            break;
-
-                        case 9:
-                            // 第9波：4只 Enemy2
                             StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy2", 4, spawnCenter));
-                            
+                            break;
+                        case 8:
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy5", 1 , spawnCenter));
+                            break;
+                        case 9:
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/E3",4,spawnCenter));
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy4", 4, spawnCenter));
                             break;
 
                         case 10:
-                            // 之后的波数可自行扩展或循环
-                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/Enemy5", 1 , spawnCenter));
+                            StartCoroutine(LoadAndSpawnEnemyWave("Prefabs/MaoDie", 1 , spawnCenter));
                             break;
                     }
                 }
