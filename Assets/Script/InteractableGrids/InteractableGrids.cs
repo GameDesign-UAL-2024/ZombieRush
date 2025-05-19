@@ -19,6 +19,7 @@ public class InteractableGrids : MonoBehaviour
     static string bar_prefab = "Prefabs/Bar";
     static string green_path = "Prefabs/GreenBlock";
     static string black_path = "Prefabs/BlackBlock";
+    static string pink_path = "Prefabs/PinkBlock";
     static string Notice_Path_B = "Prefabs/Notice_Resource_Black";
     static string Notice_Path_G = "Prefabs/Notice_Resource_Green";
     string tree_broke_sound = "Audios/TreeBroke";

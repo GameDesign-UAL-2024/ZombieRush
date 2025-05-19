@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
 
 public class Enemy4 : Enemy
 {
@@ -11,6 +12,7 @@ public class Enemy4 : Enemy
     [SerializeField] private float speedField    = 2f;
     string Explosive_path = "Prefabs/E4Exp";
     GameObject explosion;
+    GameObject resource_prefab;
     private float currentHealth;
     private GameObject currentTarget;
 
@@ -44,6 +46,63 @@ public class Enemy4 : Enemy
     public override void SetTarget(GameObject tar)
     {
         currentTarget = tar;
+    }
+    private RectTransform fillRT;
+    private Canvas   healthBarCanvas;
+    private Image    healthBarFill;
+    Rigidbody2D RB;
+    private void CreateHealthBar()
+    {
+        // 1) Canvas
+        var canvasGO = new GameObject("HealthBarCanvas");
+        canvasGO.transform.SetParent(transform);
+        canvasGO.transform.localPosition = Vector3.up * 2f; // 根据模型高度调节
+        var canvas = canvasGO.AddComponent<Canvas>();
+        canvas.renderMode     = RenderMode.WorldSpace;
+        canvas.sortingOrder   =  100;
+        canvasGO.AddComponent<CanvasScaler>().dynamicPixelsPerUnit = 10f;
+        canvasGO.AddComponent<GraphicRaycaster>();
+
+        // 2) 背景
+        var bgGO = new GameObject("BG");
+        bgGO.transform.SetParent(canvasGO.transform, false);
+        var bg = bgGO.AddComponent<Image>();
+        bg.color = Color.gray;
+        var bgRT = bg.GetComponent<RectTransform>();
+        bgRT.sizeDelta = new Vector2(5f, 0.05f);
+
+        // 3) 填充条
+        var fillGO = new GameObject("Fill");
+        fillGO.transform.SetParent(bgGO.transform, false);
+        var fill = fillGO.AddComponent<Image>();
+        fill.color = Color.green;
+        // 不用 Filled 类型了，改用 scale
+        fill.type = Image.Type.Simple;
+
+        // 拿到 RectTransform 并设置 pivot.x = 0
+        fillRT = fill.GetComponent<RectTransform>();
+        // 让它和背景同尺寸、左对齐
+        fillRT.anchorMin = new Vector2(0f, 0f);
+        fillRT.anchorMax = new Vector2(0f, 5f);
+        fillRT.pivot     = new Vector2(0f, 0.5f);
+        fillRT.sizeDelta = new Vector2(bgRT.sizeDelta.x, bgRT.sizeDelta.y);
+
+        // 缓存引用
+        healthBarCanvas = canvas;
+        healthBarFill   = fill;
+
+        // 默认满血时隐藏
+        canvasGO.SetActive(false);
+    }
+    private void UpdateHealthBar()
+    {
+        if (healthBarCanvas == null) return;
+        float t = Mathf.Clamp01(current_health / max_health);
+
+        // 只改 X 方向 scale（从左侧伸缩）
+        fillRT.localScale = new Vector3(t, 1f, 1f);
+
+        healthBarCanvas.gameObject.SetActive(t < 1f);
     }
     public override bool TakeDamage(Vector3 source, float amount, bool instantKill)
     {
@@ -84,17 +143,33 @@ public class Enemy4 : Enemy
     void Start()
     {
         // kick off our AI routine
+        resource_prefab = Addressables.LoadAssetAsync<GameObject>(UnityEngine.Random.value < 0.475f ? "Prefabs/BlackBlock" : (UnityEngine.Random.value < (0.475f / 0.525f) ? "Prefabs/GreenBlock" : "Prefabs/PinkBlock")).WaitForCompletion();
+
         explosion = Addressables.LoadAssetAsync<GameObject>(Explosive_path).WaitForCompletion();
         StartCoroutine(BehaviorRoutine());
+        CreateHealthBar();
     }
     void Update()
     {
+        if (Globals.Instance.Event.current_state == Globals.Events.GameState.pausing)
+        {
+            return;
+        }
                 // 每帧把圈圈搬到脚下
         if (rangeGO != null)
             rangeGO.transform.position = transform.position;
+        if (RB != null)
+        {
+            RB.velocity = Vector2.Lerp(RB.velocity, Vector2.zero, 2f * Time.deltaTime);
+        }
+        UpdateHealthBar();
     }
     private IEnumerator BehaviorRoutine()
     {
+        if (Globals.Instance.Event.current_state == Globals.Events.GameState.pausing)
+        {
+            yield return null;
+        }
         // 1) wait 1.5s before choosing
         while (Globals.Instance.Event.current_state != Globals.Events.GameState.playing){ yield return null;}
         yield return new WaitForSeconds(0.5f);
@@ -258,6 +333,15 @@ public class Enemy4 : Enemy
     {
         if (Globals.Datas.EnemyPool.Contains(this))
         {
+            if (resource_prefab == null)
+                return;
+            for (int i = 0; i < (UnityEngine.Random.value < 0.5 ? 1 : 2) ; i++)
+            {
+                var instance = Instantiate(resource_prefab, transform.position, Quaternion.identity);
+                var rb = instance.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                    rb.AddForce(UnityEngine.Random.insideUnitCircle.normalized * 10f, ForceMode2D.Impulse);
+            }
             Globals.Datas.EnemyPool.Remove(this);
             GlobalEventBus.OnEnemyDead.Invoke();
         }

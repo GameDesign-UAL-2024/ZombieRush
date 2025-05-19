@@ -15,8 +15,8 @@ public class B1 : Buildings
     bool initialized;
     int max_attack_number = 3;
     float attack_range = 15f;
-    float attack_gap = 2f;
-    public float attack_point {get; private set;} = 2f;
+    float attack_gap = 1.5f;
+    public float attack_point {get; private set;} = 0.5f;
     List<B1_Bullet> bullets;
     const string bullet_prefab = "Prefabs/B1_Bullet";
     // 缓存加载的子弹预制件，避免重复加载
@@ -46,6 +46,9 @@ public class B1 : Buildings
     void Update()
     {
         // 可添加其他逻辑
+        // 如果未初始化，则不执行后续逻辑
+        if (!initialized || Globals.Instance.Event.current_state == Globals.Events.GameState.pausing)
+            return;
         
     }
     private Canvas   healthBarCanvas;

@@ -176,6 +176,7 @@ public class B0 : Buildings
                 var icon  = kv.Value;
                 if (enemy != null && icon != null)
                 {
+                    enemy.current_health -= 0.25f;
                     icon.transform.position = enemy.transform.position + Vector3.up * 3f;
                 }
             }
@@ -220,9 +221,6 @@ public class B0 : Buildings
             if (initialized) destroyEvent.Invoke(this);
         }
     }
-
-
-
     /// <summary>
     /// 初始化：绑定“建筑销毁”回调
     /// </summary>

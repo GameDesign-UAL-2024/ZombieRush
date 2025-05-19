@@ -38,7 +38,10 @@ public class MainMenuCanvas : MonoBehaviour
     void Update()
     {
         float distance = Vector3.Distance(transform.position, mainCamera.transform.position);
-
+        if (Cursor.visible != true)
+        {
+            Cursor.visible = true;
+        }
         if (distance > fadeOutDistance)
         {
             canvasGroup.alpha = 0f;

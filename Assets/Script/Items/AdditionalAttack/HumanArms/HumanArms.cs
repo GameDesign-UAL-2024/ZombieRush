@@ -65,7 +65,7 @@ public class HumanArms : MonoBehaviour
                 dir.Normalize();
 
                 // 4. 应用冲量
-                float knockbackForce = 10f; 
+                float knockbackForce = 5f; 
                 enemyRb.AddForce(dir * knockbackForce, ForceMode2D.Impulse);
             }
         }

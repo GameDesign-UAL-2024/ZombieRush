@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(EnemyNav))]
 public class Enemy0 : Enemy
@@ -16,6 +17,7 @@ public class Enemy0 : Enemy
     }
 
     // —— 新增：存储当前状态的字段与属性 —— 
+    
     private EnemyState _currentState;
     public EnemyState current_state
     {
@@ -45,8 +47,67 @@ public class Enemy0 : Enemy
     [SerializeField] AudioClip watermove1;
     [SerializeField] AudioClip watermove2;
     static GameObject hitted_prefab;
+    GameObject resource_prefab;
+    private RectTransform fillRT;
+    private Canvas   healthBarCanvas;
+    private Image    healthBarFill;
+    private void CreateHealthBar()
+    {
+        // 1) Canvas
+        var canvasGO = new GameObject("HealthBarCanvas");
+        canvasGO.transform.SetParent(transform);
+        canvasGO.transform.localPosition = Vector3.up * 2f; // 根据模型高度调节
+        var canvas = canvasGO.AddComponent<Canvas>();
+        canvas.renderMode     = RenderMode.WorldSpace;
+        canvas.sortingOrder   =  100;
+        canvasGO.AddComponent<CanvasScaler>().dynamicPixelsPerUnit = 10f;
+        canvasGO.AddComponent<GraphicRaycaster>();
+
+        // 2) 背景
+        var bgGO = new GameObject("BG");
+        bgGO.transform.SetParent(canvasGO.transform, false);
+        var bg = bgGO.AddComponent<Image>();
+        bg.color = Color.gray;
+        var bgRT = bg.GetComponent<RectTransform>();
+        bgRT.sizeDelta = new Vector2(2f, 0.025f);
+
+        // 3) 填充条
+        var fillGO = new GameObject("Fill");
+        fillGO.transform.SetParent(bgGO.transform, false);
+        var fill = fillGO.AddComponent<Image>();
+        fill.color = Color.green;
+        // 不用 Filled 类型了，改用 scale
+        fill.type = Image.Type.Simple;
+
+        // 拿到 RectTransform 并设置 pivot.x = 0
+        fillRT = fill.GetComponent<RectTransform>();
+        // 让它和背景同尺寸、左对齐
+        fillRT.anchorMin = new Vector2(0f, 0f);
+        fillRT.anchorMax = new Vector2(0f, 5f);
+        fillRT.pivot     = new Vector2(0f, 0.5f);
+        fillRT.sizeDelta = new Vector2(bgRT.sizeDelta.x, bgRT.sizeDelta.y);
+
+        // 缓存引用
+        healthBarCanvas = canvas;
+        healthBarFill   = fill;
+
+        // 默认满血时隐藏
+        canvasGO.SetActive(false);
+    }
+    private void UpdateHealthBar()
+    {
+        if (healthBarCanvas == null) return;
+        float t = Mathf.Clamp01(current_health / max_health);
+
+        // 只改 X 方向 scale（从左侧伸缩）
+        fillRT.localScale = new Vector3(t, 1f, 1f);
+
+        healthBarCanvas.gameObject.SetActive(t < 1f);
+    }
     void Start()
     {
+        CreateHealthBar();
+        resource_prefab = Addressables.LoadAssetAsync<GameObject>(UnityEngine.Random.value < 0.475f ? "Prefabs/BlackBlock" : (UnityEngine.Random.value < (0.475f / 0.525f) ? "Prefabs/GreenBlock" : "Prefabs/PinkBlock")).WaitForCompletion();
         current_health = max_health;
         self_nav = transform.GetComponent<EnemyNav>();
         water_drop_step_prefab = Addressables.LoadAssetAsync<GameObject>(water_drop_step).WaitForCompletion();
@@ -132,6 +193,8 @@ public class Enemy0 : Enemy
             could_hurt = false;
             animator.SetBool("Dead", true);
         }
+        RB.velocity = Vector2.Lerp(RB.velocity, Vector2.zero, 2f * Time.deltaTime);
+        UpdateHealthBar();
     }
     void PlayMovingSound()
     {
@@ -205,7 +268,7 @@ public class Enemy0 : Enemy
         Vector2 direction = (target.transform.position - transform.position).normalized;
         if (RB != null)
         {
-            RB.velocity = direction * 5f;
+            RB.velocity = direction * 10f;
         }
     }
     public void AttackSound()
@@ -247,8 +310,19 @@ public class Enemy0 : Enemy
     {
         if (Globals.Datas.EnemyPool.Contains(this))
         {
+            if (resource_prefab == null)
+                return;
+            for (int i = 0; i < (UnityEngine.Random.value < 0.5 ? 1 : 2) ; i++)
+            {
+                var instance = Instantiate(resource_prefab, transform.position, Quaternion.identity);
+                var rb = instance.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                    rb.AddForce(UnityEngine.Random.insideUnitCircle.normalized * 10f, ForceMode2D.Impulse);
+            }
             Globals.Datas.EnemyPool.Remove(this);
-            Destroy(this.gameObject);
+            GlobalEventBus.OnEnemyDead.Invoke();
+            
         }
+        Destroy(this.gameObject);
     }
 }

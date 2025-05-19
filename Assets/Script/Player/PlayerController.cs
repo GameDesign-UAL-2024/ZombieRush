@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     CameraEffects camera_effect;
     static string properties_up_animation = "Prefabs/PropertiesUp";
     string water_drop_step = "Prefabs/WaterDrops";
+    string game_over = "Prefabs/GameOver";
+    GameObject game_over_pref;
+    GameObject game_over_instance;
     GameObject water_drop_step_prefab;
     GameObject properties_up_prefab;
     [SerializeField] Transform properties_up_location;
@@ -68,6 +71,10 @@ public class PlayerController : MonoBehaviour
                 camera_effect.Shake(0.3f , 1f , 2.5f , 2 , 0.8f); 
             }            
         }
+        if (player_properties.current_health <= 0 && game_over_instance == null)
+        {
+            game_over_instance=Instantiate(game_over_pref,transform.position,Quaternion.identity);
+        }
         return true;
     }
     void Start()
@@ -82,6 +89,7 @@ public class PlayerController : MonoBehaviour
         global = Globals.Instance;
         RB = transform.GetComponent<Rigidbody2D>();
         camera_effect = CameraEffects.Instance;
+        game_over_pref = Addressables.LoadAssetAsync<GameObject>(game_over).WaitForCompletion();
         properties_up_prefab = Addressables.LoadAssetAsync<GameObject>(properties_up_animation).WaitForCompletion();
         water_drop_step_prefab = Addressables.LoadAssetAsync<GameObject>(water_drop_step).WaitForCompletion();
     }
