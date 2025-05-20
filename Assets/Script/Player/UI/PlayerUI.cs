@@ -77,7 +77,10 @@ public class PlayerUI : MonoBehaviour
 
         get_data = StartCoroutine(GetBuildingsData());
     }
-
+    void FixedUpdate()
+    {
+        TriggerValidBuildingsUpdate();
+    }
     private IEnumerator GetBuildingsData()
     {
         // 等待数据准备好
@@ -129,8 +132,7 @@ public class PlayerUI : MonoBehaviour
             var need = kv.Value;
             bool ok =
                 globals.Data.GetResourceAmount(Globals.Datas.ResourcesType.Green) >= need[Green_Need_Key]
-             && globals.Data.GetResourceAmount(Globals.Datas.ResourcesType.Black) >= need[Black_Need_Key]
-             && globals.Data.GetResourceAmount(Globals.Datas.ResourcesType.Pink)  >= need[Pink_Need_Key];
+             && globals.Data.GetResourceAmount(Globals.Datas.ResourcesType.Black) >= need[Black_Need_Key];
 
             if (ok)
             {
@@ -151,6 +153,26 @@ public class PlayerUI : MonoBehaviour
                     btn.StartFlash();
                     StartPanelFlash();
                 }
+            }
+            else if (globals.Data.GetResourceAmount(Globals.Datas.ResourcesType.Pink) >= need[Pink_Need_Key])
+            {
+                if (!BuildingButtonList.ContainsKey(id))
+                {
+                    var go = Instantiate(button_prefab, building_panel_content.transform);
+                    var btn = go.GetComponent<BuildingButton>();
+                    BuildingButtonList[id] = btn;
+                    btn.Initialize(
+                        All_Buildings_Data[id]["UI_Image_Path"],
+                        id,
+                        All_Buildings_Data[id],
+                        need[Green_Need_Key],
+                        need[Black_Need_Key],
+                        need[Pink_Need_Key],
+                        OnClickingBuilding
+                    );
+                    btn.StartFlash();
+                    StartPanelFlash();
+                }          
             }
             else if (BuildingButtonList.ContainsKey(id))
             {
@@ -176,7 +198,6 @@ public class PlayerUI : MonoBehaviour
             case Globals.Datas.ResourcesType.Pink:
                 pink_value.text = number.ToString(); break;
         }
-        TriggerValidBuildingsUpdate();
     }
 
     public void OnClickingBuilding(int id)
@@ -221,9 +242,15 @@ public class PlayerUI : MonoBehaviour
                     All_Buildings_Data[id]["Prefab_Path"], grid
                 );
                 var need = Buildings_Need[id];
-                globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Green, -need[Green_Need_Key]);
-                globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Black, -need[Black_Need_Key]);
-                globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Pink,  -need[Pink_Need_Key]);
+                if (globals.Data.GetResourceAmount(Globals.Datas.ResourcesType.Pink) >= need[Pink_Need_Key])
+                {
+                    globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Pink,  -need[Pink_Need_Key]);
+                }
+                else
+                {
+                    globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Green, -need[Green_Need_Key]);
+                    globals.Data.AddResourceAmount(Globals.Datas.ResourcesType.Black, -need[Black_Need_Key]);
+                }
                 OnClickingBuildingPanelButton(building_panel);
                 Destroy(preview);
                 yield break;

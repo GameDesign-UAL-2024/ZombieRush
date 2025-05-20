@@ -11,6 +11,10 @@ public abstract class Enemy : MonoBehaviour
     public abstract void SetTarget(GameObject tar);
     public abstract bool TakeDamage(Vector3 source  , float amount , bool Instant_kill);
     public const string hitted_prefab_path = "Prefabs/Hitted";
+    void OnDestroy()
+    {
+        GlobalEventBus.OnEnemyDead.Invoke();
+    }
     /// <summary>
     /// 播放攻击音效，需要传入来源物体和位置
     /// </summary>

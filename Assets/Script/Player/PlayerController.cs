@@ -71,10 +71,6 @@ public class PlayerController : MonoBehaviour
                 camera_effect.Shake(0.3f , 1f , 2.5f , 2 , 0.8f); 
             }            
         }
-        if (player_properties.current_health <= 0 && game_over_instance == null)
-        {
-            game_over_instance=Instantiate(game_over_pref,transform.position,Quaternion.identity);
-        }
         return true;
     }
     void Start()
@@ -93,7 +89,7 @@ public class PlayerController : MonoBehaviour
         properties_up_prefab = Addressables.LoadAssetAsync<GameObject>(properties_up_animation).WaitForCompletion();
         water_drop_step_prefab = Addressables.LoadAssetAsync<GameObject>(water_drop_step).WaitForCompletion();
     }
-    
+
     void Update()
     {
         if (global.Event.current_state == Globals.Events.GameState.pausing)
@@ -127,6 +123,10 @@ public class PlayerController : MonoBehaviour
         if (objectSpawner != null)
         {
             objectSpawner.UpdateSpawnedObjects(transform.position);
+        }
+        if (player_properties.current_health <= 0 && game_over_instance == null)
+        {
+            game_over_instance=Instantiate(game_over_pref,transform.position,Quaternion.identity);
         }
     }
 

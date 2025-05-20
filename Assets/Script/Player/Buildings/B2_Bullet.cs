@@ -9,19 +9,10 @@ public class B2_Bullet : MonoBehaviour
     float fly_speed = 10f;
     Transform target;
     float attack_point;
-    // 新增变量：
-    // 追踪时角度变化的速度（单位：度/秒）
-    float trackingTurnSpeed;
-    // 用于累计追踪过程中旋转的总角度
-    float accumulatedTrackingAngle = 0f;
-    // 最大允许追踪角度（超过后停止追踪）
-    float maxTrackingAngle = 90f;
+
     // 当前运动方向（初始时指向初始化时target的位置）
     Vector2 currentDirection;
-    // 是否已经进入追踪阶段
-    bool isTracking = false;
-    // 一旦达到最大追踪角度，则停止追踪（保持最后旋转角度）
-    bool trackingEnded = false;
+
     
     // 控制显示与碰撞的组件引用
     SpriteRenderer spriteRenderer;
@@ -45,7 +36,6 @@ public class B2_Bullet : MonoBehaviour
     public void Initialize(Transform target, float trackingTurnSpeed, UnityAction<B2_Bullet> flightEndEvent , float atk)
     {
         this.target = target;
-        this.trackingTurnSpeed = trackingTurnSpeed;
         this.attack_point = atk;
         onFlightEnd.AddListener(flightEndEvent);
         // 标记已初始化
@@ -126,9 +116,11 @@ public class B2_Bullet : MonoBehaviour
         if (timer <= 1f && is_caged && cage_target != null && recorded_pos != null)
         {
             cage_target.transform.position = new Vector3(recorded_pos.x,recorded_pos.y,cage_target.transform.position.z);
+        }
+        if (is_caged)
+        {
             timer += Time.deltaTime;
         }
-
         if (is_caged && timer > 1f)
         {
             EndFlight();

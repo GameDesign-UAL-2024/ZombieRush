@@ -10,6 +10,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Text;
+using System.CodeDom.Compiler;
 public class Globals : MonoBehaviour
 {
     public static Globals Instance { get; private set; }
@@ -25,7 +26,6 @@ public class Globals : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
             Data = new Datas();
             Event = new Events();
             Event.current_state = Events.GameState.pausing;
@@ -222,7 +222,6 @@ public class Globals : MonoBehaviour
                 };
         }
     }
-
     private static Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
     private IEnumerator EnemyWavesCoroutine()
     {

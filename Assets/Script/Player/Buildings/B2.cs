@@ -198,7 +198,7 @@ public class B2 : Buildings
     }
     public override void Initialize(UnityAction<Buildings> on_building_destroy)
     {
-        
+        print("B2_ini");
         destroy_event.AddListener(on_building_destroy);
         initialized = true;
     }
@@ -213,7 +213,7 @@ public class B2 : Buildings
             if (healthBarCanvas != null)
                 Destroy(healthBarCanvas.gameObject);
 
-            if (initialized) destroyEvent.Invoke(this);
+            BuildingDestroy();
         }
     }
 }

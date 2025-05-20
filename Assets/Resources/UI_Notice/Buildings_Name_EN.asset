@@ -26,6 +26,10 @@ MonoBehaviour:
     m_Localized: Simple Towers
     m_Metadata:
       m_Items: []
+  - m_Id: 19983428797108224
+    m_Localized: KoNoHa's Qiu
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

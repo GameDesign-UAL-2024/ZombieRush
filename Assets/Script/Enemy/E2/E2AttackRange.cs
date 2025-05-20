@@ -59,5 +59,13 @@ public class E2AttackRange : MonoBehaviour
                 }
             }
         }
+        else if (other.CompareTag("PlayerObjects"))
+        {
+            var pc = other.GetComponent<Buildings>();
+            if (pc != null)
+            {
+                pc.TakeDamage(1);
+            }
+        }
     }
 }

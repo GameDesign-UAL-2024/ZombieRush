@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class Enemy8 : Enemy
 {
-    public override float max_health { get; set; } = 128f;
+    public override float max_health { get; set; } = 500f;
     public override float speed { get; set; } = 4f;
     public override float current_health { get; set; }
     public override GameObject target { get; set; }
@@ -51,7 +51,7 @@ public class Enemy8 : Enemy
         var bg = bgGO.AddComponent<Image>();
         bg.color = Color.gray;
         var bgRT = bg.GetComponent<RectTransform>();
-        bgRT.sizeDelta = new Vector2(5f, 0.05f);
+        bgRT.sizeDelta = new Vector2(10f, 0.05f);
 
         // 3) 填充条
         var fillGO = new GameObject("Fill");
@@ -65,7 +65,7 @@ public class Enemy8 : Enemy
         fillRT = fill.GetComponent<RectTransform>();
         // 让它和背景同尺寸、左对齐
         fillRT.anchorMin = new Vector2(0f, 0f);
-        fillRT.anchorMax = new Vector2(0f, 5f);
+        fillRT.anchorMax = new Vector2(0f, 10f);
         fillRT.pivot     = new Vector2(0f, 0.5f);
         fillRT.sizeDelta = new Vector2(bgRT.sizeDelta.x, bgRT.sizeDelta.y);
 
@@ -358,6 +358,7 @@ public class Enemy8 : Enemy
             Globals.Datas.EnemyPool.Remove(this);
             GlobalEventBus.OnEnemyDead.Invoke();
         }
+        Globals.Instance.Event.current_state = Globals.Events.GameState.timer_off;
         GameObject finishing = Addressables.LoadAssetAsync<GameObject>("Prefabs/FinishChair").WaitForCompletion();
         Instantiate(finishing , transform.position , Quaternion.identity);
         Destroy(gameObject);

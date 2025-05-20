@@ -70,6 +70,24 @@ MonoBehaviour:
       Summon truck strike enemies.'
     m_Metadata:
       m_Items: []
+  - m_Id: 19964135065817088
+    m_Localized: 'Add damage if there is water under foot
+
+      "dun dun dun~"'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19985876966215680
+    m_Localized: Kill enemies to get tiny damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19985987016364032
+    m_Localized: Destroy resources to gain tiny damage and attack speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19986328734699520
+    m_Localized: Accelerate 1s when collect green resources
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

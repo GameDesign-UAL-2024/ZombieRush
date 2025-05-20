@@ -130,6 +130,7 @@ public class InteractableGrids : MonoBehaviour
                 Destroy(bar_object);
                 bar_object = null;
                 AudioSysManager.Instance.PlaySound(player,this_type == GridType.Rocks? rock:tree,transform.position,1,false);
+                GlobalEventBus.OnGridInteracted.Invoke(this);
                 if (resource_prefab == null)
                     return;
                 for (int i = 0; i < release_number; i++)

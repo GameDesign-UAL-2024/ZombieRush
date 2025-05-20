@@ -256,7 +256,7 @@ public class Enemy2 : Enemy
         }
 
         // 3) 普通受击——扣血或秒杀
-        if (instantKill) _currentHealth = 0f;
+        if (instantKill) _currentHealth = 1f;
         else             _currentHealth -= amount;
 
         // 4) 血量归零：播放死亡动画
@@ -267,9 +267,6 @@ public class Enemy2 : Enemy
         }
         else
         {
-            // 5) 活着：击退自己 + 受击动画
-            Vector2 knockDir = ((Vector2)transform.position - (Vector2)source).normalized;
-            rb2d.AddForce(knockDir * knockbackForce, ForceMode2D.Impulse);
 
             if (_state != State.Attack)
                 animator.SetTrigger("Hurt");
@@ -344,7 +341,7 @@ public class Enemy2 : Enemy
         {
             if (resource_prefab == null)
                 return;
-            for (int i = 0; i < (UnityEngine.Random.value < 0.5 ? 1 : 2) ; i++)
+            for (int i = 0; i < (UnityEngine.Random.value < 0.5 ? 2 : 4) ; i++)
             {
                 var instance = Instantiate(resource_prefab, transform.position, Quaternion.identity);
                 var rb = instance.GetComponent<Rigidbody2D>();

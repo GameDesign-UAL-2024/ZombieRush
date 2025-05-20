@@ -35,6 +35,7 @@ public class ResourcePickup : MonoBehaviour
             {
                 AudioSysManager.Instance.PlaySound(gameObject,collect_sound_clip,transform.position,1f,false);
             }
+            GlobalEventBus.OnResourceCollect.Invoke(this);
             Destroy(gameObject,0.1f);
         }
     }

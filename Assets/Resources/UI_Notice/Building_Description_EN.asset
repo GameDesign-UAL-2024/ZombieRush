@@ -30,6 +30,10 @@ MonoBehaviour:
       so clear!
     m_Metadata:
       m_Items: []
+  - m_Id: 19853494644674560
+    m_Localized: Shooted bullet can stop enemies
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
